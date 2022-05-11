@@ -35,4 +35,7 @@ export default class HelloWorldScene extends Phaser.Scene
 
         emitter.startFollow(logo)
     }
+    update() {
+        // this.scene.start('home')
+    }
 }
