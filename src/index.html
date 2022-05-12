@@ -1,13 +1,34 @@
 <html>
 	<head>
 		<title>Phaser3 + Parceljs Template</title>
-		<link rel="stylesheet" href="./main.css" />
+		<link rel="preload" as="font" href="../public/font/IPixRegular.ttf" type="font/ttf" />
+		<style media='screen' type='text/css'>
+			@font-face {
+				font-family: IPixRegular;
+				src: url("../public/font/IPixRegular.ttf");
+				font-weight:800;
+			}
+			@font-face {
+				font-family: VonwaonBitmap12;
+				src: url("../public/font/VonwaonBitmap-12px.ttf");
+				font-weight:1000;
+			}
+			@font-face {
+				font-family: VonwaonBitmap16;
+				src: url("../public/font/VonwaonBitmap-16px.ttf");
+				font-weight:800;
+			}
+		</style>
 	</head>
 	<style>
 	</style>
 	<body>
 		<div id="container">
-			<div id="game-view" />
+			<div style="font-family:IPixRegular; position:absolute; left:-1000px; visibility:hidden;">.</div>
+			<div style="font-family:VonwaonBitmap16; position:absolute; left:-1000px; visibility:hidden;">.</div>
+			<div style="font-family:VonwaonBitmap12; position:absolute; left:-1000px; visibility:hidden;">.</div>
+<!--			<div style="font-family:IPixRegular; position:absolute; left:-1000px; visibility:hidden;">.</div>-->
+			<div id="game-view" style="background-image: url('../public/images/bg.png');"></div>
 		</div>
 			<script type="module" src="main.ts"></script>
 	</body>

@@ -7,6 +7,12 @@ export default class Home extends Phaser.Scene {
   }
   private Character
   private CharacterKey
+  private healthLabel!: Phaser.GameObjects.Text
+  private health = 10
+  init () {
+    console.log('init')
+    console.log(window.localStorage)
+  }
   preload () {
     // this.load.image('background', 'images/bg.png')
     this.load.spritesheet(
@@ -14,7 +20,6 @@ export default class Home extends Phaser.Scene {
       'images/characters/girl.png',
       { frameWidth: 320, frameHeight: 320 }
     )
-    console.log(window.localStorage)
   }
   create () {
     const width = this.scale.width
@@ -36,6 +41,14 @@ export default class Home extends Phaser.Scene {
     this.Character.on('pointerdown', (pointer) => {
       console.log(233333, this.Character)
     }, this)
+    this.healthLabel = this.add.text(100, 100, `健康: ${this.health}`, {
+      fontSize: '60px',
+      color: '#263238',
+      fontFamily: 'VonwaonBitmap12',
+      shadow: {fill: true, blur: 0, offsetY: 0},
+      padding: {left: 15, right: 15, top: 10, bottom: 10}
+    })
+    .setScrollFactor(0)
   }
   update(){
 
