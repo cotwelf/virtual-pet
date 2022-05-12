@@ -1,0 +1,23 @@
+.dialogue {
+  &.small {
+    position: absolute !important;
+    bottom: 0;
+    height: 220px;
+    width: 90%;
+    border: 5px solid $main-color;
+    padding: 30px;
+    background-image: url('../images/bg.png');
+    box-shadow: inset 3px 3px rgba($main-color, 0.8);
+  }
+}
+.btn-box {
+  display: flex !important;
+  position: absolute !important;
+  bottom: 12px;
+  width: 100%;
+  justify-content: space-around;
+  .btn {
+    height: 50px;
+    cursor: pointer;
+  }
+}

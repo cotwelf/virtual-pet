@@ -17,6 +17,11 @@ export default class HelloWorldScene extends Phaser.Scene
 
     create()
     {
+        setTimeout(() => {
+            this.scene.sleep();
+            this.scene.launch('home');
+            this.scene.setVisible(true, 'home')
+        }, 1)
         this.add.image(400, 300, 'sky')
 
         const particles = this.add.particles('red')

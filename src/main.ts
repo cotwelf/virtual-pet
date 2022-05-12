@@ -15,7 +15,10 @@ const config: Phaser.Types.Core.GameConfig = {
 			gravity: { y: 200 }
 		}
 	},
-	scene: [Home, HelloWorldScene]
+	scene: [Home, HelloWorldScene],
+	dom: {
+		createContainer: true
+	}
 }
 
 export default new Phaser.Game(config)
