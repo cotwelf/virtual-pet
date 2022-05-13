@@ -1,6 +1,6 @@
 import Phaser from "phaser";
-import { IBasicDataType } from "~/utils/types";
-import { TextureKeys, createDialogueDom, showCurrentData, createBtnSet } from '../utils'
+import { IBasicDataType, IConmunicateConfig } from "~/utils/types";
+import { TextureKeys, createDialogueDom, showCurrentData, printText, setBasicData, getBasicData } from '../utils'
 
 let testString = '你好呀~'
 
@@ -10,22 +10,30 @@ export default class Home extends Phaser.Scene {
   }
   private Character
   private CharacterKey
-  private healthLabel!: Phaser.GameObjects.Text
-  private health = 8
+  // private healthLabel!: Phaser.GameObjects.Text
+
+  // 四项基本数值
+  private basicData = {
+    health: 0,
+    feeling: 0,
+    knowledge: 0,
+    relationship: 0,
+  }
+  private currentShow = 'health'
+  private basicDataShower
+
+  // 对话框
   private dialogModal
-  private dialogBtn // WIRKROUND: 这里之后会删除，优化一下 dialogueModal
-  private dialogText = ''
   private gameWidth
   private gameHeight
-  private basicData
-  private textInterval
-  private interval
+
   init () {
     console.log('init')
     console.log(window.localStorage)
     this.CharacterKey = TextureKeys.Girl
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
+    this.basicData = getBasicData()
   }
   preload () {
     // this.load.image('background', 'images/bg.png')
@@ -36,7 +44,6 @@ export default class Home extends Phaser.Scene {
     )
   }
   create () {
-
     // 设置背景（repeat）。这里如果不 setOrigin(0, 0)，则是以图片的中心为原点，而我们希望是图片的左上角为原点
     // this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0)
     this.anims.create({
@@ -52,78 +59,66 @@ export default class Home extends Phaser.Scene {
     ).play('girl-alive')
     this.Character.setInteractive()
     this.Character.on('pointerdown', (pointer) => {
-      console.log(233333, this.Character, pointer)
-      this.communicate(testString)
+      const config: IConmunicateConfig = {
+        dialogue: '你好呀呀呀~ 今天下雨了呢，出门别忘记带伞鸭',
+        btns: [
+          {
+            text: '你好 ^-^',
+            type: 'health',
+            value: 2,
+          },
+          {
+            text: '不理你╭(╯^╰)╮',
+            type: 'feeling',
+            value: -1,
+          }
+        ]
+      }
+      this.communicate(config)
     }, this)
 
     // 展示当前数据
-    console.log(this.health, 'this.health')
-    this.basicData = this.add.dom(0, 0, showCurrentData('health', this.health)).setOrigin(0)
-    // this.basicData.node.classList.add('text')
+    this.basicDataShower = this.add.dom(0, 0, showCurrentData('health', this.basicData[this.currentShow])).setOrigin(0)
   }
+
   update(){
 
   }
-  private onCloseFn (type: IBasicDataType, value: number) {
-    console.log(type, value)
-    this.dialogModal.destroy()
-    this.dialogBtn.destroy()
-    clearInterval(this.textInterval)
-    clearInterval(this.interval)
-    let count = this.health
-    if (value) {
-      count += 2
-    } else {
-      count -= 2
-    }
-    this.health = count < 0 ? 0:(count > 10 ? 10 : count)
-    this.dialogText = ''
-    this.basicData.destroy()
-    this.basicData = this.add.dom(0, 0, showCurrentData('health', this.health)).setOrigin(0)
+  private updateBasicData (type: IBasicDataType, value: number) {
+    // 更新数值
+    let count = this.basicData[type]
+    count += value
+    this.basicData[type] = count < 0 ? 0 : (count > 10 ? 10 : count)
+    // 更新 localStorage
+    setBasicData(this.basicData)
   }
-  private communicate (text: string) {
-    if (text.length === 0) {
+  // 关闭正在开启的对话框
+  private onCloseDialogueFn (type: IBasicDataType, value: number) {
+    this.Character.setInteractive()
+    this.dialogModal.destroy()
+    this.updateBasicData(type, value)
+    this.basicDataShower.destroy()
+    this.basicDataShower = this.add.dom(0, 0, showCurrentData(type, this.basicData[type])).setOrigin(0)
+  }
+
+  // 点击角色交流
+  private communicate (config: IConmunicateConfig) {
+    this.Character.disableInteractive()
+    if (config.dialogue.length === 0) {
       return
     }
-    let currentText = text
-    const config = [
-      {
-        text: '你好 ^-^',
-        onClickFn: () => {this.onCloseFn('health', 10)}
-      },
-      {
-        text: '不理你╭(╯^╰)╮',
-        onClickFn: () => {this.onCloseFn('feeling', 0)}
+    const btnList: {
+      text: string
+      onClickFn: () => void
+    }[] = []
+    config.btns.forEach(btn => {
+      let temp = {
+        onClickFn: () => this.onCloseDialogueFn(btn.type, btn.value),
+        text: btn.text
       }
-    ]
-    this.dialogModal = this.add.dom(0, 0, createDialogueDom('small', this.dialogText)).setOrigin(0)
-    // this.dialogModal = this.add.dom(0, 0, createDialogueDom('small', {btnList: config, dialogueText: this.dialogText})).setOrigin(0)
-
-    this.interval = setInterval(() => {
-      try {
-        if (currentText.length === 0) {
-          clearInterval(this.interval)
-          setTimeout(() => {
-            this.dialogBtn = this.add.dom(0, 0, createBtnSet(config)).setOrigin(0)
-            this.textInterval = setInterval(() => {
-              if (this.dialogText.indexOf('_') !== -1) {
-                this.dialogText = this.dialogText.substring(0, this.dialogText.length - 1)
-              } else {
-                this.dialogText = this.dialogText + '_'
-              }
-              this.dialogModal.setText(this.dialogText)
-            }, 600)
-          }, 300)
-        } else {
-          this.dialogText = this.dialogText + currentText[0]
-          currentText = currentText.substring(1, currentText.length)
-          this.dialogModal.setText(this.dialogText)
-        }
-      } catch {
-        clearInterval(this.interval)
-      }
-    } ,150)
-    // this.health += 1
-    // this.healthLabel.text = `健康: ${this.health}`
+      btnList.push(temp)
+    })
+    this.dialogModal = this.add.dom(0, 0, createDialogueDom('dialogue', { btnList: btnList })).setOrigin(0)
+    printText( document.getElementById('dialogue-text'), config.dialogue)
   }
 }
