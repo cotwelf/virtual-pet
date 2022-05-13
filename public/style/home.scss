@@ -1,0 +1,49 @@
+#current-data {
+  display: flex !important;
+  width: 90%;
+  height: 60px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 5% 5% 0;
+  .percent {
+    width: 50%;
+    border: 5px solid $main-color;
+    height: 30px;
+    > div {
+      height: 100%;
+      background-image: url("../images/percent.png");
+      position: relative;
+      &::after {
+        content: '';
+        display: block;
+        background-size: contain;
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        right: 0;
+        top: -40px;
+      }
+    }
+  }
+  &::before,
+  &::after {
+    font-size: 50px;
+    display: block;
+    background-size: contain;
+    width: 60px;
+    height: 60px;
+  }
+  &::before {
+    content: '';
+    background-image: url("../images/left.png");
+  }
+  &::after {
+    content: '';
+    background-image: url("../images/right.png");
+    transform: rotateX(180deg);
+  }
+
+  &.health .percent > div::after {
+    background-image: url("../images/health.png");
+  }
+}

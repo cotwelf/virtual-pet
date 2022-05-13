@@ -1,0 +1,41 @@
+@import './variable';
+@font-face {
+  font-family: IPixRegular;
+  src: url("../font/IPixRegular.ttf");
+  font-weight:800;
+}
+@font-face {
+  font-family: VonwaonBitmap12;
+  src: url("../font/VonwaonBitmap-12px.ttf");
+  font-weight:1000;
+}
+@font-face {
+  font-family: VonwaonBitmap16;
+  src: url("../font/VonwaonBitmap-16px.ttf");
+  font-weight:800;
+}
+#font-loader {
+  font-family: VonwaonBitmap16;
+  position: absolute;
+  left: -1000px;
+  visibility: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: VonwaonBitmap16;
+  font-size: 40px;
+}
+#game-view {
+  background-image: url('../images/bg.png');
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  color: $main-color;
+
+  @import './dialogModal';
+  @import './home';
+}
+
