@@ -4,7 +4,7 @@
   height: 60px;
   align-items: center;
   justify-content: space-between;
-  margin: 5% 5% 0;
+  margin: 8% 5% 0;
   .percent {
     width: 50%;
     border: 5px solid $main-color;
@@ -17,33 +17,43 @@
         content: '';
         display: block;
         background-size: contain;
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 40px;
         position: absolute;
         right: 0;
-        top: -40px;
+        top: -54px;
       }
     }
   }
-  &::before,
-  &::after {
+  .previous,
+  .next {
     font-size: 50px;
     display: block;
     background-size: contain;
     width: 60px;
     height: 60px;
+    &.disabled {
+      opacity: 0.3;
+      pointer-events: none;
+    }
   }
-  &::before {
-    content: '';
+  .previous {
     background-image: url("../images/left.png");
   }
-  &::after {
+  .next {
     content: '';
     background-image: url("../images/right.png");
     transform: rotateX(180deg);
   }
-
-  &.health .percent > div::after {
-    background-image: url("../images/health.png");
+  @each $type in $data-type {
+    &.#{$type} .percent > div::after {
+      background-image: url("../images/#{$type}.png");
+    }
+  }
+  @media screen and (max-width: 900px) {
+    transform: scale(0.45) translate(60%, 200%) !important;
+    // .dialogue {
+    //   transform: scale(0.48) translate(58%, 20%) !important;
+    // }
   }
 }
