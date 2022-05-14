@@ -35,7 +35,15 @@ body {
   justify-content: center;
   color: $main-color;
 
+  @media screen and (max-width: 900px) {
+
+    canvas {
+      width: 100vw;
+    }
+  }
   @import './dialogModal';
+  @import "./welcome";
   @import './home';
 }
+
 

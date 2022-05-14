@@ -25,6 +25,9 @@
       animation: text-end 1s infinite;
     }
   }
+  @media screen and (max-width: 900px) {
+    transform: scale(0.48) translate(58%, 20%) !important;
+  }
 }
 .btn-box {
   display: flex !important;
