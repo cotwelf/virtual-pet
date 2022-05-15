@@ -1,0 +1,22 @@
+@mixin bg-image($url, $width, $height: $width) {
+  width: $width;
+  height: $height;
+  background-image: url($url);
+  background-size: contain;
+}
+
+@mixin btn-style {
+  border: $border-style;
+  cursor: pointer;
+  &:hover {
+    box-shadow: $btn-box-shadow;
+    transition: all 0.15s;
+  }
+}
+
+@mixin icon-style {
+  cursor: pointer;
+  &:hover {
+    transform: translateY(10%);
+  }
+}

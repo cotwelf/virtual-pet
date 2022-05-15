@@ -1,10 +1,10 @@
 import Phaser from 'phaser'
 
-import HelloWorldScene from './scenes/HelloWorldScene'
 // @ts-ignore
 import Welcome from './scenes/welcome'
 // @ts-ignore
 import Home from './scenes/home'
+import Setting from './scenes/setting'
 
 const config: Phaser.Types.Core.GameConfig = {
 	type: Phaser.AUTO,
@@ -18,7 +18,7 @@ const config: Phaser.Types.Core.GameConfig = {
 			gravity: { y: 200 }
 		}
 	},
-	scene: [Welcome, Home, HelloWorldScene],
+	scene: [Welcome, Setting, Home],
 	dom: {
 		createContainer: true
 	}

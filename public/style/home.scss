@@ -43,7 +43,6 @@
   .next {
     content: '';
     background-image: url("../images/right.png");
-    transform: rotateX(180deg);
   }
   @each $type in $data-type {
     &.#{$type} .percent > div::after {
