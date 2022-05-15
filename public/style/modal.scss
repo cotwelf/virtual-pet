@@ -1,0 +1,78 @@
+.modal {
+  @keyframes text-end {
+    0% {
+      content: '_';
+    }
+    100% {
+      content: '';
+    }
+  }
+  position: absolute !important;
+  border: $border-style;
+  background-image: url('../images/bg.png');
+  box-shadow: $btn-box-shadow;
+  .btn-box {
+    display: flex !important;
+    position: absolute !important;
+    justify-content: space-between;
+    .btn {
+      @include btn-style;
+      height: 50px;
+      width: 260px;
+      padding: 16px;
+      text-align: center;
+      &:hover {
+        top: 4px;
+        position: relative;
+      }
+    }
+  }
+  &.dialogue {
+    width: 90%;
+    bottom: 2%;
+    height: 220px;
+    padding: 20px;
+    left: 50%;
+    transform: translateX(-50%) !important;
+    @media screen and (max-width: 900px) {
+      transform: scale(0.48) translate(58%, 20%) !important;
+    }
+    .btn-box {
+      bottom: 12px;
+      width: calc(100% - 40px);
+    }
+  }
+  &.big {
+    width: 60%;
+    height: 60%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) !important;
+    #modal-text {
+      padding: 70px;
+    }
+    .btn-box {
+      bottom: 36px;
+      width: 100%;
+      justify-content: space-around;
+      text-align: center;
+      .btn {
+        border: $border-style;
+        width: 160px;
+        padding: 6px;
+        line-height: 50px;
+        &:hover {
+          box-shadow: $btn-box-shadow;
+        }
+      }
+    }
+  }
+  #modal-text {
+    display: inline-block;
+    line-height: 55px;
+    &::after {
+      content: "_";
+      animation: text-end 1s infinite;
+    }
+  }
+}

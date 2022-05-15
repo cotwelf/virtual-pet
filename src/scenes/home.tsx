@@ -1,19 +1,30 @@
 import Phaser from "phaser";
+import { confirmBtnText, cancelBtnText} from '../../public/assets/dialogues'
 import { IBasicDataType, IConmunicateConfig } from "~/utils/types";
-import { TextureKeys, createDialogueDom, showCurrentData, printText, setBasicData, getBasicData, DATA_TYPES, getInteractTimes, setInteractTimes } from '../utils'
-
-let testString = '你好呀~'
+import {
+  createDialogueDom,
+  DATA_TYPES,
+  showCurrentData,
+  printText,
+  setBasicData,
+  getBasicData,
+  getKotoba,
+  getInteractTimes,
+  setInteractTimes,
+  toggleTips,
+  getCharacterKey
+} from '../utils'
 
 export default class Home extends Phaser.Scene {
   constructor () {
     super('home'); // given the key to uniquely identify it from other Scenes
   }
-  private Character
-  private CharacterKey
+  private character
+  private characterKey
   // private healthLabel!: Phaser.GameObjects.Text
 
   // 四项基本数值
-  private basicData = {
+  private basicData: any = {
     health: 0,
     feeling: 0,
     knowledge: 0,
@@ -28,17 +39,20 @@ export default class Home extends Phaser.Scene {
   private gameWidth
   private gameHeight
 
+  private tips
+
   init () {
-    this.CharacterKey = TextureKeys.Girl
+    this.characterKey = getCharacterKey()
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
     this.basicData = getBasicData()
   }
   preload () {
     // this.load.image('background', 'images/bg.png')
+    console.log(this.characterKey)
     this.load.spritesheet(
-      this.CharacterKey,
-      'images/characters/girl.png',
+      this.characterKey,
+      `images/characters/${this.characterKey}.png`,
       { frameWidth: 320, frameHeight: 320 }
     )
   }
@@ -46,41 +60,46 @@ export default class Home extends Phaser.Scene {
     // 设置背景（repeat）。这里如果不 setOrigin(0, 0)，则是以图片的中心为原点，而我们希望是图片的左上角为原点
     // this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0)
     this.anims.create({
-      key: 'girl-alive',
-      frames: this.anims.generateFrameNames(this.CharacterKey, { start: 0, end: 2 }),
+      key: `${this.characterKey}-alive`,
+      frames: this.anims.generateFrameNames(this.characterKey, { start: 0, end: 2 }),
       frameRate: 3,
       repeat: -1
     });
-    this.Character = this.add.sprite(
+    this.character = this.add.sprite(
       this.gameWidth * 0.5,
       this.gameHeight * 0.5,
-      this.CharacterKey
-    ).play('girl-alive')
-    this.Character.setInteractive()
-    this.Character.on('pointerdown', (pointer) => {
-      console.log('character-click')
-      const interactTimes = getInteractTimes()
-      if (interactTimes === 3) {
-        this.add.dom(0, 0, <div/>).setOrigin(0)
-        return
-      }
-      setInteractTimes(interactTimes + 1)
-      const config: IConmunicateConfig = {
+      this.characterKey
+    ).play(`${this.characterKey}-alive`)
+    this.character.setInteractive()
+    this.character.on('pointerdown', (pointer) => {
+      // 设置按钮文字
+
+      let config: IConmunicateConfig = {
         dialogue: '你好呀呀呀~ 今天下雨了呢，出门别忘记带伞鸭',
         btns: [
           {
-            text: '你好 ^-^',
+            text: confirmBtnText[Math.floor((Math.random() * confirmBtnText.length))],
             type: 'health',
             value: 2,
           },
           {
-            text: '不理你╭(╯^╰)╮',
+            text: cancelBtnText[Math.floor((Math.random() * cancelBtnText.length))],
             type: 'feeling',
             value: -1,
           }
         ]
       }
-      this.communicate(config)
+      // 替换文字
+      getKotoba().then(res => {
+        config.dialogue = res
+        // console.log(res)
+        this.communicate(config)
+      })
+      const interactTimes = getInteractTimes()
+      if (interactTimes > 3) {
+        toggleTips(this, '今日互动加成已达上限_(:з」∠)_')
+      }
+      setInteractTimes(interactTimes + 1)
     }, this)
 
     // 展示当前数据
@@ -90,10 +109,15 @@ export default class Home extends Phaser.Scene {
   update(){
     if (this.currentShow !== this.previousType) {
       this.previousType = this.currentShow
-      // header 展示当前数据
-      this.basicDataShower.destroy()
-      this.basicDataShower = this.add.dom(0, 0, showCurrentData(this.currentShow, this.basicData[this.currentShow], this.onDataChange.bind(this))).setOrigin(0)
+      this.updateDataShower()
     }
+  }
+  private updateDataShower () {
+    // header 展示当前数据
+    if (this.basicDataShower) {
+      this.basicDataShower.destroy()
+    }
+    this.basicDataShower = this.add.dom(0, 0, showCurrentData(this.currentShow, this.basicData[this.currentShow], this.onDataChange.bind(this))).setOrigin(0)
   }
   private onDataChange (jump: 1 | -1 ) {
     const index = DATA_TYPES.indexOf(this.currentShow)
@@ -106,10 +130,12 @@ export default class Home extends Phaser.Scene {
     this.basicData[type] = count < 0 ? 0 : (count > 10 ? 10 : count)
     // 更新 localStorage
     setBasicData(this.basicData)
+    // 更新 dom
+    this.updateDataShower()
   }
   // 关闭正在开启的对话框
   private onCloseDialogueFn (type: IBasicDataType, value: number) {
-    this.Character.setInteractive()
+    this.character.setInteractive()
     this.dialogModal.destroy()
     this.updateBasicData(type, value)
     this.currentShow = type
@@ -117,7 +143,7 @@ export default class Home extends Phaser.Scene {
 
   // 点击角色交流
   private communicate (config: IConmunicateConfig) {
-    this.Character.disableInteractive()
+    this.character.disableInteractive()
     if (config.dialogue.length === 0) {
       return
     }
@@ -133,6 +159,6 @@ export default class Home extends Phaser.Scene {
       btnList.push(temp)
     })
     this.dialogModal = this.add.dom(0, 0, createDialogueDom('dialogue', { btnList: btnList })).setOrigin(0)
-    printText( document.getElementById('dialogue-text'), config.dialogue)
+    printText( document.getElementById('modal-text'), config.dialogue)
   }
 }

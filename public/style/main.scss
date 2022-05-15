@@ -1,4 +1,7 @@
 @import './variable';
+@import './mixin';
+
+
 @font-face {
   font-family: IPixRegular;
   src: url("../font/IPixRegular.ttf");
@@ -13,6 +16,14 @@
   font-family: VonwaonBitmap16;
   src: url("../font/VonwaonBitmap-16px.ttf");
   font-weight:800;
+}
+@keyframes blink {
+  from {
+    visibility: hidden;
+  }
+  to {
+    visibility: visible;
+  }
 }
 #font-loader {
   font-family: VonwaonBitmap16;
@@ -34,16 +45,28 @@ body {
   align-items: center;
   justify-content: center;
   color: $main-color;
-
+  .tips {
+    width: 100%;
+    text-align: center;
+    margin-top: 20%;
+    font-size: 30px;
+    // 闪烁，但好像没生效 orz
+    visibility: visible;
+    animation: blink 1s step-start infinite;
+  }
+  canvas {
+    background-image: url('../images/bg.png');
+  }
   @media screen and (max-width: 900px) {
 
     canvas {
       width: 100vw;
     }
   }
-  @import './dialogModal';
+  @import './modal';
   @import "./welcome";
   @import './home';
+  @import './setting';
 }
 
 

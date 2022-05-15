@@ -4,7 +4,7 @@
 	"description": "A typescript template project for Phaser 3 using Parceljs",
 	"scripts": {
 		"start": "npx parcel src/index.html -p 8000",
-		"build": "npx parcel build src/index.html --no-source-maps --out-dir dist",
+		"build": "npx parcel build src/index.html --out-dir dist",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"lint": "eslint ./src --ext .js,.jsx,.ts,.tsx"
 	},
