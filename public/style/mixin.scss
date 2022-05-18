@@ -6,7 +6,7 @@
 }
 
 @mixin btn-style {
-  border: $border-style;
+  border: $border-style-pc;
   cursor: pointer;
   &:hover {
     box-shadow: $btn-box-shadow;

@@ -4,6 +4,7 @@
 		"module": "es6",
 		"strict": true,
 		"noImplicitAny": false,
+    "resolveJsonModule": true,
 		"noEmit": true,
 		"allowJs": true,
 		"jsx": "preserve",

@@ -35,10 +35,10 @@ export default class Welcome extends Phaser.Scene {
     )
   }
   create () {
-    if(isMobile()) {
-      this.add.dom(this.gameWidth * 0.5, this.gameHeight * 0.4, <div className="sorry-qwq" style={{fontSize: '40px', width: '90vw', lineHeight: '15vw'}}>请用大佬电脑浏览器打开，主人还没搞好爪机的适配 _(:з」∠)_</div>)
-      return
-    }
+    // if(isMobile()) {
+    //   this.add.dom(this.gameWidth * 0.5, this.gameHeight * 0.4, <div className="sorry-qwq" style={{fontSize: '40px', width: '90vw', lineHeight: '15vw'}}>请用大佬电脑浏览器打开，主人还没搞好爪机的适配 _(:з」∠)_</div>)
+    //   return
+    // }
     if (!!getBasicData()) {
       this.scene.stop('welcome')
       this.scene.start('home')

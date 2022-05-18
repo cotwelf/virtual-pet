@@ -1,6 +1,6 @@
 @import './variable';
 @import './mixin';
-
+@import './mobile';
 
 @font-face {
   font-family: IPixRegular;
@@ -58,16 +58,15 @@ body {
   canvas {
     background-image: url('../images/bg.png');
   }
-  @media screen and (max-width: 900px) {
+  // @media screen and (max-width: 900px) {
 
-    canvas {
-      width: 100vw;
-    }
-  }
+  //   canvas {
+  //     width: 100vw;
+  //   }
+  // }
   @import './modal';
   @import "./welcome";
   @import './home';
   @import './setting';
+
 }
-
-

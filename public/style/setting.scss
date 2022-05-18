@@ -62,21 +62,17 @@
       }
       &:hover {
         transform: translateY(-8%);
-        &::before {
-          // background: rgba($main-color, 0.3);
-          // border: $border-style;
-        }
       }
       &.selected {
         &::before {
           background: rgba($main-color, 0.3);
-          border: $border-style;
+          border: $border-style-pc;
         }
       }
     }
     .percent {
       height: 30px;
-      border: $border-style;
+      border: $border-style-pc;
       > div {
         height: 100%;
         background-image: url("../images/percent.png");

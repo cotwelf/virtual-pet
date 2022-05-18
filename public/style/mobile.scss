@@ -1,0 +1,49 @@
+@media screen and (max-width: 900px) {
+  #game-view {
+    font-size: 22px;
+    > div {
+      width: 100vw !important;
+      height: 100vh !important;
+      // transform: scale(0.48) translate(58%, 20%) !important;
+      #current-data {
+        height: 8%;
+        .percent {
+          border: $border-style-mobile;
+          > div {
+            height: calc(100% + $border-weight-mobile * 2);
+            top: -$border-weight-mobile;
+            left: -$border-weight-mobile;
+          }
+        }
+      }
+      .tips {
+        font-size: 22px;
+        margin-top: 20vh;
+      }
+      .modal {
+        box-shadow: $btn-box-shadow-mobile;
+        &.dialogue {
+          border: $border-style-mobile;
+          width: 80vw;
+          height: 40vw;
+          bottom: 20vw;
+        }
+        #modal-text {
+          line-height: 36px;
+        }
+        .btn-box {
+          .btn {
+            border: $border-style-mobile;
+            height: 10vw;
+            width: 35vw;
+            padding: 2px;
+            line-height: 10vw;
+          }
+        }
+      }
+    }
+    canvas {
+      width: 100vw;
+    }
+  }
+}

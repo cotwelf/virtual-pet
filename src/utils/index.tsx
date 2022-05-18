@@ -51,7 +51,7 @@ export const printText = function(dom: HTMLElement | null, text: string, type = 
     setTimeout(() => {
       interval = setInterval(() => {
         if (currentText.length > 0) {
-          dom.innerText = dom.innerText + currentText[0]
+          dom.innerHTML = `${dom.innerText}${currentText[0] === ' ' ? '\xa0' : currentText[0]}`
           currentText = currentText.substring(1, currentText.length)
         } else {
           clearInterval(interval)
@@ -64,11 +64,12 @@ export const printText = function(dom: HTMLElement | null, text: string, type = 
 }
 
 export const showCurrentData = function(type: IBasicDataType, value: number, onChange: (jump: 1 | -1) => void) {
+  const width = document.body.clientWidth
   return (
     <div id='current-data' className={classNames([ type ], { mobile: isMobile() })}>
       <div className={classNames('previous', { disabled: type === DATA_TYPES[0] })} onClick={() => onChange(-1)}></div>
       <div className='percent'>
-        <div style={{ width: `${value / CEILING * 100}%` }}></div>
+        <div style={{ width: `calc(${value / CEILING * 100}% + ${width < 900 ? '6px' : '8px'})` }}></div>
       </div>
       <div
         className={classNames('next', { disabled: type === DATA_TYPES[DATA_TYPES.length - 1] })}
@@ -84,6 +85,6 @@ export const toggleTips = (that, text: string) => {
   }
   that.tips = that.add.dom(0, 0, <div className='tips'>{text}</div>).setOrigin(0)
   setTimeout(() => {
-    that.tips.destroy()
+    // that.tips.destroy()
   }, 5000)
 }

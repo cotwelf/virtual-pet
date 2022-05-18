@@ -1,4 +1,8 @@
 $main-color: #263238;
 $data-type: 'health', 'feeling', 'knowledge', 'relationship';
-$border-style: 5px solid $main-color;
+$border-weight-pc: 5px;
+$border-weight-mobile: 3px;
+$border-style-pc: $border-weight-pc solid $main-color;
+$border-style-mobile: $border-weight-mobile solid $main-color;
 $btn-box-shadow: inset 3px 3px rgba($main-color, 0.8);
+$btn-box-shadow-mobile: inset 1.5px 1.5px rgba($main-color, 0.8);

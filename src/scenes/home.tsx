@@ -12,7 +12,8 @@ import {
   getInteractTimes,
   setInteractTimes,
   toggleTips,
-  getCharacterKey
+  getCharacterKey,
+  getDataAndSetStatus
 } from '../utils'
 
 export default class Home extends Phaser.Scene {
@@ -46,6 +47,7 @@ export default class Home extends Phaser.Scene {
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
     this.basicData = getBasicData()
+    getDataAndSetStatus()
   }
   preload () {
     // this.load.image('background', 'images/bg.png')
@@ -137,8 +139,11 @@ export default class Home extends Phaser.Scene {
   private onCloseDialogueFn (type: IBasicDataType, value: number) {
     this.character.setInteractive()
     this.dialogModal.destroy()
-    this.updateBasicData(type, value)
-    this.currentShow = type
+    const interactTimes = getInteractTimes()
+      if (interactTimes <= 3) {
+        this.updateBasicData(type, value)
+        this.currentShow = type
+      }
   }
 
   // 点击角色交流
@@ -160,5 +165,9 @@ export default class Home extends Phaser.Scene {
     })
     this.dialogModal = this.add.dom(0, 0, createDialogueDom('dialogue', { btnList: btnList })).setOrigin(0)
     printText( document.getElementById('modal-text'), config.dialogue)
+  }
+
+  private changeStatus () {
+    // 30 分钟查询一次，是否有切换状态的条件
   }
 }

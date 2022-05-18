@@ -8,7 +8,7 @@
     }
   }
   position: absolute !important;
-  border: $border-style;
+  border: $border-style-pc;
   background-image: url('../images/bg.png');
   box-shadow: $btn-box-shadow;
   .btn-box {
@@ -34,9 +34,9 @@
     padding: 20px;
     left: 50%;
     transform: translateX(-50%) !important;
-    @media screen and (max-width: 900px) {
-      transform: scale(0.48) translate(58%, 20%) !important;
-    }
+    // @media screen and (max-width: 900px) {
+    //   transform: scale(0.48) translate(58%, 20%) !important;
+    // }
     .btn-box {
       bottom: 12px;
       width: calc(100% - 40px);
@@ -57,7 +57,7 @@
       justify-content: space-around;
       text-align: center;
       .btn {
-        border: $border-style;
+        border: $border-style-pc;
         width: 160px;
         padding: 6px;
         line-height: 50px;
