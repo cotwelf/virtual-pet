@@ -22,11 +22,27 @@
       }
       .modal {
         box-shadow: $btn-box-shadow-mobile;
+        border: $border-style-mobile;
         &.dialogue {
-          border: $border-style-mobile;
           width: 80vw;
           height: 40vw;
           bottom: 20vw;
+        }
+        &.big {
+          width: 80vw;
+          height: 70vw;
+          #modal-text {
+            padding: 6vw;
+          }
+          .btn-box {
+            .btn {
+              border: $border-style-mobile;
+              height: 10vw;
+              width: 35vw;
+              padding: 2px;
+              line-height: 10vw;
+            }
+          }
         }
         #modal-text {
           line-height: 36px;
@@ -38,6 +54,50 @@
             width: 35vw;
             padding: 2px;
             line-height: 10vw;
+          }
+        }
+      }
+      .character {
+        .btn-box {
+          padding-top: 46vh;
+        }
+        .confirm-btn {
+          width: 50vw;
+          bottom: 12vh;
+          border: $border-style-mobile;
+        }
+      }
+      .set-basic-data {
+        .basic-data {
+          width: 56vw;
+          .percent {
+            height: 6vw;
+            border: $border-style-mobile;
+          }
+          .data-item {
+            &.selected {
+              &::before {
+                width: 114%;
+                left: -8%;
+                border: $border-style-mobile;
+              }
+            }
+          }
+          .btn-box {
+            width: 92vw;
+            left: -18vw;
+            top: 26%;
+            .plus,
+            .minus {
+              width: 30px;
+              height: 30px;
+            }
+          }
+          .score-tips {
+            font-size: 18px;
+          }
+          .start {
+            border: $border-style-mobile;
           }
         }
       }

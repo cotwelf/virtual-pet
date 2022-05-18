@@ -85,6 +85,6 @@ export const toggleTips = (that, text: string) => {
   }
   that.tips = that.add.dom(0, 0, <div className='tips'>{text}</div>).setOrigin(0)
   setTimeout(() => {
-    // that.tips.destroy()
+    that.tips.destroy()
   }, 5000)
 }
