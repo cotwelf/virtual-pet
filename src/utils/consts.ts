@@ -1,4 +1,4 @@
-import { IBasicDataType } from "./types"
+import { IBasicData } from "./types"
 
 export enum CharacterKeys {
   Girl = 'girl',
@@ -7,8 +7,6 @@ export enum CharacterKeys {
 
 export const CEILING = 10
 
-export const DATA_TYPES: IBasicDataType[] = ['health', 'feeling', 'knowledge', 'relationship']
+export const DATA_TYPES: IBasicData[] = ['health', 'feeling', 'knowledge', 'relationship']
 
 export const CHARACTER_KEYS = ['girl', 'boy']
-
-

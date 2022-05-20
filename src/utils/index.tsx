@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { CEILING, DATA_TYPES } from './consts'
 import { getInteractTimes, setInteractTimes } from './localstorage'
-import { IBasicDataType, IValueChangeType } from './types'
+import { IBasicData, IValueChangeType } from './types'
 
 export * from './consts'
 export * from './localstorage'
@@ -45,10 +45,11 @@ export const printText = function(dom: HTMLElement | null, text: string, type = 
     fast: 100,
     slow: 200,
   }
+  let interval
+  let timeout
   if (!!dom) {
-    let interval
     let currentText = text
-    setTimeout(() => {
+    timeout = setTimeout(() => {
       interval = setInterval(() => {
         if (currentText.length > 0) {
           dom.innerHTML = `${dom.innerText}${currentText[0] === ' ' ? '\xa0' : currentText[0]}`
@@ -61,9 +62,16 @@ export const printText = function(dom: HTMLElement | null, text: string, type = 
   } else {
     printText(dom, text)
   }
+  function stop() {
+    clearTimeout(timeout)
+    clearInterval(interval)
+  }
+  return {
+    stop
+  }
 }
 
-export const showCurrentData = function(type: IBasicDataType, value: number, onChange: (jump: 1 | -1) => void) {
+export const showCurrentData = function(type: IBasicData, value: number, onChange: (jump: 1 | -1) => void) {
   const width = document.body.clientWidth
   return (
     <div id='current-data' className={classNames([ type ], { mobile: isMobile() })}>
@@ -87,4 +95,30 @@ export const toggleTips = (that, text: string) => {
   setTimeout(() => {
     that.tips.destroy()
   }, 5000)
+}
+
+// 以 hidden 属性来作为判断浏览器前缀的依据
+function getBrowserPrefix() {
+  // check hidden
+  if ('hidden' in document) {
+    return null
+  }
+  // All the possible prefixes
+  const browserPrefixes = ['moz', 'ms', 'o', 'webkit']
+  for (let i = 0; i < browserPrefixes.length; i += 1) {
+    const prefix = `${browserPrefixes[i]}Hidden`
+    if (prefix in document) {
+      return browserPrefixes[i]
+    }
+  }
+  // The API is not supported in browser
+  return null
+}
+
+export const getVisibilityEvent = () => {
+  const prefix = getBrowserPrefix()
+  if (prefix) {
+    return `${prefix}visibilitychange`
+  }
+  return 'visibilitychange'
 }

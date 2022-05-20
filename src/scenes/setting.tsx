@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import Phaser from "phaser";
 import { createDialogueDom, printText, CharacterKeys, setCharacterKey, setBasicData } from "~/utils";
-import { IBasicDataType } from "~/utils/types";
+import { IBasicData } from "~/utils/types";
 
 const CHARACTER_KEY_LIST = ['girl', 'boy']
 
@@ -16,7 +16,7 @@ export default class Setting extends Phaser.Scene {
   private selectDom
 
   private basicData: {
-    type: IBasicDataType,
+    type: IBasicData,
     name: string,
     value: number,
     selected: boolean
@@ -110,7 +110,7 @@ export default class Setting extends Phaser.Scene {
     this.currentkey = this.characters[this.characters.indexOf(this.currentkey) + handle]
     this.updateSelectDom()
   }
-  private onChangeData(type: IBasicDataType, value: 1 | -1) {
+  private onChangeData(type: IBasicData, value: 1 | -1) {
     let updated = false
     // 可分配 > 0 分，可加
     if ((this.sumValue < 1 && value === 1) || (this.sumValue > 9 && value === -1)) {
@@ -130,7 +130,7 @@ export default class Setting extends Phaser.Scene {
     this.basicData = newData
     this.updateBasicDataDom()
   }
-  private onDataTypeSelected (type: IBasicDataType) {
+  private onDataTypeSelected (type: IBasicData) {
     let updated = false
     let newData = this.basicData.map(data => {
       if (data.type === type) {

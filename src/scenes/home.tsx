@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { confirmBtnText, cancelBtnText} from '../../public/assets/dialogues'
-import { IBasicDataType, IConmunicateConfig } from "~/utils/types";
+import { IBasicData, IConmunicateConfig } from "~/utils/types";
 import {
   createDialogueDom,
   DATA_TYPES,
@@ -13,7 +13,9 @@ import {
   setInteractTimes,
   toggleTips,
   getCharacterKey,
-  getDataAndSetStatus
+  getEventDailyRecord,
+  getDataAndSetStatus,
+  getVisibilityEvent
 } from '../utils'
 
 export default class Home extends Phaser.Scene {
@@ -31,7 +33,7 @@ export default class Home extends Phaser.Scene {
     knowledge: 0,
     relationship: 0,
   }
-  private currentShow: IBasicDataType = 'health'
+  private currentShow: IBasicData = 'health'
   private previousType
   private basicDataShower
 
@@ -59,14 +61,25 @@ export default class Home extends Phaser.Scene {
     )
   }
   create () {
-    // 设置背景（repeat）。这里如果不 setOrigin(0, 0)，则是以图片的中心为原点，而我们希望是图片的左上角为原点
-    // this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0)
+    document.addEventListener(getVisibilityEvent(), (event) => {
+      this.anims.staggerPlay(`${this.characterKey}-alive`, this.character, 0, true)
+      console.log(2333)
+      // if (this.character.anims._paused) {
+      //   this.character.anims.start()
+      // } else {
+      //   this.character.anims.resume()
+      // }
+
+    })
     this.anims.create({
       key: `${this.characterKey}-alive`,
       frames: this.anims.generateFrameNames(this.characterKey, { start: 0, end: 2 }),
       frameRate: 3,
       repeat: -1
     });
+    if (this.character) {
+      this.character.destroy()
+    }
     this.character = this.add.sprite(
       this.gameWidth * 0.5,
       this.gameHeight * 0.5,
@@ -75,7 +88,6 @@ export default class Home extends Phaser.Scene {
     this.character.setInteractive()
     this.character.on('pointerdown', (pointer) => {
       // 设置按钮文字
-
       let config: IConmunicateConfig = {
         dialogue: '你好呀呀呀~ 今天下雨了呢，出门别忘记带伞鸭',
         btns: [
@@ -125,7 +137,7 @@ export default class Home extends Phaser.Scene {
     const index = DATA_TYPES.indexOf(this.currentShow)
     this.currentShow = DATA_TYPES[index + jump]
   }
-  private updateBasicData (type: IBasicDataType, value: number) {
+  private updateBasicData (type: IBasicData, value: number) {
     // 更新数值
     let count = this.basicData[type]
     count += value
@@ -136,7 +148,7 @@ export default class Home extends Phaser.Scene {
     this.updateDataShower()
   }
   // 关闭正在开启的对话框
-  private onCloseDialogueFn (type: IBasicDataType, value: number) {
+  private onCloseDialogueFn (type: IBasicData, value: number) {
     this.character.setInteractive()
     this.dialogModal.destroy()
     const interactTimes = getInteractTimes()
@@ -158,13 +170,16 @@ export default class Home extends Phaser.Scene {
     }[] = []
     config.btns.forEach(btn => {
       let temp = {
-        onClickFn: () => this.onCloseDialogueFn(btn.type, btn.value),
+        onClickFn: () => {
+          this.onCloseDialogueFn(btn.type, btn.value)
+          print.stop()
+        },
         text: btn.text
       }
       btnList.push(temp)
     })
     this.dialogModal = this.add.dom(0, 0, createDialogueDom('dialogue', { btnList: btnList })).setOrigin(0)
-    printText( document.getElementById('modal-text'), config.dialogue)
+    let print = printText(document.getElementById('modal-text'), config.dialogue)
   }
 
   private changeStatus () {

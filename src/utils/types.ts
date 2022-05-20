@@ -1,4 +1,4 @@
-export type IBasicDataType = 'health' | 'feeling' | 'knowledge' | 'relationship'
+export type IBasicData = 'health' | 'feeling' | 'knowledge' | 'relationship'
 
 export type IValueChangeType = 'decrease' | 'increase'
 
@@ -6,7 +6,7 @@ export interface IConmunicateConfig {
   dialogue: string,
   btns: {
     text: string,
-    type: IBasicDataType,
+    type: IBasicData,
     value: number,
   }[]
 }

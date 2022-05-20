@@ -4,6 +4,7 @@
     > div {
       width: 100vw !important;
       height: 100vh !important;
+      z-index: 2;
       // transform: scale(0.48) translate(58%, 20%) !important;
       #current-data {
         height: 8%;
@@ -26,7 +27,7 @@
         &.dialogue {
           width: 80vw;
           height: 40vw;
-          bottom: 20vw;
+          bottom: 30vw;
         }
         &.big {
           width: 80vw;
@@ -104,6 +105,8 @@
     }
     canvas {
       width: 100vw;
+      position: absolute;
+      top: 20vw;
     }
   }
 }

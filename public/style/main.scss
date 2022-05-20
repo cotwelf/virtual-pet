@@ -39,6 +39,9 @@ body {
   font-size: 40px;
   overflow: hidden;
 }
+* {
+  user-select: none;
+}
 #game-view {
   background-image: url('../images/bg.png');
   display: flex;
