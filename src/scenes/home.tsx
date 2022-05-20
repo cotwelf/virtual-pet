@@ -42,14 +42,26 @@ export default class Home extends Phaser.Scene {
   private gameWidth
   private gameHeight
 
-  private tips
+  private data
 
   init () {
     this.characterKey = getCharacterKey()
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
     this.basicData = getBasicData()
-    getDataAndSetStatus()
+    this.data = getDataAndSetStatus()
+    // 防止手机浏览器切换 tab 导致雪碧图鬼畜
+    const fixHidden = () => {
+      if (document.visibilityState === 'hidden') {
+        this.character.visible = false
+        this.character.anims.stopOnFrame(0)
+      } else {
+        this.character.anims.restart()
+        this.character.visible = true
+        // this.character.play(`${this.characterKey}-alive`, true)
+      }
+    }
+    document.addEventListener(getVisibilityEvent(), fixHidden)
   }
   preload () {
     // this.load.image('background', 'images/bg.png')
@@ -61,30 +73,18 @@ export default class Home extends Phaser.Scene {
     )
   }
   create () {
-    document.addEventListener(getVisibilityEvent(), (event) => {
-      this.anims.staggerPlay(`${this.characterKey}-alive`, this.character, 0, true)
-      console.log(2333)
-      // if (this.character.anims._paused) {
-      //   this.character.anims.start()
-      // } else {
-      //   this.character.anims.resume()
-      // }
 
-    })
     this.anims.create({
       key: `${this.characterKey}-alive`,
       frames: this.anims.generateFrameNames(this.characterKey, { start: 0, end: 2 }),
       frameRate: 3,
-      repeat: -1
+      repeat: -1,
     });
-    if (this.character) {
-      this.character.destroy()
-    }
     this.character = this.add.sprite(
       this.gameWidth * 0.5,
       this.gameHeight * 0.5,
       this.characterKey
-    ).play(`${this.characterKey}-alive`)
+    ).play(`${this.characterKey}-alive`, true)
     this.character.setInteractive()
     this.character.on('pointerdown', (pointer) => {
       // 设置按钮文字
