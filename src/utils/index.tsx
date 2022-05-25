@@ -1,6 +1,5 @@
 import classNames from 'classnames'
 import { CEILING, DATA_TYPES } from './consts'
-import { getInteractTimes, setInteractTimes } from './localstorage'
 import { IBasicData, IValueChangeType } from './types'
 
 export * from './consts'

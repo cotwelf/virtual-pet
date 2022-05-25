@@ -1,23 +1,21 @@
 import Phaser from "phaser";
 import { confirmBtnText, cancelBtnText} from '../../public/assets/dialogues'
 import { IBasicData, IConmunicateConfig } from "~/utils/types";
+import dialogues from '../../public/assets/dialogues.json'
 import {
   createDialogueDom,
   DATA_TYPES,
   showCurrentData,
   printText,
-  setBasicData,
-  getBasicData,
+  getStorageData,
+  setStorageData,
+  updateStorageData,
   getKotoba,
-  getInteractTimes,
-  setInteractTimes,
   toggleTips,
-  getCharacterKey,
-  getEventDailyRecord,
-  getDataAndSetStatus,
   getVisibilityEvent
 } from '../utils'
 
+const USE_KOTOBA_API = false
 export default class Home extends Phaser.Scene {
   constructor () {
     super('home'); // given the key to uniquely identify it from other Scenes
@@ -41,15 +39,14 @@ export default class Home extends Phaser.Scene {
   private dialogModal
   private gameWidth
   private gameHeight
-
-  private data
+  private lastDialogue
 
   init () {
-    this.characterKey = getCharacterKey()
+    const storageData = getStorageData()
+    this.characterKey = storageData.characterKey
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
-    this.basicData = getBasicData()
-    this.data = getDataAndSetStatus()
+    this.basicData = storageData.basicData
     // 防止手机浏览器切换 tab 导致雪碧图鬼畜
     const fixHidden = () => {
       if (document.visibilityState === 'hidden') {
@@ -73,7 +70,6 @@ export default class Home extends Phaser.Scene {
     )
   }
   create () {
-
     this.anims.create({
       key: `${this.characterKey}-alive`,
       frames: this.anims.generateFrameNames(this.characterKey, { start: 0, end: 2 }),
@@ -87,33 +83,38 @@ export default class Home extends Phaser.Scene {
     ).play(`${this.characterKey}-alive`, true)
     this.character.setInteractive()
     this.character.on('pointerdown', (pointer) => {
+      const currentDialogue = dialogues[Phaser.Math.RND.integerInRange(0, dialogues.length - 1)]
+
       // 设置按钮文字
       let config: IConmunicateConfig = {
-        dialogue: '你好呀呀呀~ 今天下雨了呢，出门别忘记带伞鸭',
+        dialogue: currentDialogue.text,
         btns: [
           {
-            text: confirmBtnText[Math.floor((Math.random() * confirmBtnText.length))],
+            text: currentDialogue.btn1.text,
             type: 'health',
             value: 2,
           },
           {
-            text: cancelBtnText[Math.floor((Math.random() * cancelBtnText.length))],
-            type: 'feeling',
-            value: -1,
+            text: currentDialogue.btn2.text,
+            type: 'health',
+            value: 1,
           }
         ]
       }
-      // 替换文字
-      getKotoba().then(res => {
-        config.dialogue = res
-        // console.log(res)
+      if (USE_KOTOBA_API) {
+        // 替换文字为一言
+        getKotoba().then(res => {
+          config.dialogue = res
+          this.communicate(config)
+        })
+      } else {
         this.communicate(config)
-      })
-      const interactTimes = getInteractTimes()
+      }
+      const interactTimes = getStorageData().interactTimes || 0
       if (interactTimes > 3) {
         toggleTips(this, '今日互动加成已达上限\n_(:з」∠)_')
       }
-      setInteractTimes(interactTimes + 1)
+      setStorageData('interactTimes', interactTimes + 1)
     }, this)
 
     // 展示当前数据
@@ -143,7 +144,7 @@ export default class Home extends Phaser.Scene {
     count += value
     this.basicData[type] = count < 0 ? 0 : (count > 10 ? 10 : count)
     // 更新 localStorage
-    setBasicData(this.basicData)
+    setStorageData('basicData', this.basicData)
     // 更新 dom
     this.updateDataShower()
   }
@@ -151,7 +152,7 @@ export default class Home extends Phaser.Scene {
   private onCloseDialogueFn (type: IBasicData, value: number) {
     this.character.setInteractive()
     this.dialogModal.destroy()
-    const interactTimes = getInteractTimes()
+    const interactTimes = getStorageData().interactTimes || 0
       if (interactTimes <= 3) {
         this.updateBasicData(type, value)
         this.currentShow = type

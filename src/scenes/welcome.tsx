@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { createDialogueDom, getBasicData, isMobile, printText } from "~/utils";
+import { createDialogueDom, getStorageData, isMobile, printText } from "~/utils";
 
 const RULE_FRAGMENTS = [
   "由于疫情大爆发，所有人都被封印在家里无法出门。",
@@ -39,7 +39,7 @@ export default class Welcome extends Phaser.Scene {
     //   this.add.dom(this.gameWidth * 0.5, this.gameHeight * 0.4, <div className="sorry-qwq" style={{fontSize: '40px', width: '90vw', lineHeight: '15vw'}}>请用大佬电脑浏览器打开，主人还没搞好爪机的适配 _(:з」∠)_</div>)
     //   return
     // }
-    if (!!getBasicData()) {
+    if (!!getStorageData().basicData) {
       this.scene.stop('welcome')
       this.scene.start('home')
     }

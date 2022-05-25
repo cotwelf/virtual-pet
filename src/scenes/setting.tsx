@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import Phaser from "phaser";
-import { createDialogueDom, printText, CharacterKeys, setCharacterKey, setBasicData } from "~/utils";
+import { createDialogueDom, printText, CharacterKeys, setStorageData } from "~/utils";
 import { IBasicData } from "~/utils/types";
 
 const CHARACTER_KEY_LIST = ['girl', 'boy']
@@ -193,12 +193,13 @@ export default class Setting extends Phaser.Scene {
       }
     })
     console.log(data)
-    setBasicData(data)
+
+    setStorageData('basicData', data)
     this.scene.stop('setting')
     this.scene.start('home')
   }
   private setOriginData() {
-    setCharacterKey(this.currentkey)
+    setStorageData('characterKey', this.currentkey)
     this.selectDom.destroy()
     this.currentCharacter.destroy()
     this.updateBasicDataDom()
