@@ -52,8 +52,9 @@ body {
   .tips {
     width: 100%;
     text-align: center;
-    margin-top: 20%;
+    // margin-top: 20%;
     font-size: 30px;
+    background-color: rgba($main-color, 0.5);
     // 闪烁，但好像没生效 orz
     visibility: visible;
     animation: blink 1s step-start infinite;

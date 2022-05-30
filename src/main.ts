@@ -5,8 +5,13 @@ import Welcome from './scenes/welcome'
 // @ts-ignore
 import Home from './scenes/home'
 import Setting from './scenes/setting'
+import Covid from './scenes/covid'
 
 const config: Phaser.Types.Core.GameConfig = {
+  fps: {
+    min: 10,
+    deltaHistory: 1,
+  },
 	type: Phaser.AUTO,
 	width: 800,
 	height: 800,
@@ -18,7 +23,7 @@ const config: Phaser.Types.Core.GameConfig = {
 			gravity: { y: 200 }
 		}
 	},
-	scene: [Welcome, Setting, Home],
+	scene: [Welcome, Setting, Home, Covid],
 	dom: {
 		createContainer: true
 	}

@@ -14,6 +14,7 @@ import {
   toggleTips,
   getVisibilityEvent
 } from '../utils'
+import { map, mapKeys } from "lodash";
 
 const USE_KOTOBA_API = false
 export default class Home extends Phaser.Scene {
@@ -22,10 +23,8 @@ export default class Home extends Phaser.Scene {
   }
   private character
   private characterKey
-  // private healthLabel!: Phaser.GameObjects.Text
-
   // 四项基本数值
-  private basicData: any = {
+  private basicData: { [key in IBasicData]: number } = {
     health: 0,
     feeling: 0,
     knowledge: 0,
@@ -42,11 +41,14 @@ export default class Home extends Phaser.Scene {
   private lastDialogue
 
   init () {
+    updateStorageData()
     const storageData = getStorageData()
     this.characterKey = storageData.characterKey
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
-    this.basicData = storageData.basicData
+    if (storageData.basicData) {
+      this.basicData = storageData.basicData
+    }
     // 防止手机浏览器切换 tab 导致雪碧图鬼畜
     const fixHidden = () => {
       if (document.visibilityState === 'hidden') {
@@ -61,8 +63,6 @@ export default class Home extends Phaser.Scene {
     document.addEventListener(getVisibilityEvent(), fixHidden)
   }
   preload () {
-    // this.load.image('background', 'images/bg.png')
-    console.log(this.characterKey)
     this.load.spritesheet(
       this.characterKey,
       `images/characters/${this.characterKey}.png`,
@@ -70,6 +70,10 @@ export default class Home extends Phaser.Scene {
     )
   }
   create () {
+    if (!getStorageData().eventDailyRecord?.covid ) {
+      this.scene.start('covid')
+      return
+    }
     this.anims.create({
       key: `${this.characterKey}-alive`,
       frames: this.anims.generateFrameNames(this.characterKey, { start: 0, end: 2 }),
@@ -84,7 +88,6 @@ export default class Home extends Phaser.Scene {
     this.character.setInteractive()
     this.character.on('pointerdown', (pointer) => {
       const currentDialogue = dialogues[Phaser.Math.RND.integerInRange(0, dialogues.length - 1)]
-
       // 设置按钮文字
       let config: IConmunicateConfig = {
         dialogue: currentDialogue.text,

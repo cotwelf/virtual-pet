@@ -192,9 +192,13 @@ export default class Setting extends Phaser.Scene {
         [i.type]: i.value,
       }
     })
-    console.log(data)
 
     setStorageData('basicData', data)
+    setStorageData('eventDailyRecord', {})
+    setStorageData('eventDurableRecord', [])
+    setStorageData('eventCrashRecord', [])
+    setStorageData('interactTimes', 0)
+    setStorageData('lastChangeTime', Date.now())
     this.scene.stop('setting')
     this.scene.start('home')
   }

@@ -22,7 +22,7 @@ export const createDialogueDom = function (type: 'dialogue' | 'small' | 'big', c
       { typeof config === 'string' ? config : (
         <>
           <div id='modal-text'>{config.dialogueText}</div>
-          <div className={classNames('btn', {'btn-box': config.btnList.length > 1})}>
+          <div className='btn-box'>
             { config.btnList.map((dom, index) => (
               <div
                 key={`${index}${dom.text.replace(' ', '')}`}
@@ -38,7 +38,7 @@ export const createDialogueDom = function (type: 'dialogue' | 'small' | 'big', c
   )
 }
 
-export const printText = function(dom: HTMLElement | null, text: string, type = 'normal'){
+export const printText = function(dom: HTMLElement | null, text: string, type = 'normal', that?){
   let printSpeed = {
     normal: 200,
     fast: 100,
@@ -46,14 +46,17 @@ export const printText = function(dom: HTMLElement | null, text: string, type = 
   }
   let interval
   let timeout
+  let printing
   if (!!dom) {
     let currentText = text
     timeout = setTimeout(() => {
+      printing = true
       interval = setInterval(() => {
         if (currentText.length > 0) {
           dom.innerHTML = `${dom.innerText}${currentText[0] === ' ' ? '\xa0' : currentText[0]}`
           currentText = currentText.substring(1, currentText.length)
         } else {
+          printing = false
           clearInterval(interval)
         }
       }, printSpeed[type])
@@ -62,11 +65,13 @@ export const printText = function(dom: HTMLElement | null, text: string, type = 
     printText(dom, text)
   }
   function stop() {
+    printing = false
     clearTimeout(timeout)
     clearInterval(interval)
   }
   return {
-    stop
+    stop,
+    isPrinting: () => printing
   }
 }
 
@@ -86,14 +91,17 @@ export const showCurrentData = function(type: IBasicData, value: number, onChang
   )
 }
 
-export const toggleTips = (that, text: string) => {
+export const toggleTips = (that, text: string, close = true) => {
   if (that.tips) {
     that.tips.destroy()
   }
   that.tips = that.add.dom(0, 0, <div className='tips'>{text}</div>).setOrigin(0)
+  if (!close) {
+    return
+  }
   setTimeout(() => {
     that.tips.destroy()
-  }, 5000)
+  }, 3000)
 }
 
 // 以 hidden 属性来作为判断浏览器前缀的依据
