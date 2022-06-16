@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import Phaser from "phaser";
 import { createDialogueDom, printText, CharacterKeys, setStorageData } from "~/utils";
+import { ASSET_KEYS, handleAssets } from "~/utils/handle-assets";
 import { IBasicData } from "~/utils/types";
 
 const CHARACTER_KEY_LIST = ['girl', 'boy']
@@ -93,14 +94,15 @@ export default class Setting extends Phaser.Scene {
     this.selectDom = this.add.dom(0, 0, (
       <div className='character'>
         <div className='btn-box'>
-          <div className={classNames('previous', { disabled: this.characters.indexOf(this.currentkey) === 0 })} onClick={() => this.changeCharacter(-1)} />
-          <div className={classNames('next', { disabled: this.characters.indexOf(this.currentkey) === this.characters.length - 1 })} onClick={() => this.changeCharacter(1)} />
+          <div className={classNames('previous', { disabled: this.characters.indexOf(this.currentkey) === 0 })} onClick={() => this.handleChangeCharacter(-1)} />
+          <div className={classNames('next', { disabled: this.characters.indexOf(this.currentkey) === this.characters.length - 1 })} onClick={() => this.handleChangeCharacter(1)} />
         </div>
         <div className="confirm-btn" onClick={this.setOriginData.bind(this)}>选择这个大冤种</div>
       </div>
     )).setOrigin(0)
   }
-  private changeCharacter(handle: number) {
+  private handleChangeCharacter(handle: number) {
+    handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
     this.currentCharacter.destroy()
     this.currentCharacter = this.add.sprite(
       this.gameWidth * 0.5,
@@ -111,6 +113,7 @@ export default class Setting extends Phaser.Scene {
     this.updateSelectDom()
   }
   private onChangeData(type: IBasicData, value: 1 | -1) {
+    handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
     let updated = false
     // 可分配 > 0 分，可加
     if ((this.sumValue < 1 && value === 1) || (this.sumValue > 9 && value === -1)) {
@@ -131,6 +134,7 @@ export default class Setting extends Phaser.Scene {
     this.updateBasicDataDom()
   }
   private onDataTypeSelected (type: IBasicData) {
+    handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
     let updated = false
     let newData = this.basicData.map(data => {
       if (data.type === type) {
@@ -185,6 +189,7 @@ export default class Setting extends Phaser.Scene {
     )).setOrigin(0)
   }
   private toHome () {
+    handleAssets.play(this, ASSET_KEYS.AUDIO.NEXT.KEY)
     let data
     this.basicData.forEach(i => {
       data = {
@@ -203,6 +208,7 @@ export default class Setting extends Phaser.Scene {
     this.scene.start('home')
   }
   private setOriginData() {
+    handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
     setStorageData('characterKey', this.currentkey)
     this.selectDom.destroy()
     this.currentCharacter.destroy()

@@ -69,6 +69,7 @@ export const updateStorageData = function() {
     console.log(lastString, todayString)
     if (lastString !== todayString) {
       // 每日首次登录
+      setStorageData('interactTimes', 0)
       // lastChangeTime 改为今日
       setStorageData('lastChangeTime', now.valueOf())
       // 清空持续事件和突发事件记录

@@ -14,7 +14,7 @@ import {
   toggleTips,
   getVisibilityEvent
 } from '../utils'
-import { map, mapKeys } from "lodash";
+import { ASSET_KEYS, handleAssets } from "~/utils/handle-assets";
 
 const USE_KOTOBA_API = false
 export default class Home extends Phaser.Scene {
@@ -23,6 +23,8 @@ export default class Home extends Phaser.Scene {
   }
   private character
   private characterKey
+
+  private storageData
   // 四项基本数值
   private basicData: { [key in IBasicData]: number } = {
     health: 0,
@@ -38,17 +40,19 @@ export default class Home extends Phaser.Scene {
   private dialogModal
   private gameWidth
   private gameHeight
-  private lastDialogue
+  private lastDialogueIndex = 0
+  private print
 
   init () {
     updateStorageData()
-    const storageData = getStorageData()
-    this.characterKey = storageData.characterKey
+    this.storageData = getStorageData()
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
-    if (storageData.basicData) {
-      this.basicData = storageData.basicData
+    if (this.storageData.basicData) {
+      this.basicData = this.storageData.basicData
     }
+    this.characterKey = `${this.storageData.characterKey}${this.basicData.health < 3 ? '_emo' : ''}`
+
     // 防止手机浏览器切换 tab 导致雪碧图鬼畜
     const fixHidden = () => {
       if (document.visibilityState === 'hidden') {
@@ -65,13 +69,22 @@ export default class Home extends Phaser.Scene {
   preload () {
     this.load.spritesheet(
       this.characterKey,
-      `images/characters/${this.characterKey}.png`,
+      `images/characters/${this.characterKey}.png`, // WORKAROUND
+      // `images/characters/${this.characterKey}.png`,
       { frameWidth: 320, frameHeight: 320 }
     )
   }
   create () {
+    // console.log(this.cache.audio.get('sound-click'))
+
     if (!getStorageData().eventDailyRecord?.covid ) {
       this.scene.start('covid')
+      return
+    }
+    // TODO: 之后改为随机事件
+    if (!getStorageData().eventDailyRecord?.food) {
+      // this.scene.start('getFoods')
+      this.scene.start('texts')
       return
     }
     this.anims.create({
@@ -87,7 +100,9 @@ export default class Home extends Phaser.Scene {
     ).play(`${this.characterKey}-alive`, true)
     this.character.setInteractive()
     this.character.on('pointerdown', (pointer) => {
-      const currentDialogue = dialogues[Phaser.Math.RND.integerInRange(0, dialogues.length - 1)]
+      // const currentDialogue = dialogues[Phaser.Math.RND.integerInRange(0, dialogues.length - 1)]
+      // WORDAROUND: 为了录像，顺序执行了 orz
+      const currentDialogue = dialogues[this.lastDialogueIndex]
       // 设置按钮文字
       let config: IConmunicateConfig = {
         dialogue: currentDialogue.text,
@@ -115,7 +130,7 @@ export default class Home extends Phaser.Scene {
       }
       const interactTimes = getStorageData().interactTimes || 0
       if (interactTimes > 3) {
-        toggleTips(this, '今日互动加成已达上限\n_(:з」∠)_')
+        // toggleTips(this, '今日互动加成已达上限\n_(:з」∠)_')
       }
       setStorageData('interactTimes', interactTimes + 1)
     }, this)
@@ -128,6 +143,8 @@ export default class Home extends Phaser.Scene {
     if (this.currentShow !== this.previousType) {
       this.previousType = this.currentShow
       this.updateDataShower()
+    }
+    if (!this.print?.isPrinting()) {
     }
   }
   private updateDataShower () {
@@ -153,6 +170,12 @@ export default class Home extends Phaser.Scene {
   }
   // 关闭正在开启的对话框
   private onCloseDialogueFn (type: IBasicData, value: number) {
+    // WORDAROUND: 为了录像，顺序执行了 orz
+    if (this.lastDialogueIndex === dialogues.length - 1) {
+      this.lastDialogueIndex = 0
+    } else {
+      this.lastDialogueIndex++
+    }
     this.character.setInteractive()
     this.dialogModal.destroy()
     const interactTimes = getStorageData().interactTimes || 0
@@ -174,16 +197,17 @@ export default class Home extends Phaser.Scene {
     }[] = []
     config.btns.forEach(btn => {
       let temp = {
-        onClickFn: () => {
+        onClickFn: async () => {
+          handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
+          await print.stop(this)
           this.onCloseDialogueFn(btn.type, btn.value)
-          print.stop()
         },
         text: btn.text
       }
       btnList.push(temp)
     })
     this.dialogModal = this.add.dom(0, 0, createDialogueDom('dialogue', { btnList: btnList })).setOrigin(0)
-    let print = printText(document.getElementById('modal-text'), config.dialogue)
+    let print = printText(this, document.getElementById('modal-text'), config.dialogue)
   }
 
   private changeStatus () {

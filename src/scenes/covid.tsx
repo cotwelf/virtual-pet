@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import { createDialogueDom, getStorageData, printText, setStorageData, toggleTips, TYPES_CNAME } from '~/utils'
+import { ASSET_KEYS, handleAssets } from '~/utils/handle-assets'
 import { eventDaily, IEventResItem } from '../../public/assets/events'
 
 export default class Covid extends Phaser.Scene {
@@ -26,6 +27,7 @@ export default class Covid extends Phaser.Scene {
     this.load.image('tip', 'images/covid/tip.png')
   }
   create(){
+    handleAssets.play(this, ASSET_KEYS.AUDIO.COVIDBGMSHORT.KEY, { volume: 0.2 })
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
     // 插入核酸背景图
@@ -69,6 +71,7 @@ export default class Covid extends Phaser.Scene {
   update() {
     // 开始抗原
     if (this.testing && !this.interval) {
+      handleAssets.play(this, ASSET_KEYS.AUDIO.COVIDING.KEY, { volume: 0.7 })
       this.interval = setInterval(() => {
         if (this.cGraphics.alpha !== 1) {
           this.cGraphics.alpha += 0.5
@@ -80,8 +83,8 @@ export default class Covid extends Phaser.Scene {
         }
       }, 100)
     } else if (!this.testing && !!this.interval) {
-      console.log(!this.testing, this.interval, this.gameStart)
       clearInterval(this.interval)
+      handleAssets.stop(this, ASSET_KEYS.AUDIO.COVIDING.KEY)
       this.interval = null
       if (this.cGraphics.alpha === 0 && this.tGraphics.alpha === 0) {
         // 抗原失效
@@ -89,6 +92,7 @@ export default class Covid extends Phaser.Scene {
         this.resultModal = this.addResultModal('again')
       } else if (this.tGraphics.alpha > 0) {
         // 阳性
+        handleAssets.play(this, ASSET_KEYS.AUDIO.YANG.KEY, { volume: 0.2 })
         this.resultModal = this.addResultModal('yang')
       } else if (this.cGraphics.alpha > 0) {
         // 阴性
@@ -105,11 +109,9 @@ export default class Covid extends Phaser.Scene {
       {
         text: '我知道了',
         onClickFn: () => {
-          if (print.isPrinting()) {
-            toggleTips(this, '不听完我说完吗 qwq')
-            return
-          }
-          print.stop()
+          handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
+          handleAssets.stop(this, ASSET_KEYS.AUDIO.YANG.KEY)
+          print.stop(this)
           switch(type) {
             case 'again':
               this.resultModal.destroy()
@@ -144,6 +146,7 @@ export default class Covid extends Phaser.Scene {
               toggleTips(this, tips)
               this.resultModal.destroy()
               setTimeout(() => {
+                handleAssets.stop(this, ASSET_KEYS.AUDIO.COVIDBGMSHORT.KEY)
                 this.scene.start('home')
               }, 3000)
           }
@@ -152,7 +155,7 @@ export default class Covid extends Phaser.Scene {
     ]
     setTimeout(() => {
       this.resultModal = this.add.dom(0, 0, createDialogueDom('big', { btnList: btnList })).setOrigin(0)
-      print = printText(document.getElementById('modal-text'), dialogue)
+      print = printText(this, document.getElementById('modal-text'), dialogue)
     }, 1000)
   }
 }

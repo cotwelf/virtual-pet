@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { createDialogueDom, getStorageData, isMobile, printText } from "~/utils";
+import { ASSET_KEYS, handleAssets } from "~/utils/handle-assets";
 
 const RULE_FRAGMENTS = [
   "由于疫情大爆发，所有人都被封印在家里无法出门。",
@@ -22,23 +23,33 @@ export default class Welcome extends Phaser.Scene {
 
   private gameWidth
   private gameHeight
+  private soundClick
   init () {
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
   }
   preload () {
     // this.load.image('background', 'images/bg.png')
+    console.log('preload')
+    handleAssets.load(this)
     this.load.spritesheet(
       'click',
       '/images/welcome/click.png',
       { frameWidth: 477, frameHeight: 288 }
     )
+    // this.load.audio('sound-click-temp', this.cache.audio.get('sound-click'))
+    // console.log(this.load.audio('111',''))
   }
   create () {
     // if(isMobile()) {
     //   this.add.dom(this.gameWidth * 0.5, this.gameHeight * 0.4, <div className="sorry-qwq" style={{fontSize: '40px', width: '90vw', lineHeight: '15vw'}}>请用大佬电脑浏览器打开，主人还没搞好爪机的适配 _(:з」∠)_</div>)
     //   return
     // }
+    console.log('create')
+    handleAssets.create(this)
+
+    // this.sound.add('sound-click-temp').play()
+    // handleAssets.play(this, ASSET_KEYS.AUDIO.BGM.KEY, { loop: true })
     if (!!getStorageData().basicData) {
       this.scene.stop('welcome')
       this.scene.start('home')
@@ -57,20 +68,22 @@ export default class Welcome extends Phaser.Scene {
     ).play('click')
     this.gameStart.setInteractive()
     this.gameStart.on('pointerdown', (pointer) => {
+      handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
       this.gameStart.disableInteractive()
       this.showRules(0)
     }, this)
   }
-  update(){
-
-  }
-
   private showRules(textIndex: number) {
     const btnList = [
       {
         text: CANCEL_TEXT,
-        onClickFn: () => {
-          if (textIndex === 0) {
+        onClickFn: async () => {
+          handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
+          // let result = await print.stop(this)
+          let result = print.stop(this)
+          if (!result) {
+            return
+          } else if (textIndex === 0) {
             this.rules.destroy()
             this.gameStart.setInteractive()
           } else {
@@ -80,8 +93,13 @@ export default class Welcome extends Phaser.Scene {
       },
       {
         text: CONFIRM_TEXT,
-        onClickFn: () => {
-          if (textIndex === 2) {
+        onClickFn: async () => {
+          handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
+          // let result = await print.stop(this)
+          let result = print.stop(this)
+          if (!result) {
+            return
+          } else if (textIndex === 2) {
             this.scene.stop('welcome')
             this.scene.start('setting')
           } else {
@@ -94,6 +112,6 @@ export default class Welcome extends Phaser.Scene {
       this.rules.destroy()
     }
     this.rules = this.add.dom(0, 0, createDialogueDom('big', { btnList: btnList })).setOrigin(0)
-    printText( document.getElementById('modal-text'), RULE_FRAGMENTS[textIndex], 'fast')
+    let print = printText(this, document.getElementById('modal-text'), RULE_FRAGMENTS[textIndex], 'fast')
   }
 }

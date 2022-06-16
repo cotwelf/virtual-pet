@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import { CEILING, DATA_TYPES } from './consts'
+import { ASSET_KEYS, handleAssets } from './handle-assets'
 import { IBasicData, IValueChangeType } from './types'
 
 export * from './consts'
@@ -38,40 +39,61 @@ export const createDialogueDom = function (type: 'dialogue' | 'small' | 'big', c
   )
 }
 
-export const printText = function(dom: HTMLElement | null, text: string, type = 'normal', that?){
+export const printText = function(that, dom: HTMLElement | null, text: string, type = 'normal'){
   let printSpeed = {
     normal: 200,
     fast: 100,
     slow: 200,
+    noSpace: 0,
   }
   let interval
   let timeout
   let printing
   if (!!dom) {
+    handleAssets.play(that, ASSET_KEYS.AUDIO.PRINTING.KEY)
+    printing = true
+    // handleAssets.play(that, ASSET_KEYS.AUDIO.PRINTING, { volume: 0.3 })
+    // const prevText = dom.innerHTML
     let currentText = text
     timeout = setTimeout(() => {
-      printing = true
       interval = setInterval(() => {
         if (currentText.length > 0) {
           dom.innerHTML = `${dom.innerText}${currentText[0] === ' ' ? '\xa0' : currentText[0]}`
           currentText = currentText.substring(1, currentText.length)
         } else {
           printing = false
+          handleAssets.stop(that, ASSET_KEYS.AUDIO.PRINTING.KEY)
           clearInterval(interval)
         }
       }, printSpeed[type])
-    },150)
+    }, type == 'noSpace' ? 0 : 150)
   } else {
-    printText(dom, text)
+    setTimeout(() => {
+      printText(that, dom, text)
+    }, 100)
   }
-  function stop() {
-    printing = false
-    clearTimeout(timeout)
-    clearInterval(interval)
+  function stop(that) {
+    return new Promise((resolve) => {
+      if (printing) {
+        toggleTips(that, '不听完我说完吗 qwq')
+      } else {
+        // printing = false
+        clearTimeout(timeout)
+        clearInterval(interval)
+        resolve(true)
+      }
+    })
   }
   return {
     stop,
-    isPrinting: () => printing
+    isPrinting: () => {
+      return printing
+    },
+    clear: () => {
+      if (!!dom) {
+        dom.innerHTML = ''
+      }
+    }
   }
 }
 

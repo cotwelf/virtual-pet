@@ -25,6 +25,14 @@
     visibility: visible;
   }
 }
+@keyframes text-end {
+  0% {
+    content: '_';
+  }
+  100% {
+    content: '';
+  }
+}
 #font-loader {
   font-family: VonwaonBitmap16;
   position: absolute;
@@ -49,6 +57,27 @@ body {
   align-items: center;
   justify-content: center;
   color: $main-color;
+  &.text {
+    * {
+      // font-size: 80px;
+    }
+    .name {
+      font-size: 80px;
+      margin-left: 60%;
+      &::after {
+        content: "_";
+        animation: text-end 1s infinite;
+      }
+    }
+    > div {
+      width: 100vw !important;
+      height: 100vh !important;
+      display: flex !important;
+      justify-content: center;
+      align-items: center;
+      word-break: break-all;
+    }
+  }
   .tips {
     width: 100%;
     text-align: center;

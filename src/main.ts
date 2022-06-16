@@ -6,6 +6,9 @@ import Welcome from './scenes/welcome'
 import Home from './scenes/home'
 import Setting from './scenes/setting'
 import Covid from './scenes/covid'
+import Texts from './scenes/texts'
+
+import soundClick from '../public/assets/sounds/click.mp3'
 
 const config: Phaser.Types.Core.GameConfig = {
   fps: {
@@ -23,10 +26,15 @@ const config: Phaser.Types.Core.GameConfig = {
 			gravity: { y: 200 }
 		}
 	},
-	scene: [Welcome, Setting, Home, Covid],
+	scene: [Welcome, Setting, Home, Covid, Texts],
 	dom: {
 		createContainer: true
-	}
+	},
 }
 
-export default new Phaser.Game(config)
+const game = new Phaser.Game(config)
+const soundManager = new Phaser.Sound.BaseSoundManager(game)
+
+game.cache.audio.add('sound-click', soundClick)
+
+export default game

@@ -1,12 +1,4 @@
 .modal {
-  @keyframes text-end {
-    0% {
-      content: '_';
-    }
-    100% {
-      content: '';
-    }
-  }
   position: absolute !important;
   border: $border-style-pc;
   background-image: url('../images/bg.png');
