@@ -16,7 +16,8 @@ import {
 } from '../utils'
 import { ASSET_KEYS, handleAssets } from "~/utils/handle-assets";
 
-const USE_KOTOBA_API = false
+const USE_KOTOBA_API = true
+
 export default class Home extends Phaser.Scene {
   constructor () {
     super('home'); // given the key to uniquely identify it from other Scenes
@@ -51,8 +52,9 @@ export default class Home extends Phaser.Scene {
     if (this.storageData.basicData) {
       this.basicData = this.storageData.basicData
     }
-    this.characterKey = `${this.storageData.characterKey}${this.basicData.health < 3 ? '_emo' : ''}`
-
+    // WORKAROUND: 为了录像，之后会补 boy_emo
+    // this.characterKey = `${this.storageData.characterKey}${this.basicData.health < 3 ? '_emo' : ''}`
+    this.characterKey = this.storageData.characterKey
     // 防止手机浏览器切换 tab 导致雪碧图鬼畜
     const fixHidden = () => {
       if (document.visibilityState === 'hidden') {
@@ -67,6 +69,7 @@ export default class Home extends Phaser.Scene {
     document.addEventListener(getVisibilityEvent(), fixHidden)
   }
   preload () {
+    console.log(this.characterKey, 'characterKey')
     this.load.spritesheet(
       this.characterKey,
       `images/characters/${this.characterKey}.png`, // WORKAROUND
@@ -75,18 +78,16 @@ export default class Home extends Phaser.Scene {
     )
   }
   create () {
-    // console.log(this.cache.audio.get('sound-click'))
-
     if (!getStorageData().eventDailyRecord?.covid ) {
       this.scene.start('covid')
       return
     }
-    // TODO: 之后改为随机事件
-    if (!getStorageData().eventDailyRecord?.food) {
-      // this.scene.start('getFoods')
-      this.scene.start('texts')
-      return
-    }
+    // TODO: getFoods 之后改为随机事件
+    // if (!getStorageData().eventDailyRecord?.food) {
+    //   // this.scene.start('getFoods')
+    //   this.scene.start('texts')
+    //   return
+    // }
     this.anims.create({
       key: `${this.characterKey}-alive`,
       frames: this.anims.generateFrameNames(this.characterKey, { start: 0, end: 2 }),
@@ -108,12 +109,12 @@ export default class Home extends Phaser.Scene {
         dialogue: currentDialogue.text,
         btns: [
           {
-            text: currentDialogue.btn1.text,
+            text: USE_KOTOBA_API ? confirmBtnText[Phaser.Math.RND.integerInRange(0, confirmBtnText.length - 1)] : currentDialogue.btn1.text,
             type: 'health',
             value: 2,
           },
           {
-            text: currentDialogue.btn2.text,
+            text: USE_KOTOBA_API ? cancelBtnText[Phaser.Math.RND.integerInRange(0, cancelBtnText.length - 1)] : currentDialogue.btn2.text,
             type: 'health',
             value: 1,
           }

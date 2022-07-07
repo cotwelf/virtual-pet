@@ -30,7 +30,6 @@ export default class Welcome extends Phaser.Scene {
   }
   preload () {
     // this.load.image('background', 'images/bg.png')
-    console.log('preload')
     handleAssets.load(this)
     this.load.spritesheet(
       'click',
@@ -45,11 +44,10 @@ export default class Welcome extends Phaser.Scene {
     //   this.add.dom(this.gameWidth * 0.5, this.gameHeight * 0.4, <div className="sorry-qwq" style={{fontSize: '40px', width: '90vw', lineHeight: '15vw'}}>请用大佬电脑浏览器打开，主人还没搞好爪机的适配 _(:з」∠)_</div>)
     //   return
     // }
-    console.log('create')
     handleAssets.create(this)
 
     // this.sound.add('sound-click-temp').play()
-    // handleAssets.play(this, ASSET_KEYS.AUDIO.BGM.KEY, { loop: true })
+    handleAssets.play(this, ASSET_KEYS.AUDIO.BGM_DARK.KEY, { loop: true })
     if (!!getStorageData().basicData) {
       this.scene.stop('welcome')
       this.scene.start('home')
@@ -79,8 +77,7 @@ export default class Welcome extends Phaser.Scene {
         text: CANCEL_TEXT,
         onClickFn: async () => {
           handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
-          // let result = await print.stop(this)
-          let result = print.stop(this)
+          let result = await print.stop(this)
           if (!result) {
             return
           } else if (textIndex === 0) {
@@ -95,8 +92,7 @@ export default class Welcome extends Phaser.Scene {
         text: CONFIRM_TEXT,
         onClickFn: async () => {
           handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
-          // let result = await print.stop(this)
-          let result = print.stop(this)
+          let result = await print.stop(this)
           if (!result) {
             return
           } else if (textIndex === 2) {
