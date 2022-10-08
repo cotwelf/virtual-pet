@@ -77,7 +77,6 @@ export const printText = function(that, dom: HTMLElement | null, text: string, t
       if (printing) {
         toggleTips(that, '不听完我说完吗 qwq')
       } else {
-        // printing = false
         clearTimeout(timeout)
         clearInterval(interval)
         resolve(true)

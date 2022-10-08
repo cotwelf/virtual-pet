@@ -1,0 +1,17 @@
+.amplified {
+  $scale-siez: 12;
+  $anim-duration: .5s;
+  transform: scale($scale-siez);
+  position: relative;
+  transition: all $anim-duration ease;
+  @for $i from -1000 to 1000 {
+    &.x#{$i} {
+      margin-left: #{-$i * ($scale-siez + 3)}px;
+    }
+  }
+  @for $j from -1000 to 1000 {
+    &.y#{$j} {
+      margin-top: #{-$j * $scale-siez}px;
+    }
+  }
+}

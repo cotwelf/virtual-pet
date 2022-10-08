@@ -69,11 +69,9 @@ export default class Home extends Phaser.Scene {
     document.addEventListener(getVisibilityEvent(), fixHidden)
   }
   preload () {
-    console.log(this.characterKey, 'characterKey')
     this.load.spritesheet(
       this.characterKey,
       `images/characters/${this.characterKey}.png`, // WORKAROUND
-      // `images/characters/${this.characterKey}.png`,
       { frameWidth: 320, frameHeight: 320 }
     )
   }
@@ -100,6 +98,7 @@ export default class Home extends Phaser.Scene {
       this.characterKey
     ).play(`${this.characterKey}-alive`, true)
     this.character.setInteractive()
+      console.log(this, 'this')
     this.character.on('pointerdown', (pointer) => {
       // const currentDialogue = dialogues[Phaser.Math.RND.integerInRange(0, dialogues.length - 1)]
       // WORDAROUND: 为了录像，顺序执行了 orz

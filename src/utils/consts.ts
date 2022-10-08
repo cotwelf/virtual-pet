@@ -1,5 +1,7 @@
 import { IBasicData } from "./types"
 
+export const dayAndDay = 3000 // 天和天之间的间隔
+
 export enum CharacterKeys {
   Girl = 'girl',
   Boy = 'boy',

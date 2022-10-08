@@ -1,6 +1,7 @@
 @import './variable';
 @import './mixin';
 @import './mobile';
+@import './animations';
 
 @font-face {
   font-family: IPixRegular;
@@ -50,6 +51,13 @@ body {
 * {
   user-select: none;
 }
+// #container {
+//   &::after {
+//     content: '';
+//     display: block;
+//     background-image: url('../images/icons/setting.svg');
+//   }
+// }
 #game-view {
   background-image: url('../images/bg.png');
   display: flex;
