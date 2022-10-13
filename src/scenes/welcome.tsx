@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { createDialogueDom, getStorageData, isMobile, printText } from "~/utils";
 import { ASSET_KEYS, handleAssets } from "~/utils/handle-assets";
+import { filmVersion } from "~/utils/game-controller";
 
 const RULE_FRAGMENTS = [
   "由于疫情大爆发，所有人都被封印在家里无法出门。",
@@ -13,10 +14,9 @@ const CANCEL_TEXT = '不！滚！'
 
 export default class Welcome extends Phaser.Scene {
   constructor () {
-    super('welcome'); // given the key to uniquely identify it from other Scenes
+    super('welcome')
   }
   private gameStart
-  // 对话框welcome.tsx
   private rules
   private rulesIndex = 0
   private rulesIndexLast = 0

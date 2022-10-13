@@ -98,8 +98,8 @@ export default class Home extends Phaser.Scene {
       this.characterKey
     ).play(`${this.characterKey}-alive`, true)
     this.character.setInteractive()
-      console.log(this, 'this')
     this.character.on('pointerdown', (pointer) => {
+      this.character.disableInteractive()
       // const currentDialogue = dialogues[Phaser.Math.RND.integerInRange(0, dialogues.length - 1)]
       // WORDAROUND: 为了录像，顺序执行了 orz
       const currentDialogue = dialogues[this.lastDialogueIndex]
@@ -133,6 +133,7 @@ export default class Home extends Phaser.Scene {
         // toggleTips(this, '今日互动加成已达上限\n_(:з」∠)_')
       }
       setStorageData('interactTimes', interactTimes + 1)
+      this.character.setInteractive()
     }, this)
 
     // 展示当前数据
@@ -176,13 +177,12 @@ export default class Home extends Phaser.Scene {
     } else {
       this.lastDialogueIndex++
     }
-    this.character.setInteractive()
     this.dialogModal.destroy()
     const interactTimes = getStorageData().interactTimes || 0
-      if (interactTimes <= 3) {
-        this.updateBasicData(type, value)
-        this.currentShow = type
-      }
+    if (interactTimes <= 3) {
+      this.updateBasicData(type, value)
+      this.currentShow = type
+    }
   }
 
   // 点击角色交流
@@ -201,6 +201,7 @@ export default class Home extends Phaser.Scene {
           handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
           await print.stop(this)
           this.onCloseDialogueFn(btn.type, btn.value)
+          this.character.setInteractive()
         },
         text: btn.text
       }
