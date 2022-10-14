@@ -75,7 +75,6 @@ export const handleAssets = {
     })
   },
   play: function(that: Phaser.Scene, key, config?: Phaser.Types.Sound.SoundConfig) {
-    console.log(key, that)
     that.cache.audio.get(key).play(config)
   },
   stop: function(that, key) {

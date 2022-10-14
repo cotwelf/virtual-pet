@@ -48,10 +48,6 @@ export default class Welcome extends Phaser.Scene {
 
     // this.sound.add('sound-click-temp').play()
     handleAssets.play(this, ASSET_KEYS.AUDIO.BGM_DARK.KEY, { loop: true })
-    if (!!getStorageData().basicData) {
-      this.scene.stop('welcome')
-      this.scene.start('home')
-    }
     this.add.dom(0, 0, <div className="title">生存挑战</div>).setOrigin(0)
     this.anims.create({
       key: 'click',
