@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import Phaser from "phaser";
-import { createDialogueDom, printText, CharacterKeys, setStorageData } from "~/utils";
+import { createDialogueDom, printText, CharacterKeys, setData } from "~/utils";
 import { soundsAssets, dialoguesAssets } from '../../public'
 import { IBasicData } from "~/utils/types";
 
@@ -198,18 +198,18 @@ export default class Setting extends Phaser.Scene {
       }
     })
 
-    setStorageData('basicData', data)
-    setStorageData('eventDailyRecord', {})
-    setStorageData('eventDurableRecord', [])
-    setStorageData('eventCrashRecord', [])
-    setStorageData('interactTimes', 0)
-    setStorageData('lastChangeTime', Date.now())
+    setData('basicData', data)
+    setData('eventDailyRecord', {})
+    setData('eventDurableRecord', [])
+    setData('eventCrashRecord', [])
+    setData('interactTimes', 0)
+    setData('lastChangeTime', Date.now())
     this.scene.stop('setting')
     this.scene.start('home')
   }
   private setOriginData() {
     soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)
-    setStorageData('characterKey', this.currentkey)
+    setData('characterKey', this.currentkey)
     this.selectDom.destroy()
     this.currentCharacter.destroy()
     this.updateBasicDataDom()

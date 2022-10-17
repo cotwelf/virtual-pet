@@ -4,7 +4,7 @@ import { soundsAssets, dialoguesAssets } from '../../public'
 import { IBasicData, IValueChangeType } from './types'
 
 export * from './consts'
-export * from './localstorage'
+export * from './data-storage'
 // export * from './api'
 
 export const isMobile = () => /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)

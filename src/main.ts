@@ -6,12 +6,13 @@ import Welcome from './scenes/welcome'
 import Home from './scenes/home'
 import Setting from './scenes/setting'
 import Covid from './scenes/covid'
-import Texts from './scenes/text'
+import Text from './scenes/text'
 
 import soundClick from '../public/assets/sounds/click.mp3'
 import { amplifyScenes } from './utils/amplify'
 
-const scene = [Welcome, Setting, Home, Covid, Texts]
+// const scene = [Welcome, Setting, Home, Covid, Text]
+const scene = [Welcome, Setting, Home, Covid, Text]
 
 const config: Phaser.Types.Core.GameConfig = {
   fps: {

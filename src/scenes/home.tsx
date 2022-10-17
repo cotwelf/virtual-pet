@@ -7,11 +7,9 @@ import
   DATA_TYPES,
   showCurrentData,
   printText,
-  getStorageData,
-  setStorageData,
-  updateStorageData,
   toggleTips,
-  getVisibilityEvent
+  getVisibilityEvent,
+  getData
 }
 from '../utils'
 
@@ -22,16 +20,17 @@ export default class Home extends Phaser.Scene {
     super('home'); // given the key to uniquely identify it from other Scenes
   }
   private character
-  private characterKey
+  private dataStorage
+  // private characterKey
 
-  private storageData
-  // 四项基本数值
-  private basicData: { [key in IBasicData]: number } = {
-    health: 0,
-    feeling: 0,
-    knowledge: 0,
-    relationship: 0,
-  }
+  // // 四项基本数值
+  // private basicData
+  // private eventDurableRecord
+  // private eventCrashRecord
+  // private interactTimes
+
+
+
   private currentShow: IBasicData = 'health'
   private previousType
   private basicDataShower
@@ -43,17 +42,16 @@ export default class Home extends Phaser.Scene {
   private lastDialogueIndex = 0
   private print
 
+  // 当前状态持续时间记录(s)
+  private timeCounter
+
   init () {
-    updateStorageData()
-    this.storageData = getStorageData()
+    this.dataStorage = getData()
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
-    if (this.storageData.basicData) {
-      this.basicData = this.storageData.basicData
-    }
     // WORKAROUND: 为了录像，之后会补 boy_emo
-    // this.characterKey = `${this.storageData.characterKey}${this.basicData.health < 3 ? '_emo' : ''}`
-    this.characterKey = this.storageData.characterKey
+    // this.dataStorage.characterKey = `${this.dataStorage.characterKey}${this.dataStorage.basicData.health < 3 ? '_emo' : ''}`
+
     // 防止手机浏览器切换 tab 导致雪碧图鬼畜
     const fixHidden = () => {
       if (document.visibilityState === 'hidden') {
@@ -69,33 +67,27 @@ export default class Home extends Phaser.Scene {
   }
   preload () {
     this.load.spritesheet(
-      this.characterKey,
-      `images/characters/${this.characterKey}.png`, // WORKAROUND
+      this.dataStorage.characterKey,
+      `images/characters/${this.dataStorage.characterKey}.png`, // WORKAROUND
       { frameWidth: 320, frameHeight: 320 }
     )
   }
   create () {
-    if (!getStorageData().eventDailyRecord?.covid ) {
+    if (!getData().eventDailyRecord?.covid ) {
       this.scene.start('covid')
       return
     }
-    // TODO: getFoods 之后改为随机事件
-    // if (!getStorageData().eventDailyRecord?.food) {
-    //   // this.scene.start('getFoods')
-    //   this.scene.start('texts')
-    //   return
-    // }
     this.anims.create({
-      key: `${this.characterKey}-alive`,
-      frames: this.anims.generateFrameNames(this.characterKey, { start: 0, end: 2 }),
+      key: `${this.dataStorage.characterKey}-alive`,
+      frames: this.anims.generateFrameNames(this.dataStorage.characterKey, { start: 0, end: 2 }),
       frameRate: 3,
       repeat: -1,
     });
     this.character = this.add.sprite(
       this.gameWidth * 0.5,
       this.gameHeight * 0.5,
-      this.characterKey
-    ).play(`${this.characterKey}-alive`, true)
+      this.dataStorage.characterKey
+    ).play(`${this.dataStorage.characterKey}-alive`, true)
     this.character.setInteractive()
     this.character.on('pointerdown', (pointer) => {
       this.character.disableInteractive()
@@ -120,16 +112,16 @@ export default class Home extends Phaser.Scene {
       }
       this.communicate(config)
 
-      const interactTimes = getStorageData().interactTimes || 0
+      const interactTimes = this.dataStorage.interactTimes || 0
       if (interactTimes > 3) {
         // toggleTips(this, '今日互动加成已达上限\n_(:з」∠)_')
       }
-      setStorageData('interactTimes', interactTimes + 1)
+      this.dataStorage.interactTimes += 1
       this.character.setInteractive()
     }, this)
 
     // 展示当前数据
-    this.basicDataShower = this.add.dom(0, 0, showCurrentData('health', this.basicData[this.currentShow], this.onDataChange.bind(this))).setOrigin(0)
+    this.basicDataShower = this.add.dom(0, 0, showCurrentData('health', this.dataStorage.basicData[this.currentShow], this.onDataChange.bind(this))).setOrigin(0)
   }
 
   update(){
@@ -145,7 +137,7 @@ export default class Home extends Phaser.Scene {
     if (this.basicDataShower) {
       this.basicDataShower.destroy()
     }
-    this.basicDataShower = this.add.dom(0, 0, showCurrentData(this.currentShow, this.basicData[this.currentShow], this.onDataChange.bind(this))).setOrigin(0)
+    this.basicDataShower = this.add.dom(0, 0, showCurrentData(this.currentShow, this.dataStorage.basicData[this.currentShow], this.onDataChange.bind(this))).setOrigin(0)
   }
   private onDataChange (jump: 1 | -1 ) {
     const index = DATA_TYPES.indexOf(this.currentShow)
@@ -153,11 +145,9 @@ export default class Home extends Phaser.Scene {
   }
   private updateBasicData (type: IBasicData, value: number) {
     // 更新数值
-    let count = this.basicData[type]
+    let count = this.dataStorage.basicData[type]
     count += value
-    this.basicData[type] = count < 0 ? 0 : (count > 10 ? 10 : count)
-    // 更新 localStorage
-    setStorageData('basicData', this.basicData)
+    this.dataStorage.basicData[type] = count < 0 ? 0 : (count > 10 ? 10 : count)
     // 更新 dom
     this.updateDataShower()
   }
@@ -170,7 +160,7 @@ export default class Home extends Phaser.Scene {
       this.lastDialogueIndex++
     }
     this.dialogModal.destroy()
-    const interactTimes = getStorageData().interactTimes || 0
+    const interactTimes = this.dataStorage.interactTimes || 0
     if (interactTimes <= 3) {
       this.updateBasicData(type, value)
       this.currentShow = type

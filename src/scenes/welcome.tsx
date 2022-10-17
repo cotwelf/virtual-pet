@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { createDialogueDom, getStorageData, isMobile, printText } from "~/utils";
+import { createDialogueDom, isMobile, printText } from "~/utils";
 import { soundsAssets, dialoguesAssets } from '../../public'
 import { filmVersion } from "~/utils/game-controller";
 

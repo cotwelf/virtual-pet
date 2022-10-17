@@ -3,9 +3,9 @@ import { createDialogueDom, printText } from "~/utils";
 
 let textDiv = <div></div>
 
-export default class Texts extends Phaser.Scene {
+export default class Text extends Phaser.Scene {
   constructor () {
-    super('texts')
+    super('text')
   }
   private notifyModal
   // temp

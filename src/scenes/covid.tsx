@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { createDialogueDom, getStorageData, printText, setStorageData, toggleTips, TYPES_CNAME } from '~/utils'
+import { createDialogueDom, getData, printText, setData, toggleTips, TYPES_CNAME } from '~/utils'
 import { soundsAssets } from '../../public'
 import { eventDaily, IEventResItem } from '../../public/assets/events'
 
@@ -17,10 +17,10 @@ export default class Covid extends Phaser.Scene {
   private testing = false
   private interval
 
-  private allData
+  private dataStorage
   private resultModal
   init() {
-    this.allData = getStorageData()
+    this.dataStorage = getData()
   }
   preload(){
     this.load.image('cov', 'images/covid/cov.png')
@@ -51,7 +51,7 @@ export default class Covid extends Phaser.Scene {
     this.gameStart = this.add.sprite(this.gameWidth * 0.39, this.gameHeight * 0.73, "gameStart").setOrigin(0)
     this.gameStart.setInteractive()
     this.gameStart.on('pointerdown', (pointer) => {
-      console.log(this.allData)
+      console.log(this.dataStorage)
       this.cGraphics.alpha = 0
       this.tGraphics.alpha = 0
       this.testing = true
@@ -128,10 +128,10 @@ export default class Covid extends Phaser.Scene {
                   let change
                   if (i.data !== undefined) {
                     change = Object.keys(i.data).map(j => {
-                      if (this.allData.basicData) {
-                        this.allData.basicData[j] += i.data ? i.data[j] : 0
-                        if (this.allData.basicData[j] < 0) {
-                          this.allData.basicData[j] = 0
+                      if (this.dataStorage.basicData) {
+                        this.dataStorage.basicData[j] += i.data ? i.data[j] : 0
+                        if (this.dataStorage.basicData[j] < 0) {
+                          this.dataStorage.basicData[j] = 0
                         }
                       }
                       return `${TYPES_CNAME[j]} ${i.data && i.data[j]}`
@@ -140,8 +140,8 @@ export default class Covid extends Phaser.Scene {
                   console.log(i.naze, change)
                   return `${i.naze} ${change}`
                 }).join('\n')
-                setStorageData('basicData', this.allData.basicData)
-                setStorageData('eventDailyRecord', { ...this.allData.eventDailyRecord, covid: true })
+                setData('basicData', this.dataStorage.basicData)
+                setData('eventDailyRecord', { ...this.dataStorage.eventDailyRecord, covid: true })
               }
               toggleTips(this, tips)
               this.resultModal.destroy()
