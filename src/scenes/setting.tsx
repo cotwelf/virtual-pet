@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import Phaser from "phaser";
 import { createDialogueDom, printText, CharacterKeys, setStorageData } from "~/utils";
-import { ASSET_KEYS, handleAssets } from "~/utils/handle-assets";
+import { soundsAssets, dialoguesAssets } from '../../public'
 import { IBasicData } from "~/utils/types";
 
 const CHARACTER_KEY_LIST = ['girl', 'boy']
@@ -102,7 +102,7 @@ export default class Setting extends Phaser.Scene {
     )).setOrigin(0)
   }
   private handleChangeCharacter(handle: number) {
-    handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
+    soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)
     this.currentCharacter.destroy()
     this.currentCharacter = this.add.sprite(
       this.gameWidth * 0.5,
@@ -113,7 +113,7 @@ export default class Setting extends Phaser.Scene {
     this.updateSelectDom()
   }
   private onChangeData(type: IBasicData, value: 1 | -1) {
-    handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
+    soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)
     let updated = false
     // 可分配 > 0 分，可加
     if ((this.sumValue < 1 && value === 1) || (this.sumValue > 9 && value === -1)) {
@@ -134,7 +134,7 @@ export default class Setting extends Phaser.Scene {
     this.updateBasicDataDom()
   }
   private onDataTypeSelected (type: IBasicData) {
-    handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
+    soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)
     let updated = false
     let newData = this.basicData.map(data => {
       if (data.type === type) {
@@ -189,7 +189,7 @@ export default class Setting extends Phaser.Scene {
     )).setOrigin(0)
   }
   private toHome () {
-    handleAssets.play(this, ASSET_KEYS.AUDIO.NEXT.KEY)
+    soundsAssets.handler.play(this, soundsAssets.keys.NEXT.KEY)
     let data
     this.basicData.forEach(i => {
       data = {
@@ -208,7 +208,7 @@ export default class Setting extends Phaser.Scene {
     this.scene.start('home')
   }
   private setOriginData() {
-    handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
+    soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)
     setStorageData('characterKey', this.currentkey)
     this.selectDom.destroy()
     this.currentCharacter.destroy()

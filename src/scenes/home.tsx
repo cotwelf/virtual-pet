@@ -1,8 +1,8 @@
 import Phaser from "phaser";
-import { confirmBtnText, cancelBtnText} from '../../public/assets/dialogues'
+import { soundsAssets, dialoguesAssets } from '../../public'
 import { IBasicData, IConmunicateConfig } from "~/utils/types";
-import dialogues from '../../public/assets/dialogues.json'
-import {
+import
+{
   createDialogueDom,
   DATA_TYPES,
   showCurrentData,
@@ -10,11 +10,10 @@ import {
   getStorageData,
   setStorageData,
   updateStorageData,
-  getKotoba,
   toggleTips,
   getVisibilityEvent
-} from '../utils'
-import { ASSET_KEYS, handleAssets } from "~/utils/handle-assets";
+}
+from '../utils'
 
 const USE_KOTOBA_API = true
 
@@ -102,32 +101,25 @@ export default class Home extends Phaser.Scene {
       this.character.disableInteractive()
       // const currentDialogue = dialogues[Phaser.Math.RND.integerInRange(0, dialogues.length - 1)]
       // WORDAROUND: 为了录像，顺序执行了 orz
-      const currentDialogue = dialogues[this.lastDialogueIndex]
+      const currentDialogue = dialoguesAssets.happy.dialogue[this.lastDialogueIndex]
       // 设置按钮文字
       let config: IConmunicateConfig = {
         dialogue: currentDialogue.text,
         btns: [
           {
-            text: USE_KOTOBA_API ? confirmBtnText[Phaser.Math.RND.integerInRange(0, confirmBtnText.length - 1)] : currentDialogue.btn1.text,
+            text: currentDialogue.btn1.text,
             type: 'health',
             value: 2,
           },
           {
-            text: USE_KOTOBA_API ? cancelBtnText[Phaser.Math.RND.integerInRange(0, cancelBtnText.length - 1)] : currentDialogue.btn2.text,
+            text: currentDialogue.btn2.text,
             type: 'health',
             value: 1,
           }
         ]
       }
-      if (USE_KOTOBA_API) {
-        // 替换文字为一言
-        getKotoba().then(res => {
-          config.dialogue = res
-          this.communicate(config)
-        })
-      } else {
-        this.communicate(config)
-      }
+      this.communicate(config)
+
       const interactTimes = getStorageData().interactTimes || 0
       if (interactTimes > 3) {
         // toggleTips(this, '今日互动加成已达上限\n_(:з」∠)_')
@@ -172,7 +164,7 @@ export default class Home extends Phaser.Scene {
   // 关闭正在开启的对话框
   private onCloseDialogueFn (type: IBasicData, value: number) {
     // WORDAROUND: 为了录像，顺序执行了 orz
-    if (this.lastDialogueIndex === dialogues.length - 1) {
+    if (this.lastDialogueIndex === dialoguesAssets.happy.dialogue.length - 1) {
       this.lastDialogueIndex = 0
     } else {
       this.lastDialogueIndex++
@@ -198,7 +190,7 @@ export default class Home extends Phaser.Scene {
     config.btns.forEach(btn => {
       let temp = {
         onClickFn: async () => {
-          handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
+          soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)
           await print.stop(this)
           this.onCloseDialogueFn(btn.type, btn.value)
           this.character.setInteractive()

@@ -6,7 +6,7 @@ import Welcome from './scenes/welcome'
 import Home from './scenes/home'
 import Setting from './scenes/setting'
 import Covid from './scenes/covid'
-import Texts from './scenes/texts'
+import Texts from './scenes/text'
 
 import soundClick from '../public/assets/sounds/click.mp3'
 import { amplifyScenes } from './utils/amplify'

@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { createDialogueDom, getStorageData, isMobile, printText } from "~/utils";
-import { ASSET_KEYS, handleAssets } from "~/utils/handle-assets";
+import { soundsAssets, dialoguesAssets } from '../../public'
 import { filmVersion } from "~/utils/game-controller";
 
 const RULE_FRAGMENTS = [
@@ -30,7 +30,7 @@ export default class Welcome extends Phaser.Scene {
   }
   preload () {
     // this.load.image('background', 'images/bg.png')
-    handleAssets.load(this)
+    soundsAssets.handler.load(this)
     this.load.spritesheet(
       'click',
       '/images/welcome/click.png',
@@ -44,10 +44,10 @@ export default class Welcome extends Phaser.Scene {
     //   this.add.dom(this.gameWidth * 0.5, this.gameHeight * 0.4, <div className="sorry-qwq" style={{fontSize: '40px', width: '90vw', lineHeight: '15vw'}}>请用大佬电脑浏览器打开，主人还没搞好爪机的适配 _(:з」∠)_</div>)
     //   return
     // }
-    handleAssets.create(this)
+    soundsAssets.handler.create(this)
 
     // this.sound.add('sound-click-temp').play()
-    handleAssets.play(this, ASSET_KEYS.AUDIO.BGM_DARK.KEY, { loop: true })
+    soundsAssets.handler.play(this, soundsAssets.keys.BGM_DARK.KEY, { loop: true })
     this.add.dom(0, 0, <div className="title">生存挑战</div>).setOrigin(0)
     this.anims.create({
       key: 'click',
@@ -62,7 +62,7 @@ export default class Welcome extends Phaser.Scene {
     ).play('click')
     this.gameStart.setInteractive()
     this.gameStart.on('pointerdown', (pointer) => {
-      handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
+      soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)
       this.gameStart.disableInteractive()
       this.showRules(0)
     }, this)
@@ -72,7 +72,7 @@ export default class Welcome extends Phaser.Scene {
       {
         text: CANCEL_TEXT,
         onClickFn: async () => {
-          handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
+          soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)
           let result = await print.stop(this)
           if (!result) {
             return
@@ -87,7 +87,7 @@ export default class Welcome extends Phaser.Scene {
       {
         text: CONFIRM_TEXT,
         onClickFn: async () => {
-          handleAssets.play(this, ASSET_KEYS.AUDIO.CLICK.KEY)
+          soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)
           let result = await print.stop(this)
           if (!result) {
             return

@@ -1,11 +1,11 @@
 import classNames from 'classnames'
 import { CEILING, DATA_TYPES } from './consts'
-import { ASSET_KEYS, handleAssets } from './handle-assets'
+import { soundsAssets, dialoguesAssets } from '../../public'
 import { IBasicData, IValueChangeType } from './types'
 
 export * from './consts'
 export * from './localstorage'
-export * from './api'
+// export * from './api'
 
 export const isMobile = () => /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
@@ -50,7 +50,7 @@ export const printText = function(that, dom: HTMLElement | null, text: string, t
   let timeout
   let printing
   if (!!dom) {
-    handleAssets.play(that, ASSET_KEYS.AUDIO.PRINTING.KEY)
+    soundsAssets.handler.play(that, soundsAssets.keys.PRINTING.KEY)
     printing = true
     // handleAssets.play(that, ASSET_KEYS.AUDIO.PRINTING, { volume: 0.3 })
     // const prevText = dom.innerHTML
@@ -62,7 +62,7 @@ export const printText = function(that, dom: HTMLElement | null, text: string, t
           currentText = currentText.substring(1, currentText.length)
         } else {
           printing = false
-          handleAssets.stop(that, ASSET_KEYS.AUDIO.PRINTING.KEY)
+          soundsAssets.handler.stop(that, soundsAssets.keys.PRINTING.KEY)
           clearInterval(interval)
         }
       }, printSpeed[type])
