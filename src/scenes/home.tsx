@@ -21,15 +21,6 @@ export default class Home extends Phaser.Scene {
   }
   private character
   private dataStorage
-  // private characterKey
-
-  // // 四项基本数值
-  // private basicData
-  // private eventDurableRecord
-  // private eventCrashRecord
-  // private interactTimes
-
-
 
   private currentShow: IBasicData = 'health'
   private previousType

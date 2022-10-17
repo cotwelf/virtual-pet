@@ -197,15 +197,10 @@ export default class Setting extends Phaser.Scene {
         [i.type]: i.value,
       }
     })
-
     setData('basicData', data)
-    setData('eventDailyRecord', {})
-    setData('eventDurableRecord', [])
-    setData('eventCrashRecord', [])
-    setData('interactTimes', 0)
     setData('lastChangeTime', Date.now())
     this.scene.stop('setting')
-    this.scene.start('home')
+    this.scene.start('text')
   }
   private setOriginData() {
     soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)

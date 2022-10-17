@@ -1,5 +1,5 @@
-export const filmVersion = true // 用于交作业 orz
-
+export const filmVersion = false // 用于交作业 orz
+export const fastPrintDays = true // n 天后，主要用于交作业 orz 转场用
 export const originData = {
   characterKey:"girl",
   basicData:{
@@ -16,5 +16,5 @@ export const originData = {
   eventCrashRecord:[],
   interactTimes:5,
   lastChangeTime:1665195234327,
-  dayCounter: 0
+  dayCounter: 1
 }

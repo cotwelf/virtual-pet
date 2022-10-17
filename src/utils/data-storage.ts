@@ -1,8 +1,8 @@
 export type IData = {
   characterKey: 'girl' | 'boy'
   basicData: {
-    "health":0,
-    "feeling":0,
+    "health":5,
+    "feeling":5,
     "knowledge":5,
     "relationship":5
   },
@@ -13,10 +13,10 @@ export type IData = {
   dayCounter: number
 }
 const data = {
-  characterKey:"", // girl, body
-  basicData:{
-    "health":0,
-    "feeling":0,
+  characterKey: "girl", // girl, body
+  basicData: {
+    "health":5, // 健康值为 0 时游戏结束
+    "feeling":5,
     "knowledge":5,
     "relationship":5
   },

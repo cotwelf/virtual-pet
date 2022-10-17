@@ -1,5 +1,6 @@
 import Phaser from "phaser";
-import { createDialogueDom, printText } from "~/utils";
+import { createDialogueDom, getData, printText } from "~/utils";
+import { fastPrintDays, filmVersion } from "~/utils/game-controller";
 
 let textDiv = <div></div>
 
@@ -8,6 +9,7 @@ export default class Text extends Phaser.Scene {
     super('text')
   }
   private notifyModal
+  private dataStorage
   // temp
   private count = 1
   private textString
@@ -21,16 +23,24 @@ export default class Text extends Phaser.Scene {
   create () {
     document.getElementById("game-view")?.classList.add('text')
     this.text = this.add.dom(0, 0, textDiv, "text-align: center; width: 100vw").setOrigin(0)
-    // the end
-    this.print = printText(this, textDiv, `第 ${this.count++} 天`)
+    this.dataStorage = getData()
+    // step: 游戏结束(1/3) 健康值为 0 时游戏结束
+    if (!this.dataStorage.basicData.health) {
+      this.print = printText(this, textDiv, `第 ${this.count++} 天`)
+    } else {
+      this.print = printText(this, textDiv, `第 ${this.dataStorage.dayCounter} 天`)
+      // this.textString = `第 ${this.count} 天`
+      // this.text.setText(this.textString)
+    }
 
 
-    // this.textString = `第 ${this.count} 天`
-    // this.text.setText(this.textString)
 
-    // n 天后
-    // this.text.setText(`${this.count} 天后`)
-    // this.pageTurn()
+
+    // film: 转场(1/2)
+    if (filmVersion && fastPrintDays) {
+      this.text.setText(`${this.count} 天后`)
+      this.pageTurn()
+    }
   }
   update () {
     // if (this.count < 300 && !this.printing) {
@@ -46,12 +56,16 @@ export default class Text extends Phaser.Scene {
     // if (this.count > 100) {
     //   this.text.alpha-=0.03
     // }
-    this.theEnd()
 
-    // n 天后
-    // if (!this.printing && this.count < 35) {
-    //   this.pageTurn()
-    // }
+    // step: 游戏结束(2/3)
+    if (!this.dataStorage.basicData.health) {
+      this.theEnd()
+    }
+
+    // film: 转场(2/2)
+    if (filmVersion && fastPrintDays && !this.printing && this.count < 35) {
+      this.pageTurn()
+    }
   }
   private pageTurn = () => {
     if (this.printing) {
@@ -87,13 +101,12 @@ export default class Text extends Phaser.Scene {
     ]
     this.notifyModal = this.add.dom(0, 0, createDialogueDom('big', { btnList: btnList, dialogueText })).setOrigin(0)
   }
-
+  // step: 游戏结束(3/3)
   private theEnd = () => {
     if (this.endInterval) {
       return
     }
     this.endInterval = setInterval(() => {
-      console.log(this.print.isPrinting())
       if (this.print.isPrinting()) {
         return
       }
