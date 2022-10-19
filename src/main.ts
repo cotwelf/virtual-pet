@@ -40,5 +40,5 @@ const game = new Phaser.Game(config)
 const soundManager = new Phaser.Sound.BaseSoundManager(game)
 
 game.cache.audio.add('sound-click', soundClick)
-amplifyScenes()
+amplifyScenes({scale: 11, duration: 2})
 export default game

@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import Phaser from "phaser";
-import { createDialogueDom, printText, CharacterKeys, setData } from "~/utils";
+import { CharacterKeys, setData, getData } from "~/utils";
 import { soundsAssets, dialoguesAssets } from '../../public'
 import { IBasicData } from "~/utils/types";
 
@@ -15,6 +15,7 @@ export default class Setting extends Phaser.Scene {
   private currentkey
 
   private selectDom
+  private dataStorage
 
   private basicData: {
     type: IBasicData,
@@ -56,6 +57,7 @@ export default class Setting extends Phaser.Scene {
     this.currentkey = this.characters[0]
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
+    this.dataStorage = getData()
   }
   preload () {
     this.characters.forEach(c => {
@@ -197,14 +199,22 @@ export default class Setting extends Phaser.Scene {
         [i.type]: i.value,
       }
     })
-    setData('basicData', data)
-    setData('lastChangeTime', Date.now())
+
+    setData({
+      ...this.dataStorage,
+      basicData: data,
+      lastChangeTime: Date.now()
+    })
     this.scene.stop('setting')
     this.scene.start('text')
+    return
   }
   private setOriginData() {
     soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)
-    setData('characterKey', this.currentkey)
+    setData({
+      ...this.dataStorage,
+      characterKey: this.currentkey
+    })
     this.selectDom.destroy()
     this.currentCharacter.destroy()
     this.updateBasicDataDom()

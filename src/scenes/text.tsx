@@ -2,12 +2,11 @@ import Phaser from "phaser";
 import { createDialogueDom, getData, printText } from "~/utils";
 import { fastPrintDays, filmVersion } from "~/utils/game-controller";
 
-let textDiv = <div></div>
-
 export default class Text extends Phaser.Scene {
   constructor () {
     super('text')
   }
+  private textDiv = <div></div>
   private notifyModal
   private dataStorage
   // temp
@@ -20,23 +19,31 @@ export default class Text extends Phaser.Scene {
   private endInterval
   private endDuration = 2800
   private name
+  init () {
+    this.dataStorage = getData()
+  }
   create () {
     document.getElementById("game-view")?.classList.add('text')
-    this.text = this.add.dom(0, 0, textDiv, "text-align: center; width: 100vw").setOrigin(0)
-    this.dataStorage = getData()
+    this.text = this.add.dom(0, 0, this.textDiv, "text-align: center; width: 100vw").setOrigin(0)
+    console.log(this.print)
     // step: 游戏结束(1/3) 健康值为 0 时游戏结束
     if (!this.dataStorage.basicData.health) {
-      this.print = printText(this, textDiv, `第 ${this.count++} 天`)
+      this.print = printText(this, this.textDiv, `第 ${this.count++} 天`)
     } else {
-      this.print = printText(this, textDiv, `第 ${this.dataStorage.dayCounter} 天`)
-      // this.textString = `第 ${this.count} 天`
-      // this.text.setText(this.textString)
+      this.print = printText(this, this.textDiv, `第 ${this.dataStorage.dayCounter} 天`)
+      setTimeout(() => {
+        this.scene.stop('text')
+        this.scene.start('covid')
+        this.textDiv = <div></div>
+        document.getElementById("game-view")?.classList.remove('text')
+        return
+      }, 3000)
     }
 
 
 
 
-    // film: 转场(1/2)
+    // film: 一行转场(1/2)
     if (filmVersion && fastPrintDays) {
       this.text.setText(`${this.count} 天后`)
       this.pageTurn()
@@ -62,7 +69,7 @@ export default class Text extends Phaser.Scene {
       this.theEnd()
     }
 
-    // film: 转场(2/2)
+    // film: 一行转场(2/2)
     if (filmVersion && fastPrintDays && !this.printing && this.count < 35) {
       this.pageTurn()
     }
@@ -111,7 +118,7 @@ export default class Text extends Phaser.Scene {
         return
       }
       const textString = `..第 ${this.count++} 天`
-      this.print = printText(this, textDiv, textString, 'noSpace')
+      this.print = printText(this, this.textDiv, textString, 'noSpace')
       if (this.endDuration > 1500) {
         this.endDuration -= 30
       } else {

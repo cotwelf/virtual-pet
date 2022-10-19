@@ -12,7 +12,7 @@ export type IData = {
   lastChangeTime: number,
   dayCounter: number
 }
-const data = {
+let data = {
   characterKey: "girl", // girl, body
   basicData: {
     "health":5, // 健康值为 0 时游戏结束
@@ -27,12 +27,12 @@ const data = {
   eventCrashRecord:[],
   interactTimes:5,
   lastChangeTime:1665195234327,
-  dayCounter: 0
+  dayCounter: 1
 }
 
 export const getData = () => data
 
-export const setData = (key, value) => {
-  data[key] = value
+export const setData = (value) => {
+  data = value
   return data
 }

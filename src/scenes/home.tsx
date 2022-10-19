@@ -9,11 +9,11 @@ import
   printText,
   toggleTips,
   getVisibilityEvent,
-  getData
+  getData,
+  setData
 }
 from '../utils'
-
-const USE_KOTOBA_API = true
+import { daysDuration } from "~/utils/game-controller";
 
 export default class Home extends Phaser.Scene {
   constructor () {
@@ -64,10 +64,11 @@ export default class Home extends Phaser.Scene {
     )
   }
   create () {
-    if (!getData().eventDailyRecord?.covid ) {
-      this.scene.start('covid')
+    setTimeout(() => {
+      setData({...this.dataStorage})
+      this.scene.start('text')
       return
-    }
+    }, daysDuration)
     this.anims.create({
       key: `${this.dataStorage.characterKey}-alive`,
       frames: this.anims.generateFrameNames(this.dataStorage.characterKey, { start: 0, end: 2 }),

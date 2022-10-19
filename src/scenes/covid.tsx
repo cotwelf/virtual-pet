@@ -140,8 +140,7 @@ export default class Covid extends Phaser.Scene {
                   console.log(i.naze, change)
                   return `${i.naze} ${change}`
                 }).join('\n')
-                setData('basicData', this.dataStorage.basicData)
-                setData('eventDailyRecord', { ...this.dataStorage.eventDailyRecord, covid: true })
+                setData(this.dataStorage)
               }
               toggleTips(this, tips)
               this.resultModal.destroy()

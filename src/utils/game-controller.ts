@@ -1,5 +1,6 @@
 export const filmVersion = false // 用于交作业 orz
 export const fastPrintDays = true // n 天后，主要用于交作业 orz 转场用
+export const daysDuration = 3000 // 每天持续时间
 export const originData = {
   characterKey:"girl",
   basicData:{
