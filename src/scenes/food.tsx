@@ -1,10 +1,10 @@
 import Phaser from "phaser";
 import { createDialogueDom, getData, printText } from "~/utils";
-import { fastPrintDays, fastPrintDaysMulti, filmVersion } from "~/utils/game-controller";
+import { fastPrintDays, filmVersion } from "~/utils/game-controller";
 
-export default class Text extends Phaser.Scene {
+export default class Food extends Phaser.Scene {
   constructor () {
-    super('text')
+    super('food')
   }
   private textDiv = <div></div>
   private notifyModal
@@ -26,23 +26,10 @@ export default class Text extends Phaser.Scene {
     document.getElementById("game-view")?.classList.add('text')
     this.text = this.add.dom(0, 0, this.textDiv, "text-align: center; width: 100vw").setOrigin(0)
     console.log(this.print)
-    // film: 一行转场(1/2)
-    if (fastPrintDays) {
-      this.text.setText(`${this.count} 天后`)
-      this.pageTurn()
-      return
-    }
-    // 多行转场（1/2)
-    if (fastPrintDaysMulti) {
-      this.textString = `第 ${this.count} 天`
-      this.text.setText(this.textString)
-      return
-    }
     // step: 游戏结束(1/3) 健康值为 0 时游戏结束
     if (!this.dataStorage.basicData.health) {
       this.print = printText(this, this.textDiv, `第 ${this.count++} 天`)
     } else {
-      // 正常游戏跳转
       this.print = printText(this, this.textDiv, `第 ${this.dataStorage.dayCounter} 天`)
       setTimeout(() => {
         this.scene.stop('text')
@@ -56,25 +43,26 @@ export default class Text extends Phaser.Scene {
 
 
 
-
+    // film: 一行转场(1/2)
+    if (filmVersion && fastPrintDays) {
+      this.text.setText(`${this.count} 天后`)
+      this.pageTurn()
+    }
   }
   update () {
-    // 多行转场(2/2)
-    if (fastPrintDaysMulti) {
-      if (this.count < 300 && !this.printing) {
-        this.printing = true
-        this.space = this.space - 50 < 10 ? 10 : this.space - 50
-        setTimeout(() => {
-          this.textString += `\n第 ${++this.count} 天`
-          this.text.setText(this.textString)
-          console.log(this.text.height)
-          this.printing = false
-        }, this.space)
-      }
-      if (this.count > 100) {
-        this.text.alpha-=0.03
-      }
-    }
+    // if (this.count < 300 && !this.printing) {
+    //   this.printing = true
+    //   this.space = this.space - 50 < 10 ? 10 : this.space - 50
+    //   setTimeout(() => {
+    //     this.textString += `\n第 ${++this.count} 天`
+    //     this.text.setText(this.textString)
+    //     console.log(this.text.height)
+    //     this.printing = false
+    //   }, this.space)
+    // }
+    // if (this.count > 100) {
+    //   this.text.alpha-=0.03
+    // }
 
     // step: 游戏结束(2/3)
     if (!this.dataStorage.basicData.health) {
@@ -82,7 +70,7 @@ export default class Text extends Phaser.Scene {
     }
 
     // film: 一行转场(2/2)
-    if (fastPrintDays && !this.printing && this.count < 35) {
+    if (filmVersion && fastPrintDays && !this.printing && this.count < 35) {
       this.pageTurn()
     }
   }

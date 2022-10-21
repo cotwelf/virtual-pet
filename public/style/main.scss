@@ -40,7 +40,9 @@
   left: -1000px;
   visibility: hidden;
 }
-
+html {
+  background-image: url('../images/bg.png');
+}
 body {
   margin: 0;
   padding: 0;
@@ -59,7 +61,6 @@ body {
 //   }
 // }
 #game-view {
-  background-image: url('../images/bg.png');
   display: flex;
   height: 100vh;
   align-items: center;

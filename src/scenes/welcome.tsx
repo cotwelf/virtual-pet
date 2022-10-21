@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { createDialogueDom, isMobile, printText } from "~/utils";
 import { soundsAssets, dialoguesAssets } from '../../public'
-import { filmVersion } from "~/utils/game-controller";
+import { bgmOn, filmVersion, testScenes } from "~/utils/game-controller";
 
 const RULE_FRAGMENTS = [
   "由于疫情大爆发，所有人都被封印在家里无法出门。",
@@ -11,7 +11,6 @@ const RULE_FRAGMENTS = [
 const CONFIRM_TEXT = '好 8...'
 
 const CANCEL_TEXT = '不！滚！'
-
 export default class Welcome extends Phaser.Scene {
   constructor () {
     super('welcome')
@@ -47,7 +46,13 @@ export default class Welcome extends Phaser.Scene {
     soundsAssets.handler.create(this)
 
     // this.sound.add('sound-click-temp').play()
-    soundsAssets.handler.play(this, soundsAssets.keys.BGM_DARK.KEY, { loop: true })
+    if (bgmOn) {
+      soundsAssets.handler.play(this, soundsAssets.keys.BGM_DARK.KEY, { loop: true })
+    }
+    if (testScenes) {
+      this.scene.stop('welcome')
+      this.scene.start(testScenes)
+    }
     this.add.dom(0, 0, <div className="title">生存挑战</div>).setOrigin(0)
     this.anims.create({
       key: 'click',

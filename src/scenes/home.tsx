@@ -15,6 +15,9 @@ import
 from '../utils'
 import { daysDuration } from "~/utils/game-controller";
 
+const RELEASE_TEXT = (<div style="padding-top: 50%; text-align: center;">
+我们解封啦啦啦啦~ 拜拜！！我去吃吃吃啦~ <br/> 蟹蟹这段时间的陪伴！
+</div>)
 export default class Home extends Phaser.Scene {
   constructor () {
     super('home'); // given the key to uniquely identify it from other Scenes
@@ -32,6 +35,9 @@ export default class Home extends Phaser.Scene {
   private gameHeight
   private lastDialogueIndex = 0
   private print
+
+  // 解封辽
+  private release = true
 
   // 当前状态持续时间记录(s)
   private timeCounter
@@ -64,6 +70,10 @@ export default class Home extends Phaser.Scene {
     )
   }
   create () {
+    if (this.release) {
+      this.add.dom(0, 0, RELEASE_TEXT).setOrigin(0)
+      return
+    }
     setTimeout(() => {
       setData({...this.dataStorage})
       this.scene.start('text')

@@ -15,34 +15,34 @@ export const eventDaily = {
       {
         text: '今天又是无事发生的一天。（甚至有种抗原兑着水也能阴的既视感',
       },
-      {
-        text: 'qwq 天啦噜，鼻子被自己捅出血可还行。。。',
-        dataChange: [
-          {
-            naze: '鼻子出血痛痛',
-            data: {
-              feeling: -1
-            }
-          }
-        ]
-      },
-      {
-        text: '昨晚失眠，今儿个还要早起抗原，还让不让人活了啊 QAQ',
-        dataChange: [
-          {
-            naze: '懒觉被迫中断',
-            data: {
-              feeling: -1
-            }
-          },
-          {
-            naze: '睡眠不足',
-            data: {
-              health: -1
-            }
-          }
-        ]
-      },
+      // {
+      //   text: 'qwq 天啦噜，鼻子被自己捅出血可还行。。。',
+      //   dataChange: [
+      //     {
+      //       naze: '鼻子出血痛痛',
+      //       data: {
+      //         feeling: -1
+      //       }
+      //     }
+      //   ]
+      // },
+    //   {
+    //     text: '昨晚失眠，今儿个还要早起抗原，还让不让人活了啊 QAQ',
+    //     dataChange: [
+    //       {
+    //         naze: '懒觉被迫中断',
+    //         data: {
+    //           feeling: -1
+    //         }
+    //       },
+    //       {
+    //         naze: '睡眠不足',
+    //         data: {
+    //           health: -1
+    //         }
+    //       }
+    //     ]
+    //   },
     ],
     yang: [
       {

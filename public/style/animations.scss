@@ -23,10 +23,11 @@ body {
   @for $d from 0 to 10 {
 
   }
-  $scale-size: 5;
-  $anim-duration: 1s;
+  $scale-size: 10; // 打字：5；设定数值：2.5；文字显示：10
+  $anim-duration: 2s; // 一行转场 3s；其他 1s
   transform-origin: center center;
   transition: all $anim-duration linear;
+
   &.amplified {
     transform: scale($scale-size) translate3d(0,0,0);
     @for $i from -2000 to 2000 {
