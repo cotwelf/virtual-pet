@@ -16,7 +16,7 @@ let data = {
   characterKey: "girl", // girl, body
   basicData: {
     "health":5, // 健康值为 0 时游戏结束
-    "feeling":5,
+    "feeling":10,
     "knowledge":5,
     "relationship":5
   },

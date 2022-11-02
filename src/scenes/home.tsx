@@ -14,6 +14,8 @@ import
 }
 from '../utils'
 import { daysDuration } from "~/utils/game-controller";
+import { IMAGES } from '../../public/images'
+import { loadSpritesheet, playAnims } from "~/utils/loaders/image-loader";
 
 const RELEASE_TEXT = (<div style="padding-top: 50%; text-align: center;">
 我们解封啦啦啦啦~ 拜拜！！我去吃吃吃啦~ <br/> 蟹蟹这段时间的陪伴！
@@ -22,8 +24,10 @@ export default class Home extends Phaser.Scene {
   constructor () {
     super('home'); // given the key to uniquely identify it from other Scenes
   }
+  private characterImages = new Map()
   private character
   private dataStorage
+
 
   private currentShow: IBasicData = 'health'
   private previousType
@@ -37,7 +41,7 @@ export default class Home extends Phaser.Scene {
   private print
 
   // 解封辽
-  private release = true
+  private release = false
 
   // 当前状态持续时间记录(s)
   private timeCounter
@@ -68,6 +72,11 @@ export default class Home extends Phaser.Scene {
       `images/characters/${this.dataStorage.characterKey}.png`, // WORKAROUND
       { frameWidth: 320, frameHeight: 320 }
     )
+    // const charactersKey = Object.keys(IMAGES.CHARACTERS)
+    // console.log(charactersKey)
+    // charactersKey.forEach((key) => {
+    //   loadSpritesheet({ scene: this, imageObj: IMAGES.CHARACTERS[key]})
+    // })
   }
   create () {
     if (this.release) {
@@ -79,12 +88,14 @@ export default class Home extends Phaser.Scene {
       this.scene.start('text')
       return
     }, daysDuration)
+    // const characterObj = IMAGES.CHARACTERS.get(this.dataStorage.characterKey)
+    // this.character = !!characterObj && playAnims({ scene: this, imageObj: characterObj})
     this.anims.create({
       key: `${this.dataStorage.characterKey}-alive`,
       frames: this.anims.generateFrameNames(this.dataStorage.characterKey, { start: 0, end: 2 }),
       frameRate: 3,
       repeat: -1,
-    });
+    })
     this.character = this.add.sprite(
       this.gameWidth * 0.5,
       this.gameHeight * 0.5,

@@ -27,7 +27,7 @@
 		]
 	},
 	"include": [
-		"src/**/*",
-    "public/assets/*"
+		"src",
+    "public"
   ]
 }

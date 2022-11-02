@@ -1,7 +1,20 @@
 import Phaser from "phaser";
 import { createDialogueDom, getData, printText } from "~/utils";
-import { fastPrintDays, fastPrintDaysMulti, filmVersion } from "~/utils/game-controller";
+import { fastPrintDays, fastPrintDaysMulti, filmVersion, printLoop } from "~/utils/game-controller";
+type IPageTurnConfig = {
+  transition: 'linear' | 'ease-in'
+  from: number
+  to: number
+  text: string // 一定要有 X，为即将被替换的翻页数字
+}
+const pageTurnConfig: IPageTurnConfig = {
+  from: 1,
+  to: 35,
+  transition: 'linear',
+  text: 'X 天后'
+}
 
+let dayCount = 1
 export default class Text extends Phaser.Scene {
   constructor () {
     super('text')
@@ -10,7 +23,7 @@ export default class Text extends Phaser.Scene {
   private notifyModal
   private dataStorage
   // temp
-  private count = 1
+  private count = dayCount
   private textString
   private printing
   private text
@@ -25,11 +38,10 @@ export default class Text extends Phaser.Scene {
   create () {
     document.getElementById("game-view")?.classList.add('text')
     this.text = this.add.dom(0, 0, this.textDiv, "text-align: center; width: 100vw").setOrigin(0)
-    console.log(this.print)
     // film: 一行转场(1/2)
     if (fastPrintDays) {
-      this.text.setText(`${this.count} 天后`)
-      this.pageTurn()
+      this.text.setText(pageTurnConfig.text.replace('X', `${this.count}`))
+      this.pageTurn(pageTurnConfig)
       return
     }
     // 多行转场（1/2)
@@ -44,13 +56,24 @@ export default class Text extends Phaser.Scene {
     } else {
       // 正常游戏跳转
       this.print = printText(this, this.textDiv, `第 ${this.dataStorage.dayCounter} 天`)
-      setTimeout(() => {
-        this.scene.stop('text')
-        this.scene.start('covid')
-        this.textDiv = <div></div>
-        document.getElementById("game-view")?.classList.remove('text')
+      if (printLoop) {
+        setTimeout(() => {
+          this.scene.stop('text')
+          this.scene.start('text')
+          this.textDiv = <div></div>
+          document.getElementById("game-view")?.classList.remove('text')
+          this.dataStorage.dayCounter += 1
+        }, 2000)
         return
-      }, 3000)
+      } else {
+        setTimeout(() => {
+          this.scene.stop('text')
+          this.scene.start('covid')
+          this.textDiv = <div></div>
+          document.getElementById("game-view")?.classList.remove('text')
+          return
+        }, 3000)
+      }
     }
 
 
@@ -82,11 +105,11 @@ export default class Text extends Phaser.Scene {
     }
 
     // film: 一行转场(2/2)
-    if (fastPrintDays && !this.printing && this.count < 35) {
-      this.pageTurn()
+    if (fastPrintDays && !this.printing && this.count < pageTurnConfig.to) {
+      this.pageTurn(pageTurnConfig)
     }
   }
-  private pageTurn = () => {
+  private pageTurn = ({ transition, from, to, text}: IPageTurnConfig) => {
     if (this.printing) {
       return
     }
@@ -96,13 +119,15 @@ export default class Text extends Phaser.Scene {
       // this.text.setText(`第 ${++this.count} 天`)
 
       // 阳性 x 天后
-      let counter = 30
-      this.text.setText(`${++this.count}  天后`)
+      let counter = to - from
+      this.text.setText(text.replace('X', `${++this.count}`))
       this.printing = false
-      if (this.count < counter) {
-        this.space = this.space - counter*10 < 0 ? 0 : this.space - counter*10
-      } else {
-        this.space = this.space + counter*10 > 1000 ? 1000 : this.space + counter*10
+      if (transition === 'ease-in') {
+        if (this.count < counter) {
+          this.space = this.space - counter * 10 < 0 ? 0 : this.space - counter * 10
+        } else {
+          this.space = this.space + counter * 10 > 1000 ? 1000 : this.space + counter * 10
+        }
       }
     }, this.space)
   }

@@ -10,12 +10,12 @@ export const sad = [
     showed: false,
   },
   {
-    text: "想吃海底捞寿喜烧夏朵耶里夏丽很久以前东发道麦当劳肯德基辛香汇跷脚牛肉",
+    text: "想吃海底捞寿喜烧辛香汇夏朵耶里夏丽很久以前东发道麦当劳肯德基",
     btn1: {
       text: "还有高老九"
     },
     btn2: {
-      text: "和人生一串"
+      text: "和捞王"
     },
     showed: false,
   },

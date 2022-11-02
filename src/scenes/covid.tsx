@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import { createDialogueDom, getData, printText, setData, toggleTips, TYPES_CNAME } from '~/utils'
+import { covidBgmOn, filmVersion, printLoop, testScenes } from '~/utils/game-controller'
 import { soundsAssets } from '../../public'
 import { eventDaily, IEventResItem } from '../../public/assets/events'
 
@@ -19,6 +20,9 @@ export default class Covid extends Phaser.Scene {
 
   private dataStorage
   private resultModal
+
+  // filmVersion
+  private dialogueIndex = 0
   init() {
     this.dataStorage = getData()
   }
@@ -27,7 +31,9 @@ export default class Covid extends Phaser.Scene {
     this.load.image('tip', 'images/covid/tip.png')
   }
   create(){
-    soundsAssets.handler.play(this, soundsAssets.keys.COVIDBGMSHORT.KEY, { volume: 0.2 })
+    if (covidBgmOn) {
+      soundsAssets.handler.play(this, soundsAssets.keys.COVIDBGMSHORT.KEY, { volume: 0.2 })
+    }
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
     // 插入核酸背景图
@@ -71,7 +77,9 @@ export default class Covid extends Phaser.Scene {
   update() {
     // 开始抗原
     if (this.testing && !this.interval) {
-      soundsAssets.handler.play(this, soundsAssets.keys.COVIDING.KEY, { volume: 0.7 })
+      if (covidBgmOn) {
+        soundsAssets.handler.play(this, soundsAssets.keys.COVIDING.KEY, { volume: 0.7 })
+      }
       this.interval = setInterval(() => {
         if (this.cGraphics.alpha !== 1) {
           this.cGraphics.alpha += 0.5
@@ -92,7 +100,9 @@ export default class Covid extends Phaser.Scene {
         this.resultModal = this.addResultModal('again')
       } else if (this.tGraphics.alpha > 0) {
         // 阳性
-        soundsAssets.handler.play(this, soundsAssets.keys.YANG.KEY, { volume: 0.2 })
+        if (covidBgmOn) {
+          soundsAssets.handler.play(this, soundsAssets.keys.YANG.KEY, { volume: 0.2 })
+        }
         this.resultModal = this.addResultModal('yang')
       } else if (this.cGraphics.alpha > 0) {
         // 阴性
@@ -102,7 +112,12 @@ export default class Covid extends Phaser.Scene {
 
   }
   private addResultModal(type: 'yang' | 'yin' | 'again') {
-    const dialogueObj: IEventResItem = eventDaily.covid[type][Phaser.Math.RND.integerInRange(0, eventDaily.covid[type].length - 1)]
+    let dialogueObj: IEventResItem
+    if(filmVersion) {
+      dialogueObj = eventDaily.covid[type][this.dialogueIndex++] || eventDaily.covid[type][Phaser.Math.RND.integerInRange(0, eventDaily.covid[type].length - 1)]
+    } else {
+      dialogueObj = eventDaily.covid[type][Phaser.Math.RND.integerInRange(0, eventDaily.covid[type].length - 1)]
+    }
     let dialogue = dialogueObj.text
     let print
     const btnList = [
@@ -122,7 +137,6 @@ export default class Covid extends Phaser.Scene {
             case 'yang':
               this.gameStart.destroy()
               let tips = ''
-              console.log(dialogueObj)
               if (dialogueObj?.dataChange) {
                 tips = tips + dialogueObj.dataChange.map(i => {
                   let change
@@ -137,17 +151,22 @@ export default class Covid extends Phaser.Scene {
                       return `${TYPES_CNAME[j]} ${i.data && i.data[j]}`
                     }).join(', ')
                   }
-                  console.log(i.naze, change)
                   return `${i.naze} ${change}`
                 }).join('\n')
                 setData(this.dataStorage)
               }
               toggleTips(this, tips)
               this.resultModal.destroy()
-              setTimeout(() => {
-                soundsAssets.handler.stop(this, soundsAssets.keys.COVIDBGMSHORT.KEY)
-                this.scene.start('home')
-              }, 3000)
+              if (!(filmVersion && testScenes === 'covid')) {
+                setTimeout(() => {
+                  soundsAssets.handler.stop(this, soundsAssets.keys.COVIDBGMSHORT.KEY)
+                  this.scene.start('home')
+                }, 3000)
+              } else {
+                setTimeout(() => {
+                  this.scene.restart()
+                }, 3000)
+              }
           }
         }
       }
