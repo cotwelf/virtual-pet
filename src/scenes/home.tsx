@@ -41,7 +41,7 @@ export default class Home extends Phaser.Scene {
   private print
 
   // 解封辽
-  private release = false
+  private release = true
 
   // 当前状态持续时间记录(s)
   private timeCounter

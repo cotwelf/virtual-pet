@@ -52,6 +52,7 @@ export const printText = function(that, dom: HTMLElement | null, text: string, t
   if (!!dom) {
     soundsAssets.handler.play(that, soundsAssets.keys.PRINTING.KEY)
     printing = true
+    dom.classList.add('printing')
     // handleAssets.play(that, ASSET_KEYS.AUDIO.PRINTING, { volume: 0.3 })
     // const prevText = dom.innerHTML
     let currentText = text
@@ -62,6 +63,7 @@ export const printText = function(that, dom: HTMLElement | null, text: string, t
           currentText = currentText.substring(1, currentText.length)
         } else {
           printing = false
+          dom.classList.remove('printing')
           soundsAssets.handler.stop(that, soundsAssets.keys.PRINTING.KEY)
           clearInterval(interval)
         }

@@ -67,15 +67,21 @@ body {
   justify-content: center;
   color: $main-color;
   &.text {
-    * {
-      // font-size: 80px;
-    }
-    .name {
-      font-size: 80px;
-      margin-left: 60%;
-      &::after {
-        content: "_";
-        animation: text-end 1s infinite;
+    .end-text {
+      font-size: 50px;
+      // margin-left: 60%;
+      div {
+        text-align: center;
+        &:first-child {
+          font-size: 70px;
+          margin-bottom: 50px;
+        }
+        // &:last-child {
+        //   &::after {
+        //     content: "_";
+        //     animation: text-end 1s infinite;
+        //   }
+        // }
       }
     }
     > div {
