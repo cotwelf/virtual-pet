@@ -66,7 +66,7 @@ export default class Text extends Phaser.Scene {
           this.textDiv = <div></div>
           document.getElementById("game-view")?.classList.remove('text')
           this.dataStorage.dayCounter += 1
-        }, 2000)
+        }, 3000)
         return
       } else {
         setTimeout(() => {

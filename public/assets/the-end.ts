@@ -9,5 +9,6 @@ export const theEndText = [
     '8Bit Remix,Frank,夏天 - いつも何度でも (8bit Remix)',
     '国本剛章 - 城外BGM [迷宮組曲 ミロンの大冒険]',
     '山下絹代 - Poison Mind (ボスBGM) [悪魔城ドラキュラ]',
-  ]
+  ],
+  ['设计学院', '动漫与影像设计方向 2020 级毕业设计'],
 ]

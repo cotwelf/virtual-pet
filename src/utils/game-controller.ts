@@ -6,7 +6,7 @@ export const daysDuration = 30000000 // 每天持续时间
 // scene: text
 export const fastPrintDays = filmVersion && false // n 天后，主要用于交作业 orz 转场用（一行转场）
 export const fastPrintDaysMulti = filmVersion && false // 多行转场
-export const printLoop = filmVersion && false
+export const printLoop = filmVersion && true
 
 // scene: covid
 export const covidBgmOn = false
