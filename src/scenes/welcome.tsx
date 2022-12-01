@@ -49,11 +49,14 @@ export default class Welcome extends Phaser.Scene {
     if (bgmOn) {
       soundsAssets.handler.play(this, soundsAssets.keys.BGM_DARK.KEY, { loop: true })
     }
-    if (testScenes) {
+    if (testScenes && testScenes !== 'welcome') {
       this.scene.stop('welcome')
       this.scene.start(testScenes)
     }
     this.add.dom(0, 0, <div className="title">生存挑战</div>).setOrigin(0)
+    // for(let i=1;i>0;i++) {
+    //   console.log(i)
+    // }
     this.anims.create({
       key: 'click',
       frames: this.anims.generateFrameNames('click', { start: 0, end: 2 }),

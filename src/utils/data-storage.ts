@@ -13,7 +13,7 @@ export type IData = {
   dayCounter: number
 }
 let data = {
-  characterKey: "girl-sleep", // girl, body // 录像：girl-emo, girl-game, girl-sleep
+  characterKey: "girl", // girl, body // 录像：girl-emo, girl-game, girl-sleep
   basicData: {
     "feeling":6,
     "health":0, // 健康值为 0 时游戏结束

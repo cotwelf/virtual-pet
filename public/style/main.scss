@@ -49,6 +49,57 @@ body {
   font-family: VonwaonBitmap16;
   font-size: 40px;
   overflow: hidden;
+  &.explaination,
+  &.the-end {
+    display: flex;
+    > div {
+      color: white;
+    }
+  }
+  &.explaination {
+    background: black;
+    align-items: center;
+    justify-content: center;
+  }
+  &.the-end {
+    background-color: #1967ff;
+    // background-color: #1e67b3;
+    // background-color: #040eab;
+    .tips {
+      margin-left: 100px;
+      margin-top: 140px;
+      .pic {
+        background: url('../../public/images/smile.png');
+        width: 170px;
+        height: 260px;
+        background-size: contain;
+      }
+      .big-text {
+        line-height: 60px;
+        font-size: 50px;
+      }
+      .cast {
+        font-size: 26px;
+        line-height: 40px;
+        display: flex;
+        align-items: center;
+        margin-top: 100px;
+        padding-right: 40px;
+        &::before {
+          content: '';
+          display: block;
+          background: url('../../public/images/wechat.png');
+          background-size: cover;
+          border: 15px solid white;
+          width: 180px;
+          height: 180px;
+          flex-shrink: 0;
+          margin-right: 15px;
+        }
+      }
+    }
+
+  }
 }
 * {
   user-select: none;

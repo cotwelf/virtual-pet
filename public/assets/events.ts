@@ -12,20 +12,20 @@ export interface IEventResItem {
 export const eventDaily = {
   covid: {
     yin: [
-      {
-        text: '今天又是无事发生的一天。（甚至有种抗原兑着水也能阴的既视感',
-      },
-      {
-        text: 'qwq 天啦噜，鼻子被自己捅出血可还行。。。',
-        dataChange: [
-          {
-            naze: '鼻子出血痛痛',
-            data: {
-              feeling: -1
-            }
-          }
-        ]
-      },
+      // {
+      //   text: '今天又是无事发生的一天。（甚至有种抗原兑着水也能阴的既视感',
+      // },
+      // {
+      //   text: 'qwq 天啦噜，鼻子被自己捅出血可还行。。。',
+      //   dataChange: [
+      //     {
+      //       naze: '鼻子出血痛痛',
+      //       data: {
+      //         feeling: -1
+      //       }
+      //     }
+      //   ]
+      // },
       {
         text: '昨晚失眠，今天还要早起抗原，有亿点点难受。。。',
         dataChange: [
