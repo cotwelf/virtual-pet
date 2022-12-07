@@ -10,7 +10,7 @@ type IPageTurnConfig = {
 }
 const pageTurnConfig: IPageTurnConfig = {
   from: 1,
-  to: 200,
+  to: 2000,
   transition: 'linear',
   text: '第 X 天'
 }
@@ -82,7 +82,7 @@ export default class Text extends Phaser.Scene {
   update () {
     // 多行转场(2/2)
     if (fastPrintDaysMulti) {
-      if (this.count < 300 && !this.printing) {
+      if (this.count < pageTurnConfig.to && !this.printing) {
         this.printing = true
         this.space = this.space - 80 < 10 ? 10 : this.space - 80
         setTimeout(() => {
@@ -91,9 +91,9 @@ export default class Text extends Phaser.Scene {
           this.printing = false
         }, this.space)
       }
-      if (this.count > 200) {
-        this.text.alpha-=0.03
-      }
+      // if (this.count > 200) {
+      //   this.text.alpha-=0.03
+      // }
     }
 
     // step: 游戏结束(2/3)

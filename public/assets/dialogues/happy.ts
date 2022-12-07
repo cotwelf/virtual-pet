@@ -41,26 +41,26 @@ export const happy = [
   //   showed: false,
   // },
 
-  {
-    text: "说起来，昨天吃食堂盒饭，吃到了小青虫，算不算加餐 qwq",
-    btn1: {
-      text: "啊这..."
-    },
-    btn2: {
-      text: "青虫好吃吗"
-    },
-    showed: false,
-  },
   // {
-  //   text: "你那里买菜方便吗？好好吃饭，不要饿到自己",
+  //   text: "说起来，昨天吃食堂盒饭，吃到了小青虫，算不算加餐 qwq",
   //   btn1: {
-  //     text: "嗯嗯"
+  //     text: "啊这..."
   //   },
   //   btn2: {
-  //     text: "你也是"
+  //     text: "青虫好吃吗"
   //   },
   //   showed: false,
   // },
+  {
+    text: "你那里买菜方便吗？好好吃饭，不要饿到自己",
+    btn1: {
+      text: "嗯嗯"
+    },
+    btn2: {
+      text: "你也是"
+    },
+    showed: false,
+  },
   {
     text: "什么时候解封啊啊啊啊啊啊啊啊！！！",
     btn1: {
