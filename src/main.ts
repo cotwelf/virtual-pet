@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 
+import Start from './scenes/start'
 // @ts-ignore
 import Welcome from './scenes/welcome'
 // @ts-ignore
@@ -72,7 +73,7 @@ if (blackText) {
 
 
 } else {
-  const scene = [Welcome, Setting, Home, Covid, Text]
+  const scene = [Start, Welcome, Setting, Home, Covid, Text]
 
   const config: Phaser.Types.Core.GameConfig = {
     fps: {
