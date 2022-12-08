@@ -23,7 +23,7 @@ body {
   // @for $d from 0 to 10 {
 
   // }
-  $scale-size: 5; // 打字：5；设定数值：2.5；文字显示：10
+  $scale-size: 2.5; // 打字：5；设定数值：2.5；文字显示：10
   $anim-duration: 1s; // 一行转场 3s；其他 1s
   transform-origin: center center;
   transition: all $anim-duration linear;
@@ -37,6 +37,15 @@ body {
       &.y#{$i} {
         margin-top: calc((50vh + #{-$i}px) * $scale-size);
       }
+    }
+    &::before {
+      content: '按下空格解除放大状态';
+      display: block;
+
+      z-index: 99;
+      color: white;
+      font-size: 1rem;
+
     }
   }
 }
