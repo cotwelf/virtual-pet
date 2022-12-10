@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { createDialogueDom, getData, printText, setData, toggleTips, TYPES_CNAME } from '~/utils'
+import { createDialogueDom, DATA_TYPES, getData, printText, setData, toggleTips, TYPES_CNAME } from '~/utils'
 import { covidBgmOn, filmVersion, leisureDuration, printLoop, testScenes } from '~/utils/game-controller'
 import { soundsAssets } from '../../public'
 import { eventDaily, IEventResItem } from '../../public/assets/events'
@@ -124,8 +124,10 @@ export default class Covid extends Phaser.Scene {
   }
   private addResultModal(type: 'yang' | 'yin' | 'again' | 'miss') {
     const toHome = () => {
+      setData({...this.dataStorage, dayCounter: this.dataStorage.dayCounter + 1})
       this.scene.stop('covid')
       this.scene.start('home')
+      return
     }
     // 页面 2min 无反应，自动跳到下一个页面
     const nextPageTimer = setTimeout(toHome, 120000)
@@ -161,19 +163,39 @@ export default class Covid extends Phaser.Scene {
               let tips = ''
               if (dialogueObj?.dataChange) {
                 tips = tips + dialogueObj.dataChange.map(i => {
-                  let change
+                  let changeText
+                  let currentType: string
+                  let currentValue
                   if (i.data !== undefined) {
-                    change = Object.keys(i.data).map(j => {
+                    changeText = Object.keys(i.data).map(type => {
                       if (this.dataStorage.basicData) {
-                        this.dataStorage.basicData[j] += i.data ? i.data[j] : 0
-                        if (this.dataStorage.basicData[j] < 0) {
-                          this.dataStorage.basicData[j] = 0
+                        if (!i.data) {
+                          return
+                        }
+                        currentType = Object.keys(i.data)[0]
+                        currentValue = i.data[currentType]
+                        // 这是一个已经减到 0 的溢出值
+                        let overCount = 0
+                        if (this.dataStorage.basicData[type] === 0) {
+                          currentType = DATA_TYPES.filter(key => this.dataStorage.basicData[key] !== 0).pop() || ''
+                          if (!currentType) {
+                            console.log(currentType, 'currentType')
+                            // 都是 0 了orz
+                            this.scene.stop('covid')
+                            this.scene.start('end')
+                            return
+                          }
+                        }
+                        console.log(currentType, currentValue, this.dataStorage.basicData[type], 'i.data')
+                        this.dataStorage.basicData[currentType] += currentValue
+                        if (this.dataStorage.basicData[currentType] < 0) {
+                          this.dataStorage.basicData[currentType] = 0
                         }
                       }
-                      return `${TYPES_CNAME[j]} ${i.data && i.data[j]}`
+                      return `${TYPES_CNAME[currentType]} ${currentValue}`
                     }).join(', ')
                   }
-                  return `${i.naze} ${change}`
+                  return `${i.naze} ${changeText}`
                 }).join('\n')
                 setData(this.dataStorage)
               }

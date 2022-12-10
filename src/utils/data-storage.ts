@@ -18,9 +18,9 @@ let data = {
   characterKey: "girl", // girl, body // 录像：girl-emo, girl-game, girl-sleep
   characterStatus: ['', 'emo', 'game', 'sleep'],
   basicData: {
-    "feeling":10,
-    "health":10, // 健康值为 0 时游戏结束
-    "knowledge":10,
+    "feeling":0,
+    "health":1, // 健康值为 0 时游戏结束
+    "knowledge":0,
     "relationship":10
   },
   eventDailyRecord: {

@@ -18,6 +18,8 @@ import { loadSpritesheet, playAnims } from "~/utils/loaders/image-loader";
 import { getNoInteractDialogues } from "~/../public/assets/dialogues/no-interact";
 
 const clearedData = {
+  character: undefined,
+  basicDataShower: undefined,
   print: undefined,
   toBeNextDay: false
 }
@@ -75,9 +77,12 @@ export default class Home extends Phaser.Scene {
     // 定时开启下一个循环~
     setTimeout(() => {
       this.toBeNextDay = true
-      setData({...this.dataStorage, dayCounter: this.dataStorage.dayCounter + 1})
+      setData({...this.dataStorage})
       if (!this.dialogModal) {
-        this.toBeNextDay = false
+        const setUpKeys = Object.keys(clearedData)
+        setUpKeys.forEach(key => {
+          this[key] = clearedData[key]
+        })
         this.scene.stop('home')
         this.scene.start('text')
       }
@@ -200,6 +205,10 @@ export default class Home extends Phaser.Scene {
           this.onCloseDialogueFn(addType, btn.value)
           if (this.toBeNextDay) {
             this.toBeNextDay = false
+            const setUpKeys = Object.keys(clearedData)
+            setUpKeys.forEach(key => {
+              this[key] = clearedData[key]
+            })
             this.scene.stop('home')
             this.scene.start('text')
             return
