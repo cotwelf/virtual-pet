@@ -14,6 +14,7 @@ export type IData = {
 }
 let data = {
   characterKey: "girl", // girl, body // 录像：girl-emo, girl-game, girl-sleep
+  characterStatus: ['', 'emo', 'game', 'sleep'],
   basicData: {
     "feeling":10,
     "health":2, // 健康值为 0 时游戏结束
