@@ -1,0 +1,58 @@
+body.explaination {
+  $content-width: 92vw;
+  $tips-height: 50px;
+  $top-bottom-space: 30px;
+  display: flex;
+  background: black;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  .content-box {
+    height: 100vh;
+    line-height: $tips-height;
+    width: $content-width;
+    &.page1 {
+      .text {
+        position: absolute;
+        width: $content-width;
+        text-align: center;
+        bottom: $top-bottom-space * 2;
+        animation: blink 2s infinite;
+      }
+    }
+    &.page2 {
+      .text {
+        margin: $top-bottom-space 0;
+        height: calc(100vh - $tips-height * 2 - $top-bottom-space * 4);
+        overflow-y: auto;
+      }
+      &::before {
+        content: "World 启动管理器";
+        display: block;
+        text-align: center;
+        background-color: white;
+        color: black;
+        margin-top: $top-bottom-space;
+      }
+      &::after {
+        content: 'Enter = 继续';
+        display: block;
+        background-color: white;
+        color: black;
+        position: absolute;
+        bottom: $top-bottom-space;
+        width: calc($content-width - 20px);
+        padding-left: 20px;
+      }
+    }
+    br {
+      line-height: 30px;
+    }
+  }
+  > div {
+    color: white;
+  }
+  &.mobile .content-box.page2::after {
+    content: 'Click = 继续';
+  }
+}

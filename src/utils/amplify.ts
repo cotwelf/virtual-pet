@@ -22,7 +22,7 @@ export const amplifyScenes = ({ scale, duration }) => {
       container.classList.add('amplified', `x${mousePosition.x}`, `y${mousePosition.y}`, `s${scale}`)
     } else if (e.code === 'Space' && container && amplified) {
       amplified = false
-      container.removeAttribute('class')
+      container.classList.remove(`d${duration}`, 'amplified', `x${mousePosition.x}`, `y${mousePosition.y}`, `s${scale}`)
     }
   }
 }

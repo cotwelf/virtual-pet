@@ -24,8 +24,10 @@ export default class Welcome extends Phaser.Scene {
   private gameHeight
   private soundClick
   init () {
+    console.log('start welcome')
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
+
   }
   preload () {
     // this.load.image('background', 'images/bg.png')
@@ -36,13 +38,13 @@ export default class Welcome extends Phaser.Scene {
       { frameWidth: 477, frameHeight: 288 }
     )
     // this.load.audio('sound-click-temp', this.cache.audio.get('sound-click'))
-    // console.log(this.load.audio('111',''))
   }
   create () {
     // if(isMobile()) {
     //   this.add.dom(this.gameWidth * 0.5, this.gameHeight * 0.4, <div className="sorry-qwq" style={{fontSize: '40px', width: '90vw', lineHeight: '15vw'}}>请用大佬电脑浏览器打开，主人还没搞好爪机的适配 _(:з」∠)_</div>)
     //   return
     // }
+
     soundsAssets.handler.create(this)
 
     // this.sound.add('sound-click-temp').play()

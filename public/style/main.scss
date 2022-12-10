@@ -1,7 +1,7 @@
 @import './variable';
 @import './mixin';
-@import './mobile';
 @import './animations';
+@import './mobile';
 
 @font-face {
   font-family: IPixRegular;
@@ -18,31 +18,18 @@
   src: url("../font/VonwaonBitmap-16px.ttf");
   font-weight:800;
 }
-@keyframes blink {
-  from {
-    visibility: hidden;
-  }
-  to {
-    visibility: visible;
-  }
-}
-@keyframes text-end {
-  0% {
-    content: '_';
-  }
-  100% {
-    content: '';
-  }
-}
+
 #font-loader {
   font-family: VonwaonBitmap16;
   position: absolute;
   left: -1000px;
   visibility: hidden;
 }
-html.start {
+
+#container {
   background-image: url('../images/bg.png');
 }
+
 body {
   margin: 0;
   padding: 0;
@@ -56,42 +43,9 @@ body {
       color: white;
     }
   }
-  &.explaination {
-    background: black;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    .content-box {
-      height: 100vh;
-      line-height: 50px;
-      width: 92vw;
-      &::before {
-        content: "World 启动管理器";
-        display: block;
-        text-align: center;
-        background-color: white;
-        color: black;
-        margin-top: 30px;
-      }
-      &::after {
-        content: 'Enter = 继续';
-        display: block;
-        background-color: white;
-        color: black;
-        position: absolute;
-        bottom: 30px;
-        width: 92vw;
-        padding-left: 20px;
-      }
-      br {
-        line-height: 30px;
-      }
-    }
-  }
+
   &.the-end {
     background-color: #1967ff;
-    // background-color: #1e67b3;
-    // background-color: #040eab;
     .tips {
       margin-left: 100px;
       margin-top: 140px;
@@ -132,13 +86,6 @@ body {
 * {
   user-select: none;
 }
-// #container {
-//   &::after {
-//     content: '';
-//     display: block;
-//     background-image: url('../images/icons/setting.svg');
-//   }
-// }
 #game-view {
   display: flex;
   height: 100vh;
@@ -155,12 +102,6 @@ body {
           font-size: 70px;
           margin-bottom: 50px;
         }
-        // &:last-child {
-        //   &::after {
-        //     content: "_";
-        //     animation: text-end 1s infinite;
-        //   }
-        // }
       }
     }
     > div {
@@ -185,15 +126,10 @@ body {
   canvas {
     background-image: url('../images/bg.png');
   }
-  // @media screen and (max-width: 900px) {
-
-  //   canvas {
-  //     width: 100vw;
-  //   }
-  // }
-  @import './modal';
-  @import "./welcome";
-  @import './home';
-  @import './setting';
-
 }
+
+@import './modal';
+@import "./welcome";
+@import './home';
+@import './setting';
+@import './start';
