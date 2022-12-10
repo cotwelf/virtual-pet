@@ -1,0 +1,68 @@
+body.end {
+  background-color: #1967ff;
+  display: flex;
+  > div {
+    color: white;
+  }
+  .tips {
+    margin-left: 1rem;
+    margin-top: 1.4rem;
+    .pic {
+      background: url('../../public/images/smile.png');
+      width: 1.7rem;
+      height: 2.6rem;
+      background-size: contain;
+    }
+    .big-text {
+      line-height: 0.8rem;
+      font-size: 0.5rem;
+      margin-top: 0.2rem;
+    }
+    .cast {
+      font-size: 0.26rem;
+      line-height: 0.46rem;
+      display: flex;
+      align-items: center;
+      margin-top: 1rem;
+      padding-right: 0.8rem;
+      > div {
+        display: flex;
+      }
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      &::before {
+        content: '';
+        display: block;
+        background: url('../../public/images/wechat.png');
+        background-size: cover;
+        border: 15px solid white;
+        width: 1.8rem;
+        height: 1.8rem;
+        flex-shrink: 0;
+        margin-right: 0.5rem;
+      }
+    }
+    .retry {
+      font-size: 0.3rem;
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      display: flex;
+      align-items: center;
+      .btn {
+        border: 4px solid white;
+        padding: 0.1rem 0.2rem;
+        margin-left: 10px;
+        &:hover {
+          position: relative;
+          top: -3px;
+          box-shadow: $btn-box-shadow;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

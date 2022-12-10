@@ -55,7 +55,8 @@ export default class Text extends Phaser.Scene {
     }
     // step: 游戏结束(1/3) 健康值为 0 时游戏结束
     if (!this.dataStorage.basicData.health) {
-      this.print = printText(this, this.textDiv, `第 ${this.count++} 天`)
+      this.scene.stop('text')
+      this.scene.start('end')
     } else {
       // 正常游戏跳转
       this.print = printText(this, this.textDiv, `第 ${this.dataStorage.dayCounter} 天`)
@@ -94,11 +95,6 @@ export default class Text extends Phaser.Scene {
       // if (this.count > 200) {
       //   this.text.alpha-=0.03
       // }
-    }
-
-    // step: 游戏结束(2/3)
-    if (!this.dataStorage.basicData.health) {
-      this.theEnd()
     }
 
     // film: 一行转场(2/2)
@@ -142,70 +138,5 @@ export default class Text extends Phaser.Scene {
     ]
     this.notifyModal = this.add.dom(0, 0, createDialogueDom('big', { btnList: btnList, dialogueText })).setOrigin(0)
   }
-  // step: 游戏结束(3/3)
-  private theEnd = () => {
-    const PAGE_SPACE = 2000
-    if (this.endInterval) {
-      return
-    }
-    // bg
-    this.endInterval = setInterval(() => {
-      if (this.print.isPrinting()) {
-        return
-      }
-      const textString = `...第 ${this.count++} 天`
-      this.print = printText(this, this.textDiv, textString, 'noSpace')
-      if (this.endDuration > 2100) {
-        this.endDuration -= 30
-      } else {
-        this.text.alpha = this.text.alpha > 0.3 ? this.text.alpha - 0.1 : 0.3
-      }
-    })
-    let nameDiv = <div class='end-text'></div>
-    setTimeout(() => {
-      this.theEndTextDom = this.add.dom(0, 0, nameDiv).setOrigin(0)
-      let allTheEndText = theEndText
-      // for(let i = 0; i<allTheEndText.length; i++) {
-      //   printPageText(allTheEndText[i])
-      // }
-      const printPage = (textArray) => {
-        textArray.forEach((i) => {
-          nameDiv.appendChild(<div>{i}</div>)
-        })
-        setTimeout(() => {
-          nameDiv.innerHTML = ''
-        }, PAGE_SPACE)
-      }
-      for(let i = 0; i < allTheEndText.length; i++) {
-        setTimeout(() => {
-          console.log(allTheEndText[i],'allTheEndText[i]')
-          printPage(allTheEndText[i])
-        }, PAGE_SPACE * 2 * i)
-      }
-    }, 3000)
 
-    const printPageText = (textArray: string[]) => {
-      return new Promise((resolve) => {
-        if (this.theEndText && this.theEndText.isPrinting()) {
-          setTimeout(() => {
-            printPageText(textArray)
-          }, 1200)
-          return
-        } else if (textArray.length > 0) {
-          const div = <div ></div>
-          nameDiv.appendChild(div)
-          this.theEndText = printText(this, div, textArray.shift() || '')
-          console.log(textArray)
-          printPageText(textArray)
-          return
-        } else if (textArray.length === 0) {
-          nameDiv.innerHTML = ''
-          setTimeout(() => {
-            return resolve(true)
-          }, 2000)
-        }
-        return resolve(false)
-      })
-    }
-  }
 }

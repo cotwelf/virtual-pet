@@ -36,52 +36,6 @@ body {
   font-family: VonwaonBitmap16;
   font-size: 40px;
   overflow: hidden;
-  &.explaination,
-  &.the-end {
-    display: flex;
-    > div {
-      color: white;
-    }
-  }
-
-  &.the-end {
-    background-color: #1967ff;
-    .tips {
-      margin-left: 100px;
-      margin-top: 140px;
-      .pic {
-        background: url('../../public/images/smile.png');
-        width: 170px;
-        height: 260px;
-        background-size: contain;
-      }
-      .big-text {
-        line-height: 80px;
-        font-size: 50px;
-        margin-top: 20px;
-      }
-      .cast {
-        font-size: 26px;
-        line-height: 46px;
-        display: flex;
-        align-items: center;
-        margin-top: 100px;
-        padding-right: 80px;
-        &::before {
-          content: '';
-          display: block;
-          background: url('../../public/images/wechat.png');
-          background-size: cover;
-          border: 15px solid white;
-          width: 180px;
-          height: 180px;
-          flex-shrink: 0;
-          margin-right: 50px;
-        }
-      }
-    }
-
-  }
 }
 * {
   user-select: none;
@@ -133,3 +87,4 @@ body {
 @import './home';
 @import './setting';
 @import './start';
+@import './end';
