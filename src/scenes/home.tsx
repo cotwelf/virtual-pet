@@ -14,19 +14,14 @@ import
 }
 from '../utils'
 import { daysDuration } from "~/utils/game-controller";
-import { IMAGES } from '../../public/images'
 import { loadSpritesheet, playAnims } from "~/utils/loaders/image-loader";
 import { getNoInteractDialogues } from "~/../public/assets/dialogues/no-interact";
-
-const RELEASE_TEXT = (<div style="padding-top: 50%; text-align: center;">
-我们解封啦啦啦啦~ 拜拜！！我去吃吃吃啦~ <br/> 蟹蟹这段时间的陪伴！
-</div>)
 
 export default class Home extends Phaser.Scene {
   constructor () {
     super('home'); // given the key to uniquely identify it from other Scenes
   }
-  private characterImages = new Map()
+  private characterImage
   private character
   private dataStorage
 
@@ -52,7 +47,7 @@ export default class Home extends Phaser.Scene {
     this.dataStorage = getData()
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
-getNoInteractDialogues()
+    getNoInteractDialogues()
 
     // WORKAROUND: 为了录像，之后会补 boy_emo
     // this.dataStorage.characterKey = `${this.dataStorage.characterKey}${this.dataStorage.basicData.health < 3 ? '_emo' : ''}`
@@ -83,10 +78,6 @@ getNoInteractDialogues()
     // })
   }
   create () {
-    if (this.release) {
-      this.add.dom(0, 0, RELEASE_TEXT).setOrigin(0)
-      return
-    }
     setTimeout(() => {
       setData({...this.dataStorage})
       this.scene.start('text')

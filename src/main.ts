@@ -11,7 +11,6 @@ import Text from './scenes/text'
 
 import soundClick from '../public/assets/sounds/click.mp3'
 import { amplifyScenes } from './utils/amplify'
-import { blackText, theEnd } from './utils/game-controller'
 
 import { isMobile, throttle } from './utils'
 import End from './scenes/end'

@@ -1,6 +1,6 @@
 export const filmVersion = false // 用于交作业 orz
-export const testScenes: string = 'home' // 当前测试哪个 scene
-export const bgmOn = false // true：打开 bgm；false：关闭 bgm
+export const testScenes: string = 'welcome' // 当前测试哪个 scene
+export const bgmOn = true // true：打开 bgm；false：关闭 bgm
 export const daysDuration = 30000000 // 每天持续时间
 
 // scene: text

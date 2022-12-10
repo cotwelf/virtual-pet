@@ -1,7 +1,7 @@
 import Phaser from "phaser";
-import { createDialogueDom, isMobile, printText } from "~/utils";
-import { soundsAssets, dialoguesAssets } from '../../public'
-import { bgmOn, filmVersion, testScenes } from "~/utils/game-controller";
+import { createDialogueDom, printText } from "~/utils";
+import { soundsAssets } from '../../public'
+import { bgmOn } from "~/utils/game-controller";
 
 const RULE_FRAGMENTS = [
   "由于疫情大爆发，所有人都被封印在家里无法出门。",
@@ -17,44 +17,27 @@ export default class Welcome extends Phaser.Scene {
   }
   private gameStart
   private rules
-  private rulesIndex = 0
-  private rulesIndexLast = 0
-
   private gameWidth
   private gameHeight
-  private soundClick
   init () {
-    console.log('start welcome')
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
 
   }
   preload () {
-    // this.load.image('background', 'images/bg.png')
     soundsAssets.handler.load(this)
     this.load.spritesheet(
       'click',
       '/images/welcome/click.png',
       { frameWidth: 477, frameHeight: 288 }
     )
-    // this.load.audio('sound-click-temp', this.cache.audio.get('sound-click'))
   }
   create () {
-    // if(isMobile()) {
-    //   this.add.dom(this.gameWidth * 0.5, this.gameHeight * 0.4, <div className="sorry-qwq" style={{fontSize: '40px', width: '90vw', lineHeight: '15vw'}}>请用大佬电脑浏览器打开，主人还没搞好爪机的适配 _(:з」∠)_</div>)
-    //   return
-    // }
-
     soundsAssets.handler.create(this)
-
-    // this.sound.add('sound-click-temp').play()
     if (bgmOn) {
-      soundsAssets.handler.play(this, soundsAssets.keys.BGM_DARK.KEY, { loop: true })
+      soundsAssets.handler.play(this, soundsAssets.keys.BGM_LIGHT.KEY, { loop: true, volume: 0.5 })
     }
     this.add.dom(0, 0, <div className="title">生存挑战</div>).setOrigin(0)
-    // for(let i=1;i>0;i++) {
-    //   console.log(i)
-    // }
     this.anims.create({
       key: 'click',
       frames: this.anims.generateFrameNames('click', { start: 0, end: 2 }),
