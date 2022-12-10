@@ -30,6 +30,25 @@
   background-image: url('../images/bg.png');
 }
 
+#start-loading {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  .text {
+    font-family: VonwaonBitmap16;
+    position: absolute;
+    animation: blink 2s infinite;
+    bottom: 60px;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 30px;
+  }
+}
 body {
   margin: 0;
   padding: 0;

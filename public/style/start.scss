@@ -7,6 +7,7 @@ body.explaination {
   align-items: center;
   justify-content: center;
   font-size: 30px;
+  transition: none;
   .content-box {
     height: 100vh;
     line-height: $tips-height;
@@ -54,5 +55,32 @@ body.explaination {
   }
   &.mobile .content-box.page2::after {
     content: 'Click = 继续';
+  }
+}
+
+#game-view .no-support {
+  width: 100%;
+  text-align: center;
+  padding-top: 10rem;
+  line-height: 3rem;
+  .bg {
+    background: url('../images/characters/girl-emo.png');
+    height: 1500vh;
+    width: 1500vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: scale(0.1);
+    transform-origin: inherit;
+    opacity: 0.2;
+  }
+  &::before {
+    content: '';
+    display: block;
+    background-image: url('../images/characters/girl-emo.png');
+    height: 8rem;
+    width: 8rem;
+    background-size: cover;
+    margin: 0 auto;
   }
 }

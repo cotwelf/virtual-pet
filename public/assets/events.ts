@@ -18,39 +18,39 @@ export const eventDaily = {
           {
             naze: '快对抗原无感了',
             data: {
-              feeling: -11
+              feeling: -1
             }
           }
         ]
       },
-      // {
-      //   text: 'qwq 天啦噜，鼻子被自己捅出血可还行。。。',
-      //   dataChange: [
-      //     {
-      //       naze: '鼻子出血痛痛',
-      //       data: {
-      //         feeling: -3
-      //       }
-      //     }
-      //   ]
-      // },
-      // {
-      //   text: '昨晚失眠，今天还要早起抗原，有亿点点难受。。。',
-      //   dataChange: [
-      //     {
-      //       naze: '懒觉被迫中断',
-      //       data: {
-      //         feeling: -1
-      //       }
-      //     },
-      //     {
-      //       naze: '睡眠不足',
-      //       data: {
-      //         health: -1
-      //       }
-      //     }
-      //   ]
-      // },
+      {
+        text: 'qwq 天啦噜，鼻子被自己捅出血可还行。。。',
+        dataChange: [
+          {
+            naze: '鼻子出血痛痛',
+            data: {
+              feeling: -3
+            }
+          }
+        ]
+      },
+      {
+        text: '昨晚失眠，今天还要早起抗原，有亿点点难受。。。',
+        dataChange: [
+          {
+            naze: '懒觉被迫中断',
+            data: {
+              feeling: -1
+            }
+          },
+          {
+            naze: '睡眠不足',
+            data: {
+              health: -1
+            }
+          }
+        ]
+      },
     ],
     yang: [
       {
