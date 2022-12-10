@@ -174,7 +174,7 @@ export default class Covid extends Phaser.Scene {
                         }
                         currentType = Object.keys(i.data)[0]
                         currentValue = i.data[currentType]
-                        // 这是一个已经减到 0 的溢出值
+                        // TODO: 这是一个已经减到 0 的溢出值
                         let overCount = 0
                         if (this.dataStorage.basicData[type] === 0) {
                           currentType = DATA_TYPES.filter(key => this.dataStorage.basicData[key] !== 0).pop() || ''
