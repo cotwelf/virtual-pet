@@ -53,10 +53,7 @@ export default class Text extends Phaser.Scene {
       return
     }
     // step: 游戏结束(1/3) 健康值为 0 时游戏结束
-    if (!this.dataStorage.basicData.health) {
-      this.scene.stop('text')
-      this.scene.start('end')
-    } else {
+    if (this.dataStorage.basicData.health) {
       // 正常游戏跳转
       this.print = printText(this, this.textDiv, `第 ${this.dataStorage.dayCounter} 天`)
       if (printLoop) {

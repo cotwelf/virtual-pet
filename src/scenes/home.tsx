@@ -48,6 +48,17 @@ export default class Home extends Phaser.Scene {
 
   init () {
     this.dataStorage = getData()
+    // 健康值为 0 游戏结束
+    if (this.dataStorage.basicData.health === 0) {
+      console.log(this.dataStorage,'this.dataStorage')
+      const finalText = this.add.dom(0, 0, <div className="health0">健康值已耗尽......</div>).setOrigin(0)
+      setTimeout(() => {
+        finalText.destroy()
+        this.scene.stop('home')
+        this.scene.start('end')
+      }, 5000)
+      return
+    }
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
     // 防止手机浏览器切换 tab 导致雪碧图鬼畜
@@ -127,7 +138,6 @@ export default class Home extends Phaser.Scene {
         toggleTips(this, '今日互动加成已达上限\n_(:з」∠)_')
       }
       this.dataStorage.interactTimes += 1
-      this.character.setInteractive()
     }, this)
 
     // 展示当前数据
@@ -163,6 +173,7 @@ export default class Home extends Phaser.Scene {
   }
   // 关闭正在开启的对话框
   private onCloseDialogueFn (type: IBasicData, value: number) {
+    console.log(dialoguesAssets, this.lastDialogueIndex)
     // WORDAROUND: 为了录像，顺序执行了 orz
     if (this.lastDialogueIndex === dialoguesAssets.happy.dialogue.length - 1) {
       this.lastDialogueIndex = 0

@@ -21,7 +21,7 @@ let data = {
     "feeling":0,
     "health":1, // 健康值为 0 时游戏结束
     "knowledge":0,
-    "relationship":10
+    "relationship":0
   },
   eventDailyRecord: {
     covid: false,

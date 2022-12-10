@@ -18,7 +18,7 @@ export const eventDaily = {
           {
             naze: '快对抗原无感了',
             data: {
-              feeling: -1
+              feeling: -11
             }
           }
         ]
