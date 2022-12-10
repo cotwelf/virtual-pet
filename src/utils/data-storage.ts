@@ -1,5 +1,6 @@
 export type IData = {
   characterKey: 'girl' | 'boy'
+  characterStatus: string[]
   basicData: {
     "health":5,
     "feeling":5,

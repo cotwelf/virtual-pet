@@ -21,6 +21,8 @@ export default class Covid extends Phaser.Scene {
   private dataStorage
   private resultModal
 
+  private did = false
+
   // filmVersion
   private dialogueIndex = 0
   init() {
@@ -57,7 +59,7 @@ export default class Covid extends Phaser.Scene {
     this.gameStart = this.add.sprite(this.gameWidth * 0.39, this.gameHeight * 0.73, "gameStart").setOrigin(0)
     this.gameStart.setInteractive()
     this.gameStart.on('pointerdown', (pointer) => {
-      console.log(this.dataStorage)
+      this.did = true
       this.cGraphics.alpha = 0
       this.tGraphics.alpha = 0
       this.testing = true
@@ -73,6 +75,15 @@ export default class Covid extends Phaser.Scene {
     tipImg.scale = 0.8
     // 2. 文字
     this.tips.add(tipImg)
+    // 10s 内没有核酸完成，视为错过核酸
+    setTimeout(() => {
+      if (this.did) {
+        return
+      }
+      this.gameStart.disableInteractive()
+      soundsAssets.handler.stop(this, soundsAssets.keys.COVIDING.KEY)
+      this.resultModal = this.addResultModal('miss')
+    }, 10000)
   }
   update() {
     // 开始抗原
@@ -111,7 +122,13 @@ export default class Covid extends Phaser.Scene {
     }
 
   }
-  private addResultModal(type: 'yang' | 'yin' | 'again') {
+  private addResultModal(type: 'yang' | 'yin' | 'again' | 'miss') {
+    const toHome = () => {
+      this.scene.stop('covid')
+      this.scene.start('home')
+    }
+    // 页面 2min 无反应，自动跳到下一个页面
+    const nextPageTimer = setTimeout(toHome, 120000)
     let dialogueObj: IEventResItem
     if(filmVersion) {
       dialogueObj = eventDaily.covid[type][this.dialogueIndex++] || eventDaily.covid[type][Phaser.Math.RND.integerInRange(0, eventDaily.covid[type].length - 1)]
@@ -124,6 +141,7 @@ export default class Covid extends Phaser.Scene {
       {
         text: '我知道了',
         onClickFn: async () => {
+          clearTimeout(nextPageTimer)
           soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)
           soundsAssets.handler.stop(this, soundsAssets.keys.YANG.KEY)
           let result = await print.stop(this)
@@ -138,6 +156,7 @@ export default class Covid extends Phaser.Scene {
               this.gameStart.setInteractive()
             case 'yin':
             case 'yang':
+            case 'miss':
               this.gameStart.destroy()
               let tips = ''
               if (dialogueObj?.dataChange) {
@@ -160,16 +179,10 @@ export default class Covid extends Phaser.Scene {
               }
               toggleTips(this, tips)
               this.resultModal.destroy()
-              if (!(filmVersion && testScenes === 'covid')) {
-                setTimeout(() => {
-                  soundsAssets.handler.stop(this, soundsAssets.keys.COVIDBGMSHORT.KEY)
-                  this.scene.start('home')
-                }, 3000)
-              } else {
-                setTimeout(() => {
-                  this.scene.restart()
-                }, 3000)
-              }
+              setTimeout(() => {
+                soundsAssets.handler.stop(this, soundsAssets.keys.COVIDBGMSHORT.KEY)
+                toHome()
+              }, 3000)
           }
         }
       }

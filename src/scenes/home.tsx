@@ -55,17 +55,14 @@ export default class Home extends Phaser.Scene {
     document.addEventListener(getVisibilityEvent(), fixHidden)
   }
   preload () {
-    console.log(this.dataStorage,'this.dataStorage')
+    // 随机一个状态
+    const randomStatus = this.dataStorage.characterKey === 'boy' ? '' : this.dataStorage.characterStatus[Phaser.Math.RND.integerInRange(0, this.dataStorage.characterStatus.length - 1)]
+    this.characterFullKey = `${this.dataStorage.characterKey}${randomStatus ? `-${randomStatus}` : ''}`
     this.load.spritesheet(
-      this.dataStorage.characterKey,
-      `images/characters/${this.dataStorage.characterKey}.png`,
+      this.characterFullKey,
+      `images/characters/${this.characterFullKey}.png`,
       { frameWidth: 320, frameHeight: 320 }
     )
-    // const charactersKey = Object.keys(IMAGES.CHARACTERS)
-    // console.log(charactersKey)
-    // charactersKey.forEach((key) => {
-    //   loadSpritesheet({ scene: this, imageObj: IMAGES.CHARACTERS[key]})
-    // })
   }
   create () {
     setTimeout(() => {
@@ -73,23 +70,20 @@ export default class Home extends Phaser.Scene {
       this.scene.start('text')
       return
     }, daysDuration)
-    // const characterObj = IMAGES.CHARACTERS.get(this.dataStorage.characterKey)
-    // this.character = !!characterObj && playAnims({ scene: this, imageObj: characterObj})
     this.anims.create({
-      key: `${this.dataStorage.characterKey}-alive`,
-      frames: this.anims.generateFrameNames(this.dataStorage.characterKey, { start: 0, end: 2 }),
+      key: `${this.characterFullKey}-alive`,
+      frames: this.anims.generateFrameNames(this.characterFullKey, { start: 0, end: 2 }),
       frameRate: 3,
       repeat: -1,
     })
     this.character = this.add.sprite(
       this.gameWidth * 0.5,
       this.gameHeight * 0.5,
-      this.dataStorage.characterKey
-    ).play(`${this.dataStorage.characterKey}-alive`, true)
+      this.characterFullKey
+    ).play(`${this.characterFullKey}-alive`, true)
     this.character.setInteractive()
     this.character.on('pointerdown', (pointer) => {
       this.character.disableInteractive()
-      // const currentDialogue = dialogues[Phaser.Math.RND.integerInRange(0, dialogues.length - 1)]
       // WORDAROUND: 为了录像，顺序执行了 orz
       const currentDialogue = dialoguesAssets.happy.dialogue[this.lastDialogueIndex]
       // 设置按钮文字
