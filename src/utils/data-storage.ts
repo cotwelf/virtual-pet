@@ -12,6 +12,7 @@ export type IData = {
   lastChangeTime: number,
   dayCounter: number
 }
+
 let data = {
   characterKey: "girl", // girl, body // 录像：girl-emo, girl-game, girl-sleep
   characterStatus: ['', 'emo', 'game', 'sleep'],

@@ -1,5 +1,5 @@
 export const filmVersion = false // 用于交作业 orz
-export const testScenes: string = 'welcome' // 当前测试哪个 scene
+export const testScenes: string = 'home' // 当前测试哪个 scene
 export const bgmOn = true // true：打开 bgm；false：关闭 bgm
 export const daysDuration = 30000000 // 每天持续时间
 
@@ -15,22 +15,3 @@ export const covidBgmOn = false
 export const blackText = false
 
 export const theEnd = false
-
-// export const textData = {
-//   characterKey:"girl",
-//   basicData:{
-//     "health":0,
-//     "feeling":0,
-//     "knowledge":5,
-//     "relationship":5
-//   },
-//   eventDailyRecord:{
-//     "covid":true,
-//     "food":0
-//   },
-//   eventDurableRecord:[],
-//   eventCrashRecord:[],
-//   interactTimes:5,
-//   lastChangeTime:1665195234327,
-//   dayCounter: 1
-// }

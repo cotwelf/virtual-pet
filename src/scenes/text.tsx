@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import { theEndText } from "~/../public";
 import { createDialogueDom, getData, printText } from "~/utils";
 import { fastPrintDays, fastPrintDaysMulti, filmVersion, printLoop } from "~/utils/game-controller";
 type IPageTurnConfig = {

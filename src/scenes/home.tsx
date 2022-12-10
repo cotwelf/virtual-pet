@@ -21,7 +21,7 @@ export default class Home extends Phaser.Scene {
   constructor () {
     super('home'); // given the key to uniquely identify it from other Scenes
   }
-  private characterImage
+  private characterFullKey
   private character
   private dataStorage
 
@@ -37,21 +37,10 @@ export default class Home extends Phaser.Scene {
   private lastDialogueIndex = 0
   private print
 
-  // 解封辽
-  private release = false
-
-  // 当前状态持续时间记录(s)
-  private timeCounter
-
   init () {
     this.dataStorage = getData()
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
-    getNoInteractDialogues()
-
-    // WORKAROUND: 为了录像，之后会补 boy_emo
-    // this.dataStorage.characterKey = `${this.dataStorage.characterKey}${this.dataStorage.basicData.health < 3 ? '_emo' : ''}`
-
     // 防止手机浏览器切换 tab 导致雪碧图鬼畜
     const fixHidden = () => {
       if (document.visibilityState === 'hidden') {
@@ -66,6 +55,7 @@ export default class Home extends Phaser.Scene {
     document.addEventListener(getVisibilityEvent(), fixHidden)
   }
   preload () {
+    console.log(this.dataStorage,'this.dataStorage')
     this.load.spritesheet(
       this.dataStorage.characterKey,
       `images/characters/${this.dataStorage.characterKey}.png`,

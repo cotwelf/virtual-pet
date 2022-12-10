@@ -123,10 +123,13 @@ export default class Covid extends Phaser.Scene {
     const btnList = [
       {
         text: '我知道了',
-        onClickFn: () => {
+        onClickFn: async () => {
           soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)
           soundsAssets.handler.stop(this, soundsAssets.keys.YANG.KEY)
-          print.stop(this)
+          let result = await print.stop(this)
+          if (!result) {
+            return
+          }
           switch(type) {
             case 'again':
               this.resultModal.destroy()

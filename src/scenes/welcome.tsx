@@ -25,7 +25,6 @@ export default class Welcome extends Phaser.Scene {
 
   }
   preload () {
-    soundsAssets.handler.load(this)
     this.load.spritesheet(
       'click',
       '/images/welcome/click.png',
@@ -33,7 +32,6 @@ export default class Welcome extends Phaser.Scene {
     )
   }
   create () {
-    soundsAssets.handler.create(this)
     if (bgmOn) {
       soundsAssets.handler.play(this, soundsAssets.keys.BGM_LIGHT.KEY, { loop: true, volume: 0.5 })
     }

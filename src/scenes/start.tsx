@@ -1,6 +1,7 @@
-import { isMobile, throttle } from "../utils";
 import Phaser from "phaser";
 import { testScenes } from "~/utils/game-controller";
+import { soundsAssets } from '../../public'
+import { isMobile, throttle } from "../utils";
 
 const PAGE_SPACE = 5000
 const textArray = {
@@ -31,14 +32,14 @@ export default class Start extends Phaser.Scene {
   private isMobile = isMobile()
   private timerArr: number[] = []
   private containerDom
-  init () {
+  preload () {
+    soundsAssets.handler.load(this)
+  }
+  create () {
+    soundsAssets.handler.create(this)
     if (testScenes && testScenes !== 'start') {
       this.scene.stop('start')
       this.scene.start(testScenes)
-    }
-  }
-  create () {
-    if (testScenes && testScenes !== 'start') {
       return
     }
     this.enter = this.input.keyboard.addKey(13)
