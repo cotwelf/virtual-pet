@@ -17,6 +17,11 @@ import { daysDuration } from "~/utils/game-controller";
 import { loadSpritesheet, playAnims } from "~/utils/loaders/image-loader";
 import { getNoInteractDialogues } from "~/../public/assets/dialogues/no-interact";
 
+const clearedData = {
+  print: undefined,
+  toBeNextDay: false
+}
+
 export default class Home extends Phaser.Scene {
   constructor () {
     super('home'); // given the key to uniquely identify it from other Scenes
@@ -24,7 +29,6 @@ export default class Home extends Phaser.Scene {
   private characterFullKey
   private character
   private dataStorage
-
 
   private currentShow: IBasicData = 'health'
   private previousType
@@ -34,8 +38,11 @@ export default class Home extends Phaser.Scene {
   private dialogModal
   private gameWidth
   private gameHeight
-  private lastDialogueIndex = 0
+  private lastDialogueIndex = 0 // 跨天不删除，如果没了的话需要重新赋值
   private print
+
+  // 跳转到下一天
+  private toBeNextDay = false
 
   init () {
     this.dataStorage = getData()
@@ -65,9 +72,15 @@ export default class Home extends Phaser.Scene {
     )
   }
   create () {
+    // 定时开启下一个循环~
     setTimeout(() => {
-      setData({...this.dataStorage})
-      this.scene.start('text')
+      this.toBeNextDay = true
+      setData({...this.dataStorage, dayCounter: this.dataStorage.dayCounter + 1})
+      if (!this.dialogModal) {
+        this.toBeNextDay = false
+        this.scene.stop('home')
+        this.scene.start('text')
+      }
       return
     }, daysDuration)
     this.anims.create({
@@ -92,12 +105,12 @@ export default class Home extends Phaser.Scene {
         btns: [
           {
             text: currentDialogue.btn1.text,
-            type: 'health',
-            value: 2,
+            type: 'feeling',
+            value: 1,
           },
           {
             text: currentDialogue.btn2.text,
-            type: 'health',
+            type: 'feeling',
             value: 1,
           }
         ]
@@ -106,7 +119,7 @@ export default class Home extends Phaser.Scene {
 
       const interactTimes = this.dataStorage.interactTimes || 0
       if (interactTimes > 3) {
-        // toggleTips(this, '今日互动加成已达上限\n_(:з」∠)_')
+        toggleTips(this, '今日互动加成已达上限\n_(:з」∠)_')
       }
       this.dataStorage.interactTimes += 1
       this.character.setInteractive()
@@ -152,6 +165,7 @@ export default class Home extends Phaser.Scene {
       this.lastDialogueIndex++
     }
     this.dialogModal.destroy()
+    this.dialogModal = null
     const interactTimes = this.dataStorage.interactTimes || 0
     if (interactTimes <= 3) {
       this.updateBasicData(type, value)
@@ -174,7 +188,22 @@ export default class Home extends Phaser.Scene {
         onClickFn: async () => {
           soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)
           await print.stop(this)
-          this.onCloseDialogueFn(btn.type, btn.value)
+          let addType = btn.type
+          // 如果 type 满了，则按顺序加给 health, feeling, knowledge, relationship
+          const { basicData } = this.dataStorage
+          if (basicData[addType] === 10) {
+            const otherTypes = DATA_TYPES.filter((type) => {
+              return basicData[type] !== 10
+            })
+            addType = otherTypes[0] || addType
+          }
+          this.onCloseDialogueFn(addType, btn.value)
+          if (this.toBeNextDay) {
+            this.toBeNextDay = false
+            this.scene.stop('home')
+            this.scene.start('text')
+            return
+          }
           this.character.setInteractive()
         },
         text: btn.text

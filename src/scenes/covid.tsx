@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 import { createDialogueDom, getData, printText, setData, toggleTips, TYPES_CNAME } from '~/utils'
-import { covidBgmOn, filmVersion, printLoop, testScenes } from '~/utils/game-controller'
+import { covidBgmOn, filmVersion, leisureDuration, printLoop, testScenes } from '~/utils/game-controller'
 import { soundsAssets } from '../../public'
 import { eventDaily, IEventResItem } from '../../public/assets/events'
 
@@ -83,7 +83,7 @@ export default class Covid extends Phaser.Scene {
       this.gameStart.disableInteractive()
       soundsAssets.handler.stop(this, soundsAssets.keys.COVIDING.KEY)
       this.resultModal = this.addResultModal('miss')
-    }, 10000)
+    }, leisureDuration)
   }
   update() {
     // 开始抗原

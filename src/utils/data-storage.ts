@@ -19,16 +19,16 @@ let data = {
   characterStatus: ['', 'emo', 'game', 'sleep'],
   basicData: {
     "feeling":10,
-    "health":2, // 健康值为 0 时游戏结束
-    "knowledge":5,
-    "relationship":5
+    "health":10, // 健康值为 0 时游戏结束
+    "knowledge":10,
+    "relationship":10
   },
   eventDailyRecord: {
     covid: false,
   },
   eventDurableRecord:[],
   eventCrashRecord:[],
-  interactTimes:5,
+  interactTimes:0,
   lastChangeTime:1665195234327,
   dayCounter: 1
 }
