@@ -18,7 +18,7 @@ export const eventDaily = {
           {
             naze: '快对抗原无感了',
             data: {
-              feeling: -1
+              feeling: -2
             }
           }
         ]
@@ -40,13 +40,13 @@ export const eventDaily = {
           {
             naze: '懒觉被迫中断',
             data: {
-              feeling: -1
+              feeling: -3
             }
           },
           {
             naze: '睡眠不足',
             data: {
-              health: -1
+              feeling: -1
             }
           }
         ]
@@ -59,7 +59,6 @@ export const eventDaily = {
           {
             naze: '确诊新冠',
             data: {
-              feeling: -5,
               health: -5
             }
           }
@@ -73,7 +72,6 @@ export const eventDaily = {
           {
             naze: '错过核酸时间',
             data: {
-              feeling: -1,
               relationship: -3
             }
           }

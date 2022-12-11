@@ -25,14 +25,12 @@ export default class Covid extends Phaser.Scene {
 
   // filmVersion
   private dialogueIndex = 0
-  init() {
-    this.dataStorage = getData()
-  }
   preload(){
     this.load.image('cov', 'images/covid/cov.png')
     this.load.image('tip', 'images/covid/tip.png')
   }
   create(){
+    this.dataStorage = getData()
     if (covidBgmOn) {
       soundsAssets.handler.play(this, soundsAssets.keys.COVIDBGMSHORT.KEY, { volume: 0.3 })
     }
@@ -63,6 +61,12 @@ export default class Covid extends Phaser.Scene {
       this.cGraphics.alpha = 0
       this.tGraphics.alpha = 0
       this.testing = true
+      setTimeout(() => {
+        if (this.testing) {
+          this.testing = false
+          this.gameStart.disableInteractive()
+        }
+      }, 5000)
     }, this)
     this.gameStart.on('pointerup', (pointer) => {
       this.testing = false
@@ -127,10 +131,7 @@ export default class Covid extends Phaser.Scene {
       setData({...this.dataStorage, dayCounter: this.dataStorage.dayCounter + 1})
       this.scene.stop('covid')
       this.scene.start('home')
-      return
     }
-    // 页面 2min 无反应，自动跳到下一个页面
-    const nextPageTimer = setTimeout(toHome, 120000)
     let dialogueObj: IEventResItem
     if(filmVersion) {
       dialogueObj = eventDaily.covid[type][this.dialogueIndex++] || eventDaily.covid[type][Phaser.Math.RND.integerInRange(0, eventDaily.covid[type].length - 1)]
@@ -143,7 +144,7 @@ export default class Covid extends Phaser.Scene {
       {
         text: '我知道了',
         onClickFn: async () => {
-          clearTimeout(nextPageTimer)
+          // clearTimeout(nextPageTimer)
           soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)
           soundsAssets.handler.stop(this, soundsAssets.keys.YANG.KEY)
           let result = await print.stop(this)
@@ -163,25 +164,24 @@ export default class Covid extends Phaser.Scene {
               this.gameStart.destroy()
               let tips = ''
               if (dialogueObj?.dataChange) {
-                tips = tips + dialogueObj.dataChange.map(i => {
-                  let changeText
-                  let currentType: string
-                  let currentValue
-                  if (i.data !== undefined) {
-                    changeText = Object.keys(i.data).map(type => {
+                tips = tips + dialogueObj.dataChange.map(changeObj => {
+                  let changeText = ''
+                  let currentType: string = ''
+                  let currentValue = 0
+                  if (changeObj.data !== undefined) {
+                    changeText = Object.keys(changeObj.data).map(type => {
                       if (this.dataStorage.basicData) {
-                        if (!i.data) {
+                        if (!changeObj.data) {
                           return
                         }
-                        currentType = Object.keys(i.data)[0]
-                        currentValue = i.data[currentType]
+                        currentType = Object.keys(changeObj.data)[0]
+                        currentValue = changeObj.data[currentType]
                         // TODO: 这是一个已经减到 0 的溢出值
                         if (this.dataStorage.basicData[type] === 0) {
                           currentType = DATA_TYPES.filter(key => this.dataStorage.basicData[key] !== 0).pop() || ''
                           if (!currentType) {
                             // 都是 0 了orz
-                            this.scene.stop('covid')
-                            this.scene.start('home')
+                            toHome()
                             return
                           }
                         }
@@ -194,7 +194,7 @@ export default class Covid extends Phaser.Scene {
                       return currentValue === 0 ? '' : `${TYPES_CNAME[currentType]} ${currentValue}`
                     }).join(', ')
                   }
-                  return `${i.naze} ${changeText}`
+                  return `${changeObj.naze} ${changeText}`
                 }).join('\n')
                 setData(this.dataStorage)
               }
@@ -203,6 +203,7 @@ export default class Covid extends Phaser.Scene {
               setTimeout(() => {
                 soundsAssets.handler.stop(this, soundsAssets.keys.COVIDBGMSHORT.KEY)
                 toHome()
+                return
               }, 3000)
           }
         }

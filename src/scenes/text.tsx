@@ -68,7 +68,7 @@ export default class Text extends Phaser.Scene {
     // step: 游戏结束(1/3) 健康值为 0 时游戏结束
     if (this.dataStorage.basicData.health) {
       // 正常游戏跳转
-      this.print = printText(this, this.textDiv, `第 ${this.dataStorage.dayCounter} 天`)
+      this.print = printText(this, this.textDiv, `第 ${this.dataStorage.dayCounter + 1} 天`)
       if (printLoop) {
         setTimeout(() => {
           this.scene.stop('text')

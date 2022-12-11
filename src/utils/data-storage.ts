@@ -18,10 +18,10 @@ let data = {
   characterKey: "girl", // girl, body // 录像：girl-emo, girl-game, girl-sleep
   characterStatus: ['', 'emo', 'game', 'sleep'],
   basicData: {
-    "feeling":0,
-    "health":1, // 健康值为 0 时游戏结束
-    "knowledge":0,
-    "relationship":0
+    "feeling":5,
+    "health":5, // 健康值为 0 时游戏结束
+    "knowledge":5,
+    "relationship":5
   },
   eventDailyRecord: {
     covid: false,
@@ -30,7 +30,7 @@ let data = {
   eventCrashRecord:[],
   interactTimes:0,
   lastChangeTime:1665195234327,
-  dayCounter: 1
+  dayCounter: 0
 }
 
 export const getData = () => data

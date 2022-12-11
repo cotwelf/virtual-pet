@@ -50,21 +50,14 @@ export default class Home extends Phaser.Scene {
   private toBeNextDay = false
 
   init () {
-    // 闲置状态，不要立刻开启弹窗
-    setTimeout(() => {
-      this.handleAutomaticSpeak = throttle(()=>{this.automaticSpeak()}, 5000).bind(this)
-    }, 1500)
     this.dataStorage = getData()
-    // 健康值为 0 游戏结束
-    if (this.dataStorage.basicData.health === 0) {
-      const finalText = this.add.dom(0, 0, <div className="health0">健康值已耗尽......</div>).setOrigin(0)
+    // 闲置状态，不要立刻开启弹窗
+    if (this.dataStorage.basicData.health !== 0) {
       setTimeout(() => {
-        finalText.destroy()
-        this.scene.stop('home')
-        this.scene.start('end')
-      }, 5000)
-      return
+        this.handleAutomaticSpeak = throttle(()=>{this.automaticSpeak()}, 5000).bind(this)
+      }, 1500)
     }
+
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
     // 防止手机浏览器切换 tab 导致雪碧图鬼畜
@@ -91,6 +84,19 @@ export default class Home extends Phaser.Scene {
     )
   }
   create () {
+    // 展示当前数据
+    this.basicDataShower = this.add.dom(0, 0, showCurrentData('health', this.dataStorage.basicData[this.currentShow], this.onDataChange.bind(this))).setOrigin(0)
+
+    // 健康值为 0 游戏结束
+    if (this.dataStorage.basicData.health === 0) {
+      this.add.dom(0, 0, <div className="health0">健康值已耗尽......</div>).setOrigin(0)
+      setTimeout(() => {
+        this.scene.start('end')
+        setData({...this.dataStorage})
+        this.scene.stop('home')
+      }, 5000)
+      return
+    }
     // 定时开启下一个循环~
     setTimeout(() => {
       this.toBeNextDay = true
@@ -102,6 +108,7 @@ export default class Home extends Phaser.Scene {
         })
         this.scene.stop('home')
         this.scene.start('text')
+        setData(this.dataStorage)
       }
       return
     }, daysDuration)
@@ -146,9 +153,6 @@ export default class Home extends Phaser.Scene {
       }
       this.dataStorage.interactTimes += 1
     }, this)
-
-    // 展示当前数据
-    this.basicDataShower = this.add.dom(0, 0, showCurrentData('health', this.dataStorage.basicData[this.currentShow], this.onDataChange.bind(this))).setOrigin(0)
   }
 
   update(){
@@ -240,6 +244,7 @@ export default class Home extends Phaser.Scene {
             })
             this.scene.stop('home')
             this.scene.start('text')
+            setData({...this.dataStorage})
             return
           }
           this.character.setInteractive()
