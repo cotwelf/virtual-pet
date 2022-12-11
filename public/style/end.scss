@@ -18,33 +18,48 @@ body.end {
       font-size: 0.5rem;
       margin-top: 0.2rem;
     }
-    .cast {
-      font-size: 0.26rem;
-      line-height: 0.46rem;
-      display: flex;
-      align-items: center;
+    .detail {
       margin-top: 1rem;
       padding-right: 0.8rem;
-      > div {
-        display: flex;
-      }
-      ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-      &::before {
-        content: '';
-        display: block;
-        background: url('../../public/images/wechat.png');
+      display: flex;
+      .questionnaire {
+        // background: url('../../public/images/wechat.png');
+        background: url('../../public/images/questionnaire.png');
         background-size: cover;
-        border: 15px solid white;
-        width: 1.8rem;
-        height: 1.8rem;
+        // border: 15px solid white;
+        width: 2rem;
+        height: 2rem;
         flex-shrink: 0;
         margin-right: 0.5rem;
+        position: relative;
+        &::after {
+          content: '扫码参与丰富对话内容';
+          display: block;
+          font-size: 0.2rem;
+          position: absolute;
+          bottom: -0.3rem;
+          width: 100%;
+          text-align: center;
+          animation: blink 2s infinite;
+        }
+      }
+      .cast {
+        font-size: 0.26rem;
+        line-height: 0.46rem;
+        display: flex;
+        align-items: center;
+
+        > div {
+          display: flex;
+        }
+        ul {
+          margin: 0;
+          padding: 0;
+          list-style: none;
+        }
       }
     }
+
     .retry {
       font-size: 0.3rem;
       position: fixed;

@@ -56,7 +56,10 @@ export default class End extends Phaser.Scene {
         <br />
         但我们无法为你重新启动。
       </div>
-      {castDom}
+      <div className="detail">
+        <div className="questionnaire"></div>
+        {castDom}
+      </div>
       <div className='retry'>
         成功存活 {getData().dayCounter} 天
         <div className="btn" onClick={() => {
