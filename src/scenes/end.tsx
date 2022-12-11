@@ -45,6 +45,12 @@ export default class End extends Phaser.Scene {
         setTimeout(() => {
           castDom.innerHTML = ''
           castDom.appendChild(<div>{textObj.title}{textObj.value}</div>)
+          if (index === theEndText.length - 1) {
+            // 最后一个 15s 无响应，重新开始
+            setTimeout(() => {
+              location.reload()
+            }, 5000 * index + 10000)
+          }
         }, 5000 * index)
       })
     }
