@@ -66,7 +66,6 @@ export default class Start extends Phaser.Scene {
     const allPages = Object.keys(textArray)
     let isLastPage = false
     allPages.forEach((page, index) => {
-      console.log(page,'page')
       this.timerArr.push(setTimeout(() => {
         this.containerDom.classList.add(page)
         if (index === allPages.length - 1) {

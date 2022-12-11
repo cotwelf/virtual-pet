@@ -10,7 +10,6 @@ const RANDOM_DIALOGUES = [
 ]
 export const getNoInteractDialogues = () => {
   return getKotoba().then((res) => {
-    console.log(res,'res')
     return {
       dialogue: res,
       btns: RANDOM_BTNS

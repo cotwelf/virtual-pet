@@ -39,18 +39,18 @@ export default class Text extends Phaser.Scene {
     this.dataStorage = getData()
   }
   create () {
-    console.log(soundsAssets.handler.isPlaying(this, soundsAssets.keys.BGM_LIGHT.KEY))
-    if (this.dataStorage.basicData.health < 6) {
-      if (!soundsAssets.handler.isPlaying(this, soundsAssets.keys.BGM_DARK.KEY)) {
-        soundsAssets.handler.play(this, soundsAssets.keys.BGM_DARK.KEY, { loop: true, volume: 0.5 })
-      }
-      soundsAssets.handler.stop(this, soundsAssets.keys.BGM_LIGHT.KEY)
-    } else {
-      if (!soundsAssets.handler.isPlaying(this, soundsAssets.keys.BGM_LIGHT.KEY)) {
-        soundsAssets.handler.play(this, soundsAssets.keys.BGM_LIGHT.KEY, { loop: true, volume: 0.5 })
-      }
-      soundsAssets.handler.stop(this, soundsAssets.keys.BGM_DARK.KEY)
-    }
+    // dark bgm 有点吵其实。。。
+    // if (this.dataStorage.basicData.health < 6) {
+    //   if (!soundsAssets.handler.isPlaying(this, soundsAssets.keys.BGM_DARK.KEY)) {
+    //     soundsAssets.handler.play(this, soundsAssets.keys.BGM_DARK.KEY, { loop: true, volume: 0.5 })
+    //   }
+    //   soundsAssets.handler.stop(this, soundsAssets.keys.BGM_LIGHT.KEY)
+    // } else {
+    //   if (!soundsAssets.handler.isPlaying(this, soundsAssets.keys.BGM_LIGHT.KEY)) {
+    //     soundsAssets.handler.play(this, soundsAssets.keys.BGM_LIGHT.KEY, { loop: true, volume: 0.5 })
+    //   }
+    //   soundsAssets.handler.stop(this, soundsAssets.keys.BGM_DARK.KEY)
+    // }
     document.getElementById("game-view")?.classList.add('text')
     this.text = this.add.dom(0, 0, this.textDiv, "text-align: center; width: 100vw").setOrigin(0)
     // film: 一行转场(1/2)

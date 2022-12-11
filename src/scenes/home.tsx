@@ -119,7 +119,6 @@ export default class Home extends Phaser.Scene {
     this.character.setInteractive()
     this.character.on('pointerdown', (pointer) => {
       this.character.disableInteractive()
-      console.log(this.dataStorage)
       this.dataStorage.lastChangeTime = Date.now()
       // WORDAROUND: 为了录像，顺序执行了 orz
       const currentDialogue = dialoguesAssets.happy.dialogue[this.lastDialogueIndex]

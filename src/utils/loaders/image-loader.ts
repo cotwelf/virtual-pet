@@ -21,7 +21,6 @@ export const playAnims = ({
   scene: any
   imageObj: IImageAsset
 }) => {
-  console.log(imageObj, 'obj')
   scene.anims.create({
     key: `${imageObj.key}-alive`,
     frames: scene.anims.generateFrameNames(imageObj.key, { start: 0, end: imageObj.frame - 1 }),

@@ -25,7 +25,6 @@ export default class Food extends Phaser.Scene {
   create () {
     document.getElementById("game-view")?.classList.add('text')
     this.text = this.add.dom(0, 0, this.textDiv, "text-align: center; width: 100vw").setOrigin(0)
-    console.log(this.print)
     // step: 游戏结束(1/3) 健康值为 0 时游戏结束
     if (!this.dataStorage.basicData.health) {
       this.print = printText(this, this.textDiv, `第 ${this.count++} 天`)

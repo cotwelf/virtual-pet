@@ -17,7 +17,6 @@ export const amplifyScenes = ({ scale, duration }) => {
   container.onkeydown = (e) => {
     if (e.code === 'Space' && container && !amplified) {
       amplified = true
-      console.log(container.classList)
       container.classList.add(`d${duration}`)
       container.classList.add('amplified', `x${mousePosition.x}`, `y${mousePosition.y}`, `s${scale}`)
     } else if (e.code === 'Space' && container && amplified) {

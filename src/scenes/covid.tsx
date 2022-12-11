@@ -34,7 +34,7 @@ export default class Covid extends Phaser.Scene {
   }
   create(){
     if (covidBgmOn) {
-      soundsAssets.handler.play(this, soundsAssets.keys.COVIDBGMSHORT.KEY, { volume: 0.2 })
+      soundsAssets.handler.play(this, soundsAssets.keys.COVIDBGMSHORT.KEY, { volume: 0.3 })
     }
     this.gameWidth = this.scale.width
     this.gameHeight = this.scale.height
@@ -156,6 +156,7 @@ export default class Covid extends Phaser.Scene {
               this.cGraphics.alpha = 0
               this.tGraphics.alpha = 0
               this.gameStart.setInteractive()
+              break;
             case 'yin':
             case 'yang':
             case 'miss':
@@ -186,12 +187,11 @@ export default class Covid extends Phaser.Scene {
                         }
                         this.dataStorage.basicData[currentType] += currentValue
                         if (this.dataStorage.basicData[currentType] < 0) {
-                          console.log(currentValue, this.dataStorage, currentType)
                           currentValue = currentValue - this.dataStorage.basicData[currentType]
                           this.dataStorage.basicData[currentType] = 0
                         }
                       }
-                      return `${TYPES_CNAME[currentType]} ${currentValue}`
+                      return currentValue === 0 ? '' : `${TYPES_CNAME[currentType]} ${currentValue}`
                     }).join(', ')
                   }
                   return `${i.naze} ${changeText}`

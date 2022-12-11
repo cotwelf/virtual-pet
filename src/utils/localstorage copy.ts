@@ -66,7 +66,6 @@ export const updateStorageData = function() {
     const lastDate = new Date(storageData.lastChangeTime)
     const lastString = `${lastDate.getFullYear()}/${lastDate.getMonth() + 1}/${lastDate.getDate()}`
     const todayString = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}`
-    console.log(lastString, todayString)
     if (lastString !== todayString) {
       // 每日首次登录
       setStorageData('interactTimes', 0)
