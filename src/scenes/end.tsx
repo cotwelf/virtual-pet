@@ -60,9 +60,7 @@ export default class End extends Phaser.Scene {
       <div className='retry'>
         成功存活 {getData().dayCounter} 天
         <div className="btn" onClick={() => {
-          this.scene.stop('end')
-          this.setDom(false)
-          this.scene.start('start')
+          location.reload()
         }}>重新挑战</div>
       </div>
     </div>)
