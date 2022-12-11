@@ -3,9 +3,11 @@ import { testScenes } from "~/utils/game-controller";
 import { soundsAssets } from '../../public'
 import { isMobile, throttle } from "../utils";
 
-const PAGE_SPACE = 5000
+const PAGE_SPACE = 5000 // 默认 5000
 const textArray = {
   page1: <div>正在启动 World</div>,
+  // page2: <></>,
+  // page3: <div>
   page2: <div>
     <div>World 未能正常启动。原因可能是最近您遇到了一些心理或生理问题。请您核查近期是否有以下问题：</div>
     <br />
@@ -15,12 +17,13 @@ const textArray = {
     <div>&nbsp;&nbsp;4. 近半年有一段时间处于饥饿状态。可能由于买不到菜，或其他因素。</div>
     <div>&nbsp;&nbsp;5. 担心未来。</div>
     <br />
-    <div>如果无法确认是否存在以上情形，请根据下列关键词回忆，或与您的朋友联系，已获得帮助。</div>
+    <div>如果无法确认是否存在以上情形，请根据下列关键词回忆，或与您的朋友联系，以获得帮助。</div>
     <br />
     <div>&nbsp;&nbsp;时间：2022 年</div>
     <br />
     <div>&nbsp;&nbsp;地点：上半年：上海；下半年：甘肃、广州、北京、河南等其他城市</div>
-  </div>
+  </div>,
+  // page4: <></>
 }
 export default class Start extends Phaser.Scene {
   constructor () {

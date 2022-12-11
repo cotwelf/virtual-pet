@@ -21,6 +21,21 @@ body.explaination {
         animation: blink 2s infinite;
       }
     }
+    // &.page2 {
+    //   width: 100vw;
+    //   height: 100vh;
+    //   background-color: black;
+    //   position: absolute;
+    //   top: 0;
+    //   left: 0;
+    //   > div{
+    //     &::after {
+    //       content: "_";
+    //       animation: text-end 1s infinite;
+    //     }
+    //   }
+    // }
+    // &.page3 {
     &.page2 {
       .text {
         margin: $top-bottom-space 0;
@@ -53,7 +68,7 @@ body.explaination {
   > div {
     color: white;
   }
-  &.mobile .content-box.page2::after {
+  &.mobile .content-box.page3::after {
     content: 'Click = 继续';
   }
 }

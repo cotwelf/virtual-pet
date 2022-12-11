@@ -6,7 +6,8 @@
 		"start": "npx parcel src/index.html -p 8000",
 		"build": "npx parcel build src/index.html --out-dir dist",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"lint": "eslint ./src --ext .js,.jsx,.ts,.tsx"
+		"lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
+		"publish": "npm run build && tcb hosting deploy ./dist"
 	},
 	"author": "supertommy",
 	"license": "MIT",
@@ -25,6 +26,8 @@
 		"parcel-plugin-clean-easy": "^1.0.2",
 		"parcel-plugin-static-files-copy": "^2.4.3",
 		"postcss": "^8.4.13",
+		"postcss-px-to-viewport": "^1.1.1",
+		"postcss-sprites": "^4.2.1",
 		"sass": "^1.51.0",
 		"typescript": "^3.8.3"
 	},
