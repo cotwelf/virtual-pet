@@ -78,5 +78,8 @@ export const assetHandler = {
   },
   stop: function(that, key) {
     that.cache.audio.get(key).stop()
+  },
+  isPlaying: function(that, key) {
+    return that.cache.audio.get(key).isPlaying
   }
 }

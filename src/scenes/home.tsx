@@ -10,10 +10,11 @@ import
   toggleTips,
   getVisibilityEvent,
   getData,
-  setData
+  setData,
+  throttle
 }
 from '../utils'
-import { daysDuration } from "~/utils/game-controller";
+import { daysDuration, leisureDuration } from "~/utils/game-controller";
 import { loadSpritesheet, playAnims } from "~/utils/loaders/image-loader";
 import { getNoInteractDialogues } from "~/../public/assets/dialogues/no-interact";
 
@@ -43,14 +44,19 @@ export default class Home extends Phaser.Scene {
   private lastDialogueIndex = 0 // 跨天不删除，如果没了的话需要重新赋值
   private print
 
+  // 闲置状态
+  private handleAutomaticSpeak
   // 跳转到下一天
   private toBeNextDay = false
 
   init () {
+    // 闲置状态，不要立刻开启弹窗
+    setTimeout(() => {
+      this.handleAutomaticSpeak = throttle(()=>{this.automaticSpeak()}, 5000).bind(this)
+    }, 1500)
     this.dataStorage = getData()
     // 健康值为 0 游戏结束
     if (this.dataStorage.basicData.health === 0) {
-      console.log(this.dataStorage,'this.dataStorage')
       const finalText = this.add.dom(0, 0, <div className="health0">健康值已耗尽......</div>).setOrigin(0)
       setTimeout(() => {
         finalText.destroy()
@@ -113,6 +119,8 @@ export default class Home extends Phaser.Scene {
     this.character.setInteractive()
     this.character.on('pointerdown', (pointer) => {
       this.character.disableInteractive()
+      console.log(this.dataStorage)
+      this.dataStorage.lastChangeTime = Date.now()
       // WORDAROUND: 为了录像，顺序执行了 orz
       const currentDialogue = dialoguesAssets.happy.dialogue[this.lastDialogueIndex]
       // 设置按钮文字
@@ -149,7 +157,8 @@ export default class Home extends Phaser.Scene {
       this.previousType = this.currentShow
       this.updateDataShower()
     }
-    if (!this.print?.isPrinting()) {
+    if (this.handleAutomaticSpeak) {
+      this.handleAutomaticSpeak()
     }
   }
   private updateDataShower () {
@@ -172,8 +181,12 @@ export default class Home extends Phaser.Scene {
     this.updateDataShower()
   }
   // 关闭正在开启的对话框
-  private onCloseDialogueFn (type: IBasicData, value: number) {
-    console.log(dialoguesAssets, this.lastDialogueIndex)
+  private onCloseDialogueFn (type?: IBasicData, value?: number) {
+    if (!type || !value) {
+      this.dialogModal.destroy()
+      this.dialogModal = null
+      return
+    }
     // WORDAROUND: 为了录像，顺序执行了 orz
     if (this.lastDialogueIndex === dialoguesAssets.happy.dialogue.length - 1) {
       this.lastDialogueIndex = 0
@@ -207,13 +220,19 @@ export default class Home extends Phaser.Scene {
           let addType = btn.type
           // 如果 type 满了，则按顺序加给 health, feeling, knowledge, relationship
           const { basicData } = this.dataStorage
-          if (basicData[addType] === 10) {
-            const otherTypes = DATA_TYPES.filter((type) => {
-              return basicData[type] !== 10
-            })
-            addType = otherTypes[0] || addType
+          if (!!addType) {
+            if (basicData[addType] === 10) {
+              const otherTypes = DATA_TYPES.filter((type) => {
+                return basicData[type] !== 10
+              })
+              addType = otherTypes[0] || addType
+            }
+            this.onCloseDialogueFn(addType, btn.value)
+          } else {
+            // 只是休闲状态，数值不变化
+            this.onCloseDialogueFn()
           }
-          this.onCloseDialogueFn(addType, btn.value)
+
           if (this.toBeNextDay) {
             this.toBeNextDay = false
             const setUpKeys = Object.keys(clearedData)
@@ -234,7 +253,19 @@ export default class Home extends Phaser.Scene {
     let print = printText(this, document.getElementById('modal-text'), config.dialogue)
   }
 
-  private changeStatus () {
-    // 30 分钟查询一次，是否有切换状态的条件
+  private async automaticSpeak () {
+    if (!this) {
+      return
+    }
+    // 1min 查询一次，如果没有交互过，开始每隔 30s 自言自语
+    const timeSpace =  Date.now() - this.dataStorage.lastChangeTime
+    if (timeSpace > leisureDuration) {
+      if (this.dialogModal) {
+        this.onCloseDialogueFn()
+      }
+      const modalConfig = await getNoInteractDialogues()
+      this.communicate(modalConfig)
+      this.dataStorage.lastChangeTime = Date.now()
+    }
   }
 }

@@ -1,5 +1,6 @@
 import { getData, isMobile, throttle } from "../utils";
 import Phaser from "phaser";
+import { soundsAssets } from "~/../public";
 
 export const theEndText = [
   {
@@ -39,6 +40,8 @@ export default class End extends Phaser.Scene {
   private isMobile = isMobile()
   private containerDom
   create () {
+    soundsAssets.handler.stop(this, soundsAssets.keys.BGM_LIGHT.KEY)
+    soundsAssets.handler.stop(this, soundsAssets.keys.BGM_DARK.KEY)
     const castDom = <div className='cast'></div>
     const showText = () => {
       theEndText.forEach((textObj, index) => {
@@ -49,7 +52,7 @@ export default class End extends Phaser.Scene {
             // 最后一个 15s 无响应，重新开始
             setTimeout(() => {
               location.reload()
-            }, 5000 * index + 10000)
+            }, 5000 * index + 25000)
           }
         }, 5000 * index)
       })
@@ -69,6 +72,7 @@ export default class End extends Phaser.Scene {
       <div className='retry'>
         成功存活 {getData().dayCounter} 天
         <div className="btn" onClick={() => {
+          soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)
           location.reload()
         }}>重新挑战</div>
       </div>

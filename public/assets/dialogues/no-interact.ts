@@ -1,7 +1,10 @@
 import { getKotoba } from "~/utils/api";
 import { random } from "lodash";
 
-const RANDOM_BTNS = ['确实', '没戳']
+const RANDOM_BTNS = [
+  { text: "没人理我qwq" },
+  { text: "戳一下" }
+]
 const RANDOM_DIALOGUES = [
   "好像没有人理我了呢。。。。。。",
 ]
@@ -9,25 +12,13 @@ export const getNoInteractDialogues = () => {
   return getKotoba().then((res) => {
     console.log(res,'res')
     return {
-      text: res,
-      btn1: {
-        text: "确实"
-      },
-      btn2: {
-        text: "戳一下"
-      },
-      showed: false,
+      dialogue: res,
+      btns: RANDOM_BTNS
     }
   }).catch(() => {
     return {
-      text: RANDOM_DIALOGUES[0],
-      btn1: {
-        text: "确实"
-      },
-      btn2: {
-        text: "没戳"
-      },
-      showed: false,
+      dialogue: RANDOM_DIALOGUES[0],
+      btns: RANDOM_BTNS
     }
   })
 }

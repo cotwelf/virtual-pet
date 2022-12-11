@@ -6,7 +6,7 @@ export interface IConmunicateConfig {
   dialogue: string,
   btns: {
     text: string,
-    type: IBasicData,
-    value: number,
+    type?: IBasicData,
+    value?: number,
   }[]
 }
