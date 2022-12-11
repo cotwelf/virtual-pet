@@ -32,15 +32,18 @@ body.end {
         flex-shrink: 0;
         margin-right: 0.5rem;
         position: relative;
-        &::after {
-          content: '扫码参与丰富对话内容';
-          display: block;
-          font-size: 0.2rem;
-          position: absolute;
-          bottom: -0.3rem;
-          width: 100%;
-          text-align: center;
-          animation: blink 2s infinite;
+        cursor: pointer;
+        &:hover {
+          &::after {
+            content: '扫我丰富对话内容库~';
+            display: block;
+            font-size: 0.2rem;
+            position: absolute;
+            bottom: -0.3rem;
+            width: 100%;
+            text-align: center;
+            // animation: blink 2s infinite;
+          }
         }
       }
       .cast {
