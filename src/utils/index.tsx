@@ -7,7 +7,7 @@ export * from './consts'
 export * from './data-storage'
 // export * from './api'
 
-export const isMobile = () => /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+export const isMobile = () => /Android|webOS|iPhone|iPod|BlackBerry|Mobile|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
 export const throttle = function (fn: () => void, delay: number) {
   let timer = 0

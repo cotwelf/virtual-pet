@@ -43,10 +43,10 @@ export default class Start extends Phaser.Scene {
     if (loading) {
       document.body.removeChild(loading)
     }
-    if (this.isMobile) {
-      this.add.dom(0, 0, <div className="no-support">肥肠抱歉  _(:з」∠)_ <br />本游戏暂时只支持 PC 端现代浏览器<div className="bg"></div></div>).setOrigin(0)
-      return
-    }
+    // if (this.isMobile) {
+    //   this.add.dom(0, 0, <div className="no-support">肥肠抱歉  _(:з」∠)_ <br />本游戏暂时只支持 PC 端现代浏览器<div className="bg"></div></div>).setOrigin(0)
+    //   return
+    // }
     soundsAssets.handler.create(this)
     if (testScenes && testScenes !== 'start') {
       this.scene.stop('start')

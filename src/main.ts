@@ -15,10 +15,13 @@ import { amplifyScenes } from './utils/amplify'
 import { isMobile, throttle } from './utils'
 import End from './scenes/end'
 
-document.body.classList.add(`${isMobile() ? 'mobile' : 'pc'}`)
 // 适配 TODO
 // 1920 * 1080 fontSize = 100px
 const resizeScreen = () => {
+  console.log(isMobile() && window.innerHeight > window.innerWidth)
+  document.body.classList.add(`${isMobile() ? 'mobile' : 'pc'}`)
+  document.body.classList.add(`${(window.innerHeight < window.innerWidth) ? 'wide' : 'normal'}`)
+
   const widthScale = Math.round(window.innerWidth / 1920 * 100) / 100
   const heightScale = Math.round(window.innerHeight / 1080 * 100) / 100
   const scale = Math.min(widthScale, heightScale)
