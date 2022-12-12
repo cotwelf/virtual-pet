@@ -6,6 +6,7 @@ import { IBasicData, IValueChangeType } from './types'
 export * from './consts'
 export * from './data-storage'
 // export * from './api'
+const scaleType = ['scale-fast', 'scale-slow']
 
 export const isMobile = () => /Android|webOS|iPhone|iPod|BlackBerry|Mobile|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
@@ -62,6 +63,8 @@ export const printText = function(that, dom: HTMLElement | null, text: string, t
   let interval
   let timeout
   let printing
+  let finalShowHTML = ''
+  let scaleElementId: string[] = []
   if (!!dom) {
     soundsAssets.handler.play(that, soundsAssets.keys.PRINTING.KEY)
     printing = true
@@ -69,12 +72,62 @@ export const printText = function(that, dom: HTMLElement | null, text: string, t
     // handleAssets.play(that, ASSET_KEYS.AUDIO.PRINTING, { volume: 0.3 })
     // const prevText = dom.innerHTML
     let currentText = text
+
+    // 检查快速缩放
+    let textArr = [currentText]
+
+    const replaceTextString = (str, type): string[] => {
+      if (str.indexOf(type) === -1) {
+        return [str]
+      }
+      const reg = new RegExp(type, "g")
+      const tempString = str.replace(reg, `|${type}|`)
+      const newArr = tempString.split('|')
+
+      if (newArr[0] === '') {
+        newArr.shift()
+      }
+      if (newArr[newArr.length - 1] === '') {
+        newArr.pop()
+      }
+      return newArr
+    }
+
+    scaleType.forEach((type) => {
+      let currentArr: string[] = []
+      textArr.map((textString) => {
+        currentArr = [...currentArr, ...replaceTextString(textString, type)]
+      })
+      textArr = [...currentArr]
+    })
+    let scaleElementCount = 1
+    textArr.forEach((i) => {
+      let addString = i
+      if (scaleType.includes(i)) {
+        scaleElementId.push(`${i}${scaleElementCount}`)
+        addString = `<span id='${i}${scaleElementCount++}'></span>`
+      }
+      finalShowHTML = `${finalShowHTML}${addString}`
+    })
+    // 为了打字效果，先替换带有标识的 string
+    scaleType.forEach((type) => {
+      const reg = new RegExp(type, "g")
+      currentText = currentText.replace(reg, '')
+    })
+
     timeout = setTimeout(() => {
       interval = setInterval(() => {
         if (currentText.length > 0) {
           dom.innerHTML = `${dom.innerText}${currentText[0] === ' ' ? '\xa0' : currentText[0]}`
           currentText = currentText.substring(1, currentText.length)
         } else {
+          let tempString = text
+          scaleType.forEach((type) => {
+            const reg = new RegExp(type, "g")
+            tempString = tempString.replace(reg, `<span id=${type}></span>`)
+          })
+          dom.innerHTML = finalShowHTML
+          // 顺序缩放
           printing = false
           dom.classList.remove('printing')
           soundsAssets.handler.stop(that, soundsAssets.keys.PRINTING.KEY)

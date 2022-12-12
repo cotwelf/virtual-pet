@@ -1,5 +1,5 @@
 export const filmVersion = false // 用于交作业 orz
-export const testScenes: string = '' // 当前测试哪个 scene，默认 ''
+export const testScenes: string = 'welcome' // 当前测试哪个 scene，默认 ''
 export const bgmOn = true // true：打开 bgm；false：关闭 bgm
 export const daysDuration = 180000 // 每天持续时间，默认 180000, 测试 3000
 export const leisureDuration = 60000 // 超过闲置时间，开启下一阶段，或开启自动对话，默认 60000
