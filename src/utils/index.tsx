@@ -105,7 +105,7 @@ export const printText = function(that, dom: HTMLElement | null, text: string, t
       let addString = i
       if (scaleType.includes(i)) {
         scaleElementId.push(`${i}${scaleElementCount}`)
-        addString = `<span id='${i}${scaleElementCount++}'></span>`
+        addString = `<span id="${i}${scaleElementCount++}" class="scaled"></span>`
       }
       finalShowHTML = `${finalShowHTML}${addString}`
     })
@@ -126,8 +126,12 @@ export const printText = function(that, dom: HTMLElement | null, text: string, t
             const reg = new RegExp(type, "g")
             tempString = tempString.replace(reg, `<span id=${type}></span>`)
           })
-          dom.innerHTML = finalShowHTML
+          dom.innerHTML = `<span class="light-dark">${finalShowHTML}</span>`
           // 顺序缩放
+          const position = document.getElementById('scale-fast1')?.getBoundingClientRect()
+          const left = position?.left
+          document.body.classList.add('amplified', `x${left}`, `y${position?.top}`)
+          console.log(left, 'left')
           printing = false
           dom.classList.remove('printing')
           soundsAssets.handler.stop(that, soundsAssets.keys.PRINTING.KEY)
