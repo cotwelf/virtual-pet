@@ -2,12 +2,21 @@ import classNames from 'classnames'
 import { CEILING, DATA_TYPES } from './consts'
 import { soundsAssets, dialoguesAssets } from '../../public'
 import { IBasicData, IValueChangeType } from './types'
+import { amplifyDom, ITransformElement } from './amplify'
 
 export * from './consts'
 export * from './data-storage'
 // export * from './api'
 const scaleType = ['scale-fast', 'scale-slow']
 
+type IText = {
+  text: string,
+  scale?: {
+    speed?: string,
+    index: number,
+    type?: string
+  }
+}
 export const isMobile = () => /Android|webOS|iPhone|iPod|BlackBerry|Mobile|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
 export const throttle = function (fn: () => void, delay: number) {
@@ -53,7 +62,7 @@ export const createDialogueDom = function (type: 'dialogue' | 'small' | 'big', c
   )
 }
 
-export const printText = function(that, dom: HTMLElement | null, text: string, type = 'normal'){
+export const printText = function(that, dom: HTMLElement | null, text: string | IText[], type = 'normal'){
   let printSpeed = {
     normal: 200,
     fast: 100,
@@ -64,70 +73,57 @@ export const printText = function(that, dom: HTMLElement | null, text: string, t
   let timeout
   let printing
   let finalShowHTML = ''
-  let scaleElementId: string[] = []
+  let originalText = ''
+  let transformElement: ITransformElement = {
+    scaleDom: {
+      id: '',
+      transType: '',
+      speed: '',
+    },
+    moveOrderId: []
+  }
+  if (typeof text !== 'string') {
+    originalText = ''
+    text.forEach((i) => {
+      originalText = `${originalText}${i.text}`
+      if (i.scale) {
+        finalShowHTML = `${finalShowHTML}<span class="scaled-text ${i.scale.index === 0 ? `${i.scale.speed} ${i.scale.type}` : ''}" id="scale-${i.scale.index}">${i.text}</span>`
+        transformElement.moveOrderId.push(`scale-${i.scale.index}`)
+        if (i.scale.index === 0) {
+          transformElement.scaleDom = {
+            id: `scale-${i.scale.index}`,
+            transType: i.scale.type || '',
+            speed: i.scale.speed || ''
+          }
+        }
+      } else {
+        finalShowHTML = `${finalShowHTML}<span>${i.text}</span>`
+      }
+    })
+  } else {
+    originalText = text
+    finalShowHTML = text
+  }
   if (!!dom) {
     soundsAssets.handler.play(that, soundsAssets.keys.PRINTING.KEY)
     printing = true
     dom.classList.add('printing')
-    // handleAssets.play(that, ASSET_KEYS.AUDIO.PRINTING, { volume: 0.3 })
-    // const prevText = dom.innerHTML
-    let currentText = text
-
-    // 检查快速缩放
-    let textArr = [currentText]
-
-    const replaceTextString = (str, type): string[] => {
-      if (str.indexOf(type) === -1) {
-        return [str]
-      }
-      const reg = new RegExp(type, "g")
-      const tempString = str.replace(reg, `|${type}|`)
-      const newArr = tempString.split('|')
-
-      if (newArr[0] === '') {
-        newArr.shift()
-      }
-      if (newArr[newArr.length - 1] === '') {
-        newArr.pop()
-      }
-      return newArr
-    }
-
-    scaleType.forEach((type) => {
-      let currentArr: string[] = []
-      textArr.map((textString) => {
-        currentArr = [...currentArr, ...replaceTextString(textString, type)]
-      })
-      textArr = [...currentArr]
-    })
-    let scaleElementCount = 1
-    textArr.forEach((i) => {
-      let addString = i
-      if (scaleType.includes(i)) {
-        scaleElementId.push(`${i}${scaleElementCount}`)
-        addString = `<span id='${i}${scaleElementCount++}'></span>`
-      }
-      finalShowHTML = `${finalShowHTML}${addString}`
-    })
-    // 为了打字效果，先替换带有标识的 string
-    scaleType.forEach((type) => {
-      const reg = new RegExp(type, "g")
-      currentText = currentText.replace(reg, '')
-    })
-
-    timeout = setTimeout(() => {
+    let currentText = originalText
+      timeout = setTimeout(() => {
       interval = setInterval(() => {
         if (currentText.length > 0) {
           dom.innerHTML = `${dom.innerText}${currentText[0] === ' ' ? '\xa0' : currentText[0]}`
           currentText = currentText.substring(1, currentText.length)
         } else {
-          let tempString = text
-          scaleType.forEach((type) => {
-            const reg = new RegExp(type, "g")
-            tempString = tempString.replace(reg, `<span id=${type}></span>`)
-          })
-          dom.innerHTML = finalShowHTML
+          transformElement.moveOrderId.sort()
+          dom.innerHTML = `<span ${transformElement.moveOrderId.length > 0? 'class="light-dark"' : ''}>${finalShowHTML}</span>`
+          amplifyDom(transformElement)
+          console.log(transformElement, 'transformElement')
           // 顺序缩放
+          // const position = document.getElementById('scale-fast1')?.getBoundingClientRect()
+          // const left = position?.left
+          // document.body.classList.add('amplified', `x${left}`, `y${position?.top}`)
+          // console.log(left, 'left')
           printing = false
           dom.classList.remove('printing')
           soundsAssets.handler.stop(that, soundsAssets.keys.PRINTING.KEY)

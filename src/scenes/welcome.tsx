@@ -4,10 +4,48 @@ import { soundsAssets } from '../../public'
 import { bgmOn } from "~/utils/game-controller";
 
 const RULE_FRAGMENTS = [
-  "scale-fast由于疫情大爆发，scale-fast所有人都被封印在scale-slow家里无法出门。",
-  "你唯一要做的，就是保持身心健康，尽可能不生病、不抑郁，等待解封。",
-  "接下来请设定初始值，迎接无尽（不是）的封印吧！！"
+  "由于疫情大爆发，所有人都被封印在家里无法出门。",
+  [
+    {
+      text: "你唯一要做的，就是保持身心健康，尽可能不生病、不抑郁，",
+    },
+    {
+      text: "等待解封",
+      scale: {
+        speed: 'fast',
+        index: 0,
+        type: 'step2', // 'sudden', 'step2'
+      }
+    },
+    {
+      text: "。",
+      scale: {
+        index: 1,
+      }
+    }
+  ],
+  [
+    {
+      text: "接下来请设定初始值，迎接无尽（不是）的",
+    },
+    {
+      text: "封印",
+      scale: {
+        speed: 'fast',
+        index: 0,
+        type: 'ease', // 'sudden'
+      }
+    },
+    {
+      text: "吧！！",
+    }
+  ],
 ]
+// const RULE_FRAGMENTS = [
+//   "scale-fast由于疫情大爆发，scale-fast所有人都被封印在scale-slow家里无法出门。",
+//   "你唯一要做的，就是保持身心健康，尽可能不生病、不抑郁，等待解封。",
+//   "接下来请设定初始值，迎接无尽（不是）的封印吧！！"
+// ]
 const CONFIRM_TEXT = '好 8...'
 
 const CANCEL_TEXT = '不！滚！'

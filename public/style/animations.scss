@@ -16,55 +16,19 @@
 }
 
 body {
-  $scale-size: 2.5; // 打字：5；设定数值：2.5；文字显示：10
   $anim-duration: 1s; // 一行转场 3s；其他 1s
   transform-origin: center center;
   transition: all $anim-duration linear;
-  &.amplified {
-    transform: scale($scale-size) translate3d(0,0,0);
-    @for $i from -2000 to 2000 {
-      &.x#{$i} {
-       margin-left: calc((50vw + #{-$i}px) * $scale-size);
-      }
-      &.y#{$i} {
-        margin-top: calc((50vh + #{-$i}px) * $scale-size);
-      }
-    }
-    &::before {
-      content: '按下空格解除放大状态';
-      display: block;
-
-      z-index: 99;
-      color: white;
-      font-size: 1rem;
-
-    }
+  .light-dark {
+    color: $dark-light;
   }
-}
+  .scaled-text {
+    color: $main-color;
+  }
+  // 缩放方式不同
+  &.step2,
+  &.fast {
+    transition: all $anim-duration step-start;
+  }
 
-// oring 为 0，缩放动画有点问题，盲猜是移动距离太大的缘故
-// body {
-//   $scale-size: 10;
-//   $anim-duration: 5s;
-//   // $cubic-bezier: cubic-bezier(.3,0,.3,.0);
-//   $transition-style: ease;
-//   transform-origin: 0 0;
-//   position: relative;
-//   transition: left $anim-duration linear,
-//               top $anim-duration linear,
-//               transform $anim-duration linear;
-//   left: 0;
-//   top: 0;
-//   transform: scale(1);
-//   &.amplified {
-//     transform: scale($scale-size);
-//     @for $i from -2000 to 2000 {
-//       &.x#{$i} {
-//        left: calc(#{-$scale-size * $i}px + 50vw);
-//       }
-//       &.y#{$i} {
-//         top: calc(#{-$scale-size * $i}px + 50vh);
-//       }
-//     }
-//   }
-// }
+}
