@@ -63,7 +63,6 @@ export const amplifyScenes = ({ scale, duration, position }: {
       container.style.transform = s ? `scale(${scale})` : ''
       container.style.marginLeft = s ? `calc(${-scalePosition.x}px * ${scale})` : ''
       container.style.marginTop = s ? `calc(${-scalePosition.y}px * ${scale})` : ''
-      console.log(`calc(-${scalePosition.x}px * ${scale})`)
     }
   }
 
@@ -91,6 +90,7 @@ export const amplifyScenes = ({ scale, duration, position }: {
     scaleFn(true)
     setTimeout(() => {
       scaleFn(false)
+      document.getElementsByClassName('light-dark')[0].classList.remove('light-dark')
     }, 1000)
   }
 }
