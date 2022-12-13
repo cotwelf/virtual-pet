@@ -14,6 +14,7 @@ import { amplifyScenes } from './utils/amplify'
 
 import { isMobile, throttle } from './utils'
 import End from './scenes/end'
+import { amplifyScale } from './utils/game-controller'
 
 // 适配 TODO
 // 1920 * 1080 fontSize = 100px
@@ -58,5 +59,5 @@ const game = new Phaser.Game(config)
 const soundManager = new Phaser.Sound.BaseSoundManager(game)
 
 game.cache.audio.add('sound-click', soundClick)
-amplifyScenes({scale: 11, duration: 2})
+amplifyScenes({scale: amplifyScale.space, duration: 2})
 export default game
