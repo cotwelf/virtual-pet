@@ -5,16 +5,14 @@ import { soundsAssets } from "~/../public";
 export const theEndText = [
   {
     id: 0,
-    title: <span>作品：</span>,
-    value: <span>彭修文</span>,
+    title: '',
+    value: <ul>
+    <li>作品：彭修文</li>
+    <li>指导老师：陈海璐</li>
+  </ul>,
   },
   {
     id: 1,
-    title: <span>指导老师：</span>,
-    value: <span>陈海璐</span>,
-  },
-  {
-    id: 2,
     title: <div>背景音来源：</div>,
     value: (<ul>
       <li>燃新闻 - B站 BV1634y1e7mo</li>
@@ -24,7 +22,7 @@ export const theEndText = [
     </ul>)
   },
   {
-    id: 3,
+    id: 2,
     title: '',
     value: <ul>
       <li>华东师范大学设计学院</li>
