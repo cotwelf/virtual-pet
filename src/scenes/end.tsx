@@ -1,22 +1,26 @@
 import { getData, isMobile, throttle } from "../utils";
 import Phaser from "phaser";
 import { soundsAssets } from "~/../public";
+import { englishVer, filmVersion, testScenes } from "~/utils/game-controller";
 
 export const theEndText = [
   {
     id: 0,
     title: '',
-    value: <ul>
+    value: englishVer ? (<ul>
+      <li>Producer: PengXiuwen</li>
+      <li>Tutor: ChenHailu</li>
+    </ul>) : (<ul>
     <li>作品：彭修文</li>
     <li>指导老师：陈海璐</li>
-  </ul>,
+  </ul>),
   },
   {
     id: 1,
-    title: <div>背景音来源：</div>,
+    title: englishVer ? <div>Background Music:</div> : <div>背景音来源：</div>,
     value: (<ul>
-      <li>燃新闻 - B站 BV1634y1e7mo</li>
-      <li>芍药与丁香 - B站 BV1s5411D73c</li>
+      <li>燃新闻 - Bilibili BV1634y1e7mo</li>
+      <li>芍药与丁香 - Bilibili BV1s5411D73c</li>
       <li>国本剛章 - 城外BGM [迷宮組曲 ミロンの大冒険]</li>
       <li>山下絹代 - Poison Mind (ボスBGM) [悪魔城ドラキュラ]</li>
     </ul>)
@@ -24,10 +28,13 @@ export const theEndText = [
   {
     id: 2,
     title: '',
-    value: <ul>
+    value: englishVer ? (<ul>
+      <li>East China Normal University</li>
+      <li>Graduation Design for the major of Animation and image design, class of 2020</li>
+    </ul>) : (<ul>
       <li>华东师范大学设计学院</li>
       <li>动漫与影像设计方向 2020 级毕业设计</li>
-    </ul>
+    </ul>)
   }
 ]
 
@@ -46,7 +53,7 @@ export default class End extends Phaser.Scene {
         setTimeout(() => {
           castDom.innerHTML = ''
           castDom.appendChild(<div>{textObj.title}{textObj.value}</div>)
-          if (index === theEndText.length - 1) {
+          if (index === theEndText.length - 1 && !testScenes) {
             // 最后一个 15s 无响应，重新开始
             setTimeout(() => {
               location.reload()
@@ -59,21 +66,22 @@ export default class End extends Phaser.Scene {
     this.containerDom = (<div className="tips">
       <div className='pic' />
       <div className='big-text'>
-        你的世界遇到问题，需要重新启动。
+        { englishVer ? "Your world ran into a problem and needs to restart." : "你的世界遇到问题，需要重新启动。"}
         <br />
-        但我们无法为你重新启动。
+        { englishVer ? "But we can not restart for you." : "但我们无法为你重新启动。"}
+
       </div>
       <div className="detail">
         <div className="questionnaire"></div>
         {castDom}
       </div>
-      <div className='retry'>
+      {filmVersion ? null : <div className='retry'>
         成功存活 {getData().dayCounter} 天
         <div className="btn" onClick={() => {
           soundsAssets.handler.play(this, soundsAssets.keys.CLICK.KEY)
           location.reload()
         }}>重新挑战</div>
-      </div>
+      </div>}
     </div>)
     this.setDom(true)
     showText()

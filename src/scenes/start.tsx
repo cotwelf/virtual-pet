@@ -1,14 +1,28 @@
 import Phaser from "phaser";
-import { testScenes } from "~/utils/game-controller";
+import { englishVer, testScenes } from "~/utils/game-controller";
 import { soundsAssets } from '../../public'
 import { isMobile, throttle } from "../utils";
 
 const PAGE_SPACE = 5000 // 默认 5000
 const textArray = {
   page1: <div>正在启动 World</div>,
-  // page2: <></>,
-  // page3: <div>
-  page2: <div>
+  page2: englishVer ? (<div>
+    <div>World failed to start. A recent mental or physical change might be the cause. Please check your life：</div>
+    {/* <div class='br'/> */}
+    <br />
+    <div>&nbsp;&nbsp;1. To prevent the spread of the COVID-19, Once some person be tested positive, residents were forbidden from going out in all neighbourhood.</div>
+    <div>&nbsp;&nbsp;2. Due to the lack of labor and the intervention of relevant departments, logistics and transportation services have been damaged. People can't get food and daily necessities as usual, hunger and fear became widespread.</div>
+    <div>&nbsp;&nbsp;3. All grade of students have to took online classes, they should have played and studied with friends on campus.They lost the most precious time of their youth.</div>
+    <div>&nbsp;&nbsp;4. Online work for some staff that could work at home, but the tertiary industry was affected to some extent ,so a lot of people lost their job that keep them alive.</div>
+    <div>&nbsp;&nbsp;5. All citizens are required to have nucleic acid test once or twice a day, pray that the result is negative, because if someone is positive, she/he would be post to shelters, there were all positive people. These positive people had to leave their families and they didn't know the deadly nature of COVID-19.</div>
+    {/* <div class='br'/> */}
+    <br />
+    <div>If it is difficult to confirm whether the above conditions exist, please recall according to the following keywords, or contact your friends for assistance.</div>
+    {/* <div class='br'/> */}
+    <br />
+    <div>&nbsp;&nbsp;Time: 2022</div>
+    <div>&nbsp;&nbsp;Place: First-half: Shanghai. Second-half: Gansu, Guangzhou, Beijing, Henan and other province</div>
+  </div>) : (<div>
     <div>World 未能正常启动。原因可能是最近您遇到了一些心理或生理问题。请您核查近期是否有以下问题：</div>
     <br />
     <div>&nbsp;&nbsp;1. 遇到了百年一遇天灾 / 人祸。如：疫病等。</div>
@@ -22,7 +36,7 @@ const textArray = {
     <div>&nbsp;&nbsp;时间：2022 年</div>
     <br />
     <div>&nbsp;&nbsp;地点：上半年：上海；下半年：甘肃、广州、北京、河南等其他城市</div>
-  </div>,
+  </div>),
   // page4: <></>
 }
 export default class Start extends Phaser.Scene {
@@ -70,7 +84,7 @@ export default class Start extends Phaser.Scene {
     let isLastPage = false
     allPages.forEach((page, index) => {
       this.timerArr.push(setTimeout(() => {
-        this.containerDom.classList.add(page)
+        this.containerDom.classList.add(page, englishVer ? 'en' : 'cn')
         if (index === allPages.length - 1) {
           // 最后一页，不清空，enter 跳转
           text.innerHTML = ''

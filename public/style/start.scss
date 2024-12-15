@@ -21,22 +21,16 @@ body.explaination {
         animation: blink 2s infinite;
       }
     }
-    // &.page2 {
-    //   width: 100vw;
-    //   height: 100vh;
-    //   background-color: black;
-    //   position: absolute;
-    //   top: 0;
-    //   left: 0;
-    //   > div{
-    //     &::after {
-    //       content: "_";
-    //       animation: text-end 1s infinite;
-    //     }
-    //   }
-    // }
-    // &.page3 {
     &.page2 {
+      &.en {
+        line-height: 45px;
+        &::before {
+          content: "World Boot Manager";
+        }
+        &::after {
+          content: 'Click = Continue';
+        }
+      }
       .text {
         margin: $top-bottom-space 0;
         height: calc(100vh - $tips-height * 2 - $top-bottom-space * 4);

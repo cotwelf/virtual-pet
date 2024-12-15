@@ -149,7 +149,7 @@ export default class Home extends Phaser.Scene {
 
       const interactTimes = this.dataStorage.interactTimes || 0
       if (interactTimes > 3) {
-        toggleTips(this, '今日互动加成已达上限\n_(:з」∠)_')
+        toggleTips(this, '互动加成已达上限\n_(:з」∠)_')
       }
       this.dataStorage.interactTimes += 1
     }, this)

@@ -54,11 +54,18 @@ body.end {
 
         > div {
           display: flex;
+          flex-direction: column;
+          > div {
+            margin-bottom: 0.1rem;
+          }
         }
         ul {
           margin: 0;
           padding: 0;
           list-style: none;
+          li {
+            margin: 0.1rem 0;
+          }
         }
       }
     }

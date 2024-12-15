@@ -45,5 +45,8 @@
 	"staticFiles": {
 		"staticPath": "public",
 		"watcherGlob": "**"
+	},
+	"volta": {
+		"node": "18.20.5"
 	}
 }
