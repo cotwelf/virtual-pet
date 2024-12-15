@@ -118,7 +118,6 @@ export const printText = function(that, dom: HTMLElement | null, text: string | 
           transformElement.moveOrderId.sort()
           dom.innerHTML = `<span ${transformElement.moveOrderId.length > 0? 'class="light-dark"' : ''}>${finalShowHTML}</span>`
           amplifyDom(transformElement)
-          console.log(transformElement, 'transformElement')
           // 顺序缩放
           // const position = document.getElementById('scale-fast1')?.getBoundingClientRect()
           // const left = position?.left
